@@ -137,8 +137,8 @@ window.logout = logout;
 
 const audioManager = makeAudioManager();
 const [CTX, canvasWidth, canvasHeight, canvasElement, scaleFactor] = generateCanvas({
-    width: window.innerWidth, // * 0.6, // 코드 에디터 사이즈 적용
-    height: window.innerHeight,
+    width: 500, // * 0.6, // 코드 에디터 사이즈 적용
+    height: 500,
     attachNode: ".game",
 });
 
