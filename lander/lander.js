@@ -48,25 +48,24 @@ export const makeLander = (state, onGameEnd) => {
     // xxx : #4
     let fuel;
     
-    const fuelLimit = 200;
+    const fuelLimit = 100;
 
 
     // xxx : #2
     const resetProps = () => {
         const seededRandom = state.get("seededRandom");
-        // const seededRandom = Math.random(); // XXX: 
-        console.log(seededRandom);
+        // const seededRandom = Math.random(); // XXX: temp
         _position = {
-            x: seededRandomBetween(canvasWidth * 0.33, canvasWidth * 0.66, seededRandom),
-            y: LANDER_HEIGHT * 2,
+            x: canvasWidth / 2,//seededRandomBetween(canvasWidth * 0.33, canvasWidth * 0.66, seededRandom),
+            y: canvasHeight / 2// LANDER_HEIGHT * 2,
         };
         _displayPosition = { ..._position };
         _velocity = {
-            x: seededRandomBetween(-_thrust * (canvasWidth / 10), _thrust * (canvasWidth / 10), seededRandom),
-            y: seededRandomBetween(0, _thrust * (canvasWidth / 10), seededRandom),
+            x: 0, // seededRandomBetween(-_thrust * (canvasWidth / 10), _thrust * (canvasWidth / 10), seededRandom),
+            y: 0 // seededRandomBetween(0, _thrust * (canvasWidth / 10), seededRandom),
         };
-        _rotationVelocity = seededRandomBetween(-0.2, 0.2, seededRandom);
-        _angle = seededRandomBetween(Math.PI * 1.5, Math.PI * 2.5, seededRandom);
+        _rotationVelocity = 0; // seededRandomBetween(-0.2, 0.2, seededRandom);
+        _angle = 0; // seededRandomBetween(Math.PI * 1.5, Math.PI * 2.5, seededRandom);
         _engineOn = false;
         _rotatingLeft = false;
         _rotatingRight = false;
@@ -160,11 +159,11 @@ export const makeLander = (state, onGameEnd) => {
             // xxx : #3
             if (_rotatingRight && fuel < fuelLimit) { // xxx : #4
                 _rotationVelocity += deltaTimeMultiplier * 0.01;
-                fuel += 10 * deltaTimeMultiplier * (_thrust / 5); // xxx : #4
+                fuel += deltaTimeMultiplier * _thrust * 2; // xxx : #4
             }
             if (_rotatingLeft && fuel < fuelLimit) { // xxx : #4
                 _rotationVelocity -= deltaTimeMultiplier * 0.01;
-                fuel += 10 * deltaTimeMultiplier * (_thrust / 5); // xxx : #4
+                fuel += deltaTimeMultiplier * _thrust * 2; // xxx : #4
             }
             if (_position.x < 0) _position.x = canvasWidth;
 
@@ -179,7 +178,7 @@ export const makeLander = (state, onGameEnd) => {
             if (_engineOn && fuel < fuelLimit) { // xxx : #4
                 _velocity.x += deltaTimeMultiplier * (_thrust * Math.sin(_angle));
                 _velocity.y -= deltaTimeMultiplier * (_thrust * Math.cos(_angle));
-                fuel += 10 * deltaTimeMultiplier * _thrust; // xxx : #4
+                fuel += deltaTimeMultiplier * _thrust * 20; // xxx : #4
             }
 
             console.log("fuel : " + fuel.toFixed(5) + "L");
@@ -406,44 +405,44 @@ export const makeLander = (state, onGameEnd) => {
         // Translate to the top-left corner of the lander so engine and booster
         // flames can be drawn from 0, 0
         CTX.translate(-LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
+        if (fuel < fuelLimit) {
+            if (_engineOn || _rotatingLeft || _rotatingRight) {
+                CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
+            }
 
-        if ((_engineOn || _rotatingLeft || _rotatingRight) && fuel < fuelLimit) { // xxx : #4
-            CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
+            // Main engine flame
+            if (_engineOn) {
+                const _flameHeight = randomBetween(10, 50);
+                const _flameMargin = 3;
+                CTX.beginPath();
+                CTX.moveTo(_flameMargin, LANDER_HEIGHT);
+                CTX.lineTo(LANDER_WIDTH - _flameMargin, LANDER_HEIGHT);
+                CTX.lineTo(LANDER_WIDTH / 2, LANDER_HEIGHT + _flameHeight);
+                CTX.closePath();
+                CTX.fill();
+            }
+
+            const _boosterLength = randomBetween(5, 25);
+            // Right booster flame
+            if (_rotatingLeft) {
+                CTX.beginPath();
+                CTX.moveTo(LANDER_WIDTH, 0);
+                CTX.lineTo(LANDER_WIDTH + _boosterLength, LANDER_HEIGHT * 0.05);
+                CTX.lineTo(LANDER_WIDTH, LANDER_HEIGHT * 0.1);
+                CTX.closePath();
+                CTX.fill();
+            }
+
+            // Left booster flame
+            if (_rotatingRight) {
+                CTX.beginPath();
+                CTX.moveTo(0, 0);
+                CTX.lineTo(-_boosterLength, LANDER_HEIGHT * 0.05);
+                CTX.lineTo(0, LANDER_HEIGHT * 0.1);
+                CTX.closePath();
+                CTX.fill();
+            }
         }
-
-        // Main engine flame
-        if (_engineOn && fuel < fuelLimit) { // xxx : #4
-            const _flameHeight = randomBetween(10, 50);
-            const _flameMargin = 3;
-            CTX.beginPath();
-            CTX.moveTo(_flameMargin, LANDER_HEIGHT);
-            CTX.lineTo(LANDER_WIDTH - _flameMargin, LANDER_HEIGHT);
-            CTX.lineTo(LANDER_WIDTH / 2, LANDER_HEIGHT + _flameHeight);
-            CTX.closePath();
-            CTX.fill();
-        }
-
-        const _boosterLength = randomBetween(5, 25);
-        // Right booster flame
-        if (_rotatingLeft) {
-            CTX.beginPath();
-            CTX.moveTo(LANDER_WIDTH, 0);
-            CTX.lineTo(LANDER_WIDTH + _boosterLength, LANDER_HEIGHT * 0.05);
-            CTX.lineTo(LANDER_WIDTH, LANDER_HEIGHT * 0.1);
-            CTX.closePath();
-            CTX.fill();
-        }
-
-        // Left booster flame
-        if (_rotatingRight) {
-            CTX.beginPath();
-            CTX.moveTo(0, 0);
-            CTX.lineTo(-_boosterLength, LANDER_HEIGHT * 0.05);
-            CTX.lineTo(0, LANDER_HEIGHT * 0.1);
-            CTX.closePath();
-            CTX.fill();
-        }
-
         CTX.restore();
     };
 
