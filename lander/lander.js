@@ -16,6 +16,8 @@ export const makeLander = (state, onGameEnd) => {
     // Use grounded height to approximate distance from ground
     const _landingData = state.get("terrain").getLandingData();
     const _groundedHeight = _landingData.terrainAvgHeight - LANDER_HEIGHT + LANDER_HEIGHT / 2;
+    
+    // xxx : #3
     const _thrust = 0.01;
 
     let _position;
@@ -43,6 +45,13 @@ export const makeLander = (state, onGameEnd) => {
 
     let _isPressKeyVal;
 
+    // xxx : #4
+    let fuel;
+    
+    const fuelLimit = 200;
+
+
+    // xxx : #2
     const resetProps = () => {
         const seededRandom = state.get("seededRandom");
         // const seededRandom = Math.random(); // XXX: 
@@ -77,6 +86,8 @@ export const makeLander = (state, onGameEnd) => {
         _babySoundPlayed = false;
 
         _isPressKeyVal = false;
+
+        fuel = 0;
     };
     resetProps();
 
@@ -146,9 +157,15 @@ export const makeLander = (state, onGameEnd) => {
                 !CTX.isPointInPath(_landingData.terrainPath2D, _position.x * state.get("scaleFactor"), (_position.y + LANDER_HEIGHT / 2) * state.get("scaleFactor")))
         ) {
             // Update ballistic properties
-            if (_rotatingRight) _rotationVelocity += deltaTimeMultiplier * 0.01;
-            if (_rotatingLeft) _rotationVelocity -= deltaTimeMultiplier * 0.01;
-
+            // xxx : #3
+            if (_rotatingRight && fuel < fuelLimit) { // xxx : #4
+                _rotationVelocity += deltaTimeMultiplier * 0.01;
+                fuel += 10 * deltaTimeMultiplier * (_thrust / 5); // xxx : #4
+            }
+            if (_rotatingLeft && fuel < fuelLimit) { // xxx : #4
+                _rotationVelocity -= deltaTimeMultiplier * 0.01;
+                fuel += 10 * deltaTimeMultiplier * (_thrust / 5); // xxx : #4
+            }
             if (_position.x < 0) _position.x = canvasWidth;
 
             if (_position.x > canvasWidth) _position.x = 0;
@@ -159,10 +176,13 @@ export const makeLander = (state, onGameEnd) => {
 
             _displayPosition.x = _position.x;
 
-            if (_engineOn) {
+            if (_engineOn && fuel < fuelLimit) { // xxx : #4
                 _velocity.x += deltaTimeMultiplier * (_thrust * Math.sin(_angle));
                 _velocity.y -= deltaTimeMultiplier * (_thrust * Math.cos(_angle));
+                fuel += 10 * deltaTimeMultiplier * _thrust; // xxx : #4
             }
+
+            console.log("fuel : " + fuel.toFixed(5) + "L");
 
             // Log new rotations
             const rotations = Math.floor(_angle / (Math.PI * 2));
@@ -387,12 +407,12 @@ export const makeLander = (state, onGameEnd) => {
         // flames can be drawn from 0, 0
         CTX.translate(-LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
 
-        if (_engineOn || _rotatingLeft || _rotatingRight) {
+        if ((_engineOn || _rotatingLeft || _rotatingRight) && fuel < fuelLimit) { // xxx : #4
             CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
         }
 
         // Main engine flame
-        if (_engineOn) {
+        if (_engineOn && fuel < fuelLimit) { // xxx : #4
             const _flameHeight = randomBetween(10, 50);
             const _flameMargin = 3;
             CTX.beginPath();
