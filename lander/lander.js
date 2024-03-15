@@ -47,8 +47,11 @@ export const makeLander = (state, onGameEnd) => {
 
     // xxx : #4
     let fuel;
-    
+
+    let time;
+
     const fuelLimit = 100;
+    const timeLimit = 5000;
 
 
     // xxx : #2
@@ -87,6 +90,7 @@ export const makeLander = (state, onGameEnd) => {
         _isPressKeyVal = false;
 
         fuel = 0;
+        time = 0;
     };
     resetProps();
 
@@ -148,6 +152,8 @@ export const makeLander = (state, onGameEnd) => {
     const _updateProps = (deltaTime) => {
         const deltaTimeMultiplier = 1;// deltaTime / INTERVAL;
 
+        if (time > timeLimit) _setGameEndData(false);
+
         _position.y = _position.y + deltaTimeMultiplier * _velocity.y;
 
         if (
@@ -181,7 +187,7 @@ export const makeLander = (state, onGameEnd) => {
                 fuel += deltaTimeMultiplier * _thrust * 20; // xxx : #4
             }
 
-            console.log("fuel : " + fuel.toFixed(5) + "L");
+            console.log("fuel : " + fuel.toFixed(2) + "L & time : " + time + "ms");
 
             // Log new rotations
             const rotations = Math.floor(_angle / (Math.PI * 2));
@@ -235,6 +241,8 @@ export const makeLander = (state, onGameEnd) => {
 
             _setGameEndData(didLand);
         }
+
+        time += INTERVAL;
     };
 
     const _drawHUD = () => {
