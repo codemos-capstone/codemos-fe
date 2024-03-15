@@ -146,7 +146,7 @@ export const makeLander = (state, onGameEnd) => {
     };
 
     const _updateProps = (deltaTime) => {
-        const deltaTimeMultiplier = deltaTime / INTERVAL;
+        const deltaTimeMultiplier = 1;// deltaTime / INTERVAL;
 
         _position.y = _position.y + deltaTimeMultiplier * _velocity.y;
 
