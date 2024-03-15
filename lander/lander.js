@@ -16,6 +16,8 @@ export const makeLander = (state, onGameEnd) => {
     // Use grounded height to approximate distance from ground
     const _landingData = state.get("terrain").getLandingData();
     const _groundedHeight = _landingData.terrainAvgHeight - LANDER_HEIGHT + LANDER_HEIGHT / 2;
+    
+    // xxx : #3
     const _thrust = 0.01;
 
     let _position;
@@ -43,21 +45,30 @@ export const makeLander = (state, onGameEnd) => {
 
     let _isPressKeyVal;
 
+    // xxx : #4
+    let fuel;
+
+    let time;
+
+    const fuelLimit = 100;
+    const timeLimit = 5000;
+
+
+    // xxx : #2
     const resetProps = () => {
         const seededRandom = state.get("seededRandom");
-        // const seededRandom = Math.random(); // XXX: 
-        console.log(seededRandom);
+        // const seededRandom = Math.random(); // XXX: temp
         _position = {
-            x: seededRandomBetween(canvasWidth * 0.33, canvasWidth * 0.66, seededRandom),
-            y: LANDER_HEIGHT * 2,
+            x: canvasWidth / 2,//seededRandomBetween(canvasWidth * 0.33, canvasWidth * 0.66, seededRandom),
+            y: canvasHeight / 2// LANDER_HEIGHT * 2,
         };
         _displayPosition = { ..._position };
         _velocity = {
-            x: seededRandomBetween(-_thrust * (canvasWidth / 10), _thrust * (canvasWidth / 10), seededRandom),
-            y: seededRandomBetween(0, _thrust * (canvasWidth / 10), seededRandom),
+            x: 0, // seededRandomBetween(-_thrust * (canvasWidth / 10), _thrust * (canvasWidth / 10), seededRandom),
+            y: 0 // seededRandomBetween(0, _thrust * (canvasWidth / 10), seededRandom),
         };
-        _rotationVelocity = seededRandomBetween(-0.2, 0.2, seededRandom);
-        _angle = seededRandomBetween(Math.PI * 1.5, Math.PI * 2.5, seededRandom);
+        _rotationVelocity = 0; // seededRandomBetween(-0.2, 0.2, seededRandom);
+        _angle = 0; // seededRandomBetween(Math.PI * 1.5, Math.PI * 2.5, seededRandom);
         _engineOn = false;
         _rotatingLeft = false;
         _rotatingRight = false;
@@ -77,6 +88,9 @@ export const makeLander = (state, onGameEnd) => {
         _babySoundPlayed = false;
 
         _isPressKeyVal = false;
+
+        fuel = 0;
+        time = 0;
     };
     resetProps();
 
@@ -136,7 +150,9 @@ export const makeLander = (state, onGameEnd) => {
     };
 
     const _updateProps = (deltaTime) => {
-        const deltaTimeMultiplier = deltaTime / INTERVAL;
+        const deltaTimeMultiplier = 1;// deltaTime / INTERVAL;
+
+        if (time > timeLimit) _setGameEndData(false);
 
         _position.y = _position.y + deltaTimeMultiplier * _velocity.y;
 
@@ -146,9 +162,15 @@ export const makeLander = (state, onGameEnd) => {
                 !CTX.isPointInPath(_landingData.terrainPath2D, _position.x * state.get("scaleFactor"), (_position.y + LANDER_HEIGHT / 2) * state.get("scaleFactor")))
         ) {
             // Update ballistic properties
-            if (_rotatingRight) _rotationVelocity += deltaTimeMultiplier * 0.01;
-            if (_rotatingLeft) _rotationVelocity -= deltaTimeMultiplier * 0.01;
-
+            // xxx : #3
+            if (_rotatingRight && fuel < fuelLimit) { // xxx : #4
+                _rotationVelocity += deltaTimeMultiplier * 0.01;
+                fuel += deltaTimeMultiplier * _thrust * 2; // xxx : #4
+            }
+            if (_rotatingLeft && fuel < fuelLimit) { // xxx : #4
+                _rotationVelocity -= deltaTimeMultiplier * 0.01;
+                fuel += deltaTimeMultiplier * _thrust * 2; // xxx : #4
+            }
             if (_position.x < 0) _position.x = canvasWidth;
 
             if (_position.x > canvasWidth) _position.x = 0;
@@ -159,10 +181,13 @@ export const makeLander = (state, onGameEnd) => {
 
             _displayPosition.x = _position.x;
 
-            if (_engineOn) {
+            if (_engineOn && fuel < fuelLimit) { // xxx : #4
                 _velocity.x += deltaTimeMultiplier * (_thrust * Math.sin(_angle));
                 _velocity.y -= deltaTimeMultiplier * (_thrust * Math.cos(_angle));
+                fuel += deltaTimeMultiplier * _thrust * 20; // xxx : #4
             }
+
+            console.log("fuel : " + fuel.toFixed(2) + "L & time : " + time + "ms");
 
             // Log new rotations
             const rotations = Math.floor(_angle / (Math.PI * 2));
@@ -216,6 +241,8 @@ export const makeLander = (state, onGameEnd) => {
 
             _setGameEndData(didLand);
         }
+
+        time += INTERVAL;
     };
 
     const _drawHUD = () => {
@@ -386,44 +413,44 @@ export const makeLander = (state, onGameEnd) => {
         // Translate to the top-left corner of the lander so engine and booster
         // flames can be drawn from 0, 0
         CTX.translate(-LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
+        if (fuel < fuelLimit) {
+            if (_engineOn || _rotatingLeft || _rotatingRight) {
+                CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
+            }
 
-        if (_engineOn || _rotatingLeft || _rotatingRight) {
-            CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
+            // Main engine flame
+            if (_engineOn) {
+                const _flameHeight = randomBetween(10, 50);
+                const _flameMargin = 3;
+                CTX.beginPath();
+                CTX.moveTo(_flameMargin, LANDER_HEIGHT);
+                CTX.lineTo(LANDER_WIDTH - _flameMargin, LANDER_HEIGHT);
+                CTX.lineTo(LANDER_WIDTH / 2, LANDER_HEIGHT + _flameHeight);
+                CTX.closePath();
+                CTX.fill();
+            }
+
+            const _boosterLength = randomBetween(5, 25);
+            // Right booster flame
+            if (_rotatingLeft) {
+                CTX.beginPath();
+                CTX.moveTo(LANDER_WIDTH, 0);
+                CTX.lineTo(LANDER_WIDTH + _boosterLength, LANDER_HEIGHT * 0.05);
+                CTX.lineTo(LANDER_WIDTH, LANDER_HEIGHT * 0.1);
+                CTX.closePath();
+                CTX.fill();
+            }
+
+            // Left booster flame
+            if (_rotatingRight) {
+                CTX.beginPath();
+                CTX.moveTo(0, 0);
+                CTX.lineTo(-_boosterLength, LANDER_HEIGHT * 0.05);
+                CTX.lineTo(0, LANDER_HEIGHT * 0.1);
+                CTX.closePath();
+                CTX.fill();
+            }
         }
-
-        // Main engine flame
-        if (_engineOn) {
-            const _flameHeight = randomBetween(10, 50);
-            const _flameMargin = 3;
-            CTX.beginPath();
-            CTX.moveTo(_flameMargin, LANDER_HEIGHT);
-            CTX.lineTo(LANDER_WIDTH - _flameMargin, LANDER_HEIGHT);
-            CTX.lineTo(LANDER_WIDTH / 2, LANDER_HEIGHT + _flameHeight);
-            CTX.closePath();
-            CTX.fill();
-        }
-
-        const _boosterLength = randomBetween(5, 25);
-        // Right booster flame
-        if (_rotatingLeft) {
-            CTX.beginPath();
-            CTX.moveTo(LANDER_WIDTH, 0);
-            CTX.lineTo(LANDER_WIDTH + _boosterLength, LANDER_HEIGHT * 0.05);
-            CTX.lineTo(LANDER_WIDTH, LANDER_HEIGHT * 0.1);
-            CTX.closePath();
-            CTX.fill();
-        }
-
-        // Left booster flame
-        if (_rotatingRight) {
-            CTX.beginPath();
-            CTX.moveTo(0, 0);
-            CTX.lineTo(-_boosterLength, LANDER_HEIGHT * 0.05);
-            CTX.lineTo(0, LANDER_HEIGHT * 0.1);
-            CTX.closePath();
-            CTX.fill();
-        }
-
         CTX.restore();
     };
 
