@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useState } from "react";
 import Login from "components/Login";
 import Register from "components/Register";
 
@@ -6,14 +6,30 @@ import "./LoginPage.css"
 
 const btnTexts = require('lang/kor.json').login;
 
-export default function LoginPage(){
+function HomeBtn({handlePage, setIsLogin}){
     return(
-        <div className="container">
+        <button btntype='main' className="home-btn" onClick={handlePage}>{btnTexts[4]}</button>
+    )   
+}
+
+export default function LoginPage({setPage, setIsLogin}){
+    const handlePage = (e) => {
+        setPage(e.currentTarget.getAttribute('btnType'))
+    }
+    const [formStat, setFormStat] = useState('login')
+    let form;
+    if (formStat === 'login'){
+        form = <Login setForm={setFormStat} />
+    } else if (formStat === 'register') {
+        form = <Register setForm={setFormStat} />
+    }
+    
+    return(
+        <div className="container" style={{padding: '10px'}}>
             <div className="success-message" id="successMessage">{btnTexts[0]}</div>
-            <Login />
-            <Register />
+            {form}
             <div className="home">
-                <button id="home" type="button">{btnTexts[4]}</button> {/** onClick={} */}
+                <HomeBtn handlePage={handlePage} />
             </div>
         </div>
     )

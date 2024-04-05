@@ -2,7 +2,7 @@ import { React, useState } from "react";
 
 const btnTexts = require('lang/kor.json').login;
 
-export default function Login(){
+export default function Login({ setForm }){
     const serverAddress = "";
     const [userid, setUserid] = useState("");
     const [password, setPassword] = useState("");
@@ -29,13 +29,17 @@ export default function Login(){
             console.log("Cannot login", err)
         })
     }
+    function pageToggle(){
+        setForm('register')
+    }
     const containerStyle = {
         maxWidth: '300px',
         margin: 'auto',
         background: '#fff',
         padding: '20px',
         borderRadius: '8px',
-        boxShadow: '0 0 10px rgba(255, 255, 255, 0.4)'
+        boxShadow: '0 0 10px rgba(255, 255, 255, 0.4)',
+        
     }
 
     return(
@@ -51,8 +55,8 @@ export default function Login(){
                     <label htmlFor="password">Password</label> {/*For issue*/}
                     <input type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
                 </div>
-                <button type="submit">{btnTexts[1]}</button>
-                <button id="register-btn" type="button">{btnTexts[2]}</button> {/** onclick={pageToggle} */}
+                <button type="submit" style={{margin: '5px'}}>{btnTexts[1]}</button>
+                <button id="register-btn" type="button" onClick={pageToggle}>{btnTexts[2]}</button>
             </form>
         </div>
     )

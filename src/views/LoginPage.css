@@ -5,14 +5,6 @@
     text-align: center;
     overflow-y: auto;
 }
-.login .login-container, .login .register-container {
-    max-width: 300px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-}
 
 .login .success-message {
     display: none;

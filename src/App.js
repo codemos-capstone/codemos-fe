@@ -14,7 +14,7 @@ export default function App(){
     else if (page === 'docs') {
         pageContent = <Docs />
     } else if (page === 'login') {
-        pageContent = <Login isLogin={isLogin} setIsLogin={setIsLogin} />
+        pageContent = <Login setPage={setPage} setIsLogin={setIsLogin} />
     } else if (page === 'user-page'){
         pageContent = <User isLogin={isLogin} setPage={setPage} />
     } else if (page === 'game'){

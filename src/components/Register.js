@@ -2,7 +2,7 @@ import { React, useState } from "react";
 
 const btnTexts = require('lang/kor.json').login;
 
-export default function Register(){
+export default function Register({ setForm }){
     const serverAddress = "";
     const [username, setUsername] = useState("");
     const [userid, setUserid] = useState("");
@@ -27,11 +27,14 @@ export default function Register(){
             document.getElementById('reg-id').value = '';
             document.getElementById('reg-password').value = '';
             //pageToggle();
-            showSuccessMessage();
+            //showSuccessMessage();
         })
         .catch((err) => {
             console.log("Cannot register", err)
         })
+    }
+    function pageToggle(){
+        setForm('login')
     }
     const containerStyle = {
         maxWidth: '300px',
@@ -60,8 +63,8 @@ export default function Register(){
                 <label htmlFor="password">Password</label>
                 <input type="password" id="reg-password" name="password" onChange={(e) => setPassword(e.target.value)} required />
             </div>
-            <button type="submit">{btnTexts[2]}</button>
-            <button id="back" type="button">{btnTexts[3]}</button> {/** onClick={pageToggle} */}
+            <button type="submit" style={{margin: '5px'}}>{btnTexts[2]}</button>
+            <button id="back" type="button" onClick={pageToggle}>{btnTexts[3]}</button>
         </form>
     </div>
     )
