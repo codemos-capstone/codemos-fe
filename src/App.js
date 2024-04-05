@@ -2,7 +2,7 @@ import { React, useState } from "react"
 import MainPage from "views/MainPage"
 import Game from "views/Game"
 import Docs from "views/Docs"
-import Login from "views/Login"
+import Login from "views/LoginPage"
 import User from "views/User"
 
 export default function App(){
