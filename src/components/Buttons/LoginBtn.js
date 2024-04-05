@@ -10,12 +10,16 @@ function ProfileBtn({handlePage}){
     )
 }
 
-export default function LoginBtn({handlePage, isLogin}){
+export default function LoginBtn({handlePage, isLogin, setIsLogin}){
+    function logout(){
+        setIsLogin(false);
+        sessionStorage.removeItem("jwtToken");
+    }
     if (isLogin) {
         return(
             <div>
                 <ProfileBtn handlePage={handlePage} />
-                <button className="home-logout-btn">{btnTexts[1]}</button>
+                <button className="home-logout-btn" onClick={logout}>{btnTexts[1]}</button>
             </div>
         )
     } else {

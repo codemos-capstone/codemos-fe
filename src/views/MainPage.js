@@ -7,13 +7,13 @@ import logo from 'assets/images/main-logo.png'
 
 import susuk from 'assets/images/dol.jpg'
 
-export default function MainPage({setPage, isLogin}){
+export default function MainPage({setPage, isLogin, setIsLogin}){
     const handlePage = (e) => {
         setPage(e.currentTarget.getAttribute('btnType'))
     }
     return(
         <div className='container'>
-            <LoginBtn handlePage={handlePage} isLogin={isLogin}/>
+            <LoginBtn handlePage={handlePage} isLogin={isLogin} setIsLogin={setIsLogin}/>
             <div>
                 <div className="mainpage">
                     <img src={symbol} width="100px" /><br />

@@ -2,7 +2,7 @@ import { React, useState } from "react";
 
 const btnTexts = require('lang/kor.json').login;
 
-export default function Login({ setForm }){
+export default function Login({ setForm, setToLogin }){
     const serverAddress = "";
     const [userid, setUserid] = useState("");
     const [password, setPassword] = useState("");
@@ -23,7 +23,7 @@ export default function Login({ setForm }){
         }).then((token) => {
             console.log('Login!')
             sessionStorage.setItem('jwtToken', token.accessToken);
-            history.back()
+            setToLogin()
         })
         .catch((err) => {
             console.log("Cannot login", err)

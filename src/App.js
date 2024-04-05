@@ -10,7 +10,7 @@ export default function App(){
     const [isLogin, setIsLogin] = useState(false);
     let pageContent
     if (page === 'main')
-        pageContent = <MainPage setPage={setPage} isLogin={isLogin}/>;
+        pageContent = <MainPage setPage={setPage} isLogin={isLogin} setIsLogin={setIsLogin}/>;
     else if (page === 'docs') {
         pageContent = <Docs />
     } else if (page === 'login') {
