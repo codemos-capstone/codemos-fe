@@ -26,14 +26,22 @@ export default function Login(){
             history.back()
         })
         .catch((err) => {
-            console.log("Cannot register", err)
+            console.log("Cannot login", err)
         })
+    }
+    const containerStyle = {
+        maxWidth: '300px',
+        margin: 'auto',
+        background: '#fff',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 0 10px rgba(255, 255, 255, 0.4)'
     }
 
     return(
-        <div className="login-container">
+        <div className="login-container" style={containerStyle}>
             <h2>{btnTexts[1]}</h2>
-            <form action="#" method="post">
+            <form onSubmit={handleLogin} method="post">
                 <div className="form-group">
                     <label htmlFor="id">ID</label>
                     <input type="text" id="id" name="id" onChange={(e) => setUserid(e.target.value)} required />
@@ -43,7 +51,7 @@ export default function Login(){
                     <label htmlFor="password">Password</label> {/*For issue*/}
                     <input type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
                 </div>
-                <button type="submit" onClick={handleLogin}>{btnTexts[1]}</button>
+                <button type="submit">{btnTexts[1]}</button>
                 <button id="register-btn" type="button">{btnTexts[2]}</button> {/** onclick={pageToggle} */}
             </form>
         </div>
