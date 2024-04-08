@@ -1,4 +1,4 @@
-import { React, useEffect } from "react";
+import React, { useEffect } from "react";
 import './Docs.css'
 
 import landing_sample from "assets/images/landing_sample.gif"

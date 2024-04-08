@@ -1,4 +1,4 @@
-import { React, useState } from "react"
+import React, { useState } from "react"
 import MainPage from "views/MainPage"
 import Game from "views/Game"
 import Docs from "views/Docs"

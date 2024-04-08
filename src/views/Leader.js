@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import "./Leader.css"
 import Leaderboard from "components/Leaderboard";
 
