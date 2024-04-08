@@ -1,13 +1,9 @@
-import { React, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const btnTexts = require('lang/kor.json').leader;
-const urls = [
-    "/leaderboard?pageno=",
-    "/leaderboard/",
-]
+const serverAddress = "";
 
-export default function Leaderboard(){
-    const serverAddress = "";
+export default function Leaderboard({ page }){
     const tableStyle = {
         width: "500px",
         marginLeft: "auto",
@@ -24,8 +20,25 @@ export default function Leaderboard(){
         padding: "5px"
     }
 
-    const [page, setPage] = useState(0);
-    const [save, setSave] = useState(null);
+    const [save, setSave] = useState([]);
+
+    useEffect(()=>{
+        loadBoard();
+    }, [page])
+
+    // Call functions to set current leaderboard page.
+    const loadBoard = () => {
+        getBoard("/leaderboard?pageno=" + String(page)).then(result => {
+            if (result.length == 0){
+                console.log('page is empty');
+                return;
+            }
+            setSave(result);
+        })
+        .catch(error => {
+            console.log('Error', error);
+        })   
+    }
 
     return(
         <table style={tableStyle}>
@@ -37,14 +50,14 @@ export default function Leaderboard(){
                     <td style={thStyle}>{btnTexts.cols[3]}</td>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <BoardRows boardData={save} page={page} />
         </table>
     )
 }
 
 // Sends requests to backend server.
 // Get a page of leaderboard except each specific code or each submitted code.
-// -> setBoard, loadBoard
+// -> loadBoard
 function getBoard(url){
     return new Promise((resolve, reject) => {
         fetch(serverAddress + url,{
@@ -53,125 +66,103 @@ function getBoard(url){
         })
         .then((response) => {
             if(!response.ok){
-                throw new Error(response.status)
+                throw new Error(response.status);
             }
             const contentType = response.headers.get('Content-Type');
             if(!contentType){
-                throw new Error('no content type')
+                throw new Error('no content type');
             } else if (contentType.includes('application/json')){
-                return response.json()
-            } else if (contentType.includes('text/plain')){
-                return response.text()
+                return response.json();
             } else {
-                throw new Error('cannot handle response')
+                throw new Error('cannot handle response');
             } 
         })
         .then((data) => {
-            if(typeof(data) == 'string'){
-                resolve(data)
+            let leaderboard = data.content;
+            for(var i = 0; i < leaderboard.length; i++){
+                leaderboard[i].score /= 100000;
             }
-            leaderboards = data.content
-            for(var i = 0; i < leaderboards.length; i++){
-                leaderboards[i].score /= 100000 
-            }
-            save = leaderboards
-            //data.sort((a,b) => a.score - b.score)
-            resolve(leaderboards)
+            resolve(leaderboard);
         })
         .catch((error) => {
-            reject(error)
+            reject(error);
         })
     })
-        
 }
-// Set <table> with given data.
+// Sends requests to backend server.
+// Get each specific submitted code(string).
+// -> setBoard, 
+function getCode(url){
+    return new Promise((resolve, reject) => {
+        fetch(serverAddress + url,{
+            method: "GET",
+            body: null
+        })
+        .then((response) => {
+            if(!response.ok){
+                throw new Error(response.status);
+            }
+            const contentType = response.headers.get('Content-Type');
+            if(!contentType){
+                throw new Error('no content type');
+            } else if (contentType.includes('text/plain')){
+                return response.text();
+            } else {
+                throw new Error('cannot handle response');
+            } 
+        })
+        .then((data) => {
+            resolve(data);
+        })
+        .catch((error) => {
+            reject(error);
+        })
+    })
+}
+// Set <tbody> with given data.
 // Add toggle menu to show detail codes(set onClick event to <td> that uses getBoard())
 // -> loadBoard
-function setBoard(boardData){
-    tbody.innerHTML = ""
-
-    if(boardData.length == 0){
-        var tr = document.createElement('tr')
-        table.appendChild(tr)
-        var td = document.createElement('td')
-        tr.appendChild(td)
-        td.colSpan = 4
-        td.style.height = "200px"
-        td.textContent = "No Results"
-        return
-    }
-
-    for(var i = 0; i < boardData.length; i++){
-        var tr = document.createElement('tr')
-        tr.style.cursor = 'pointer'
-        tr.setAttribute('num', i)
-        tr.classList.add('row')
-        tr.style.border = "1px solid white";
-        tbody.appendChild(tr)
-        var td1 = document.createElement('td')
-        td1.style.border = "1px solid #2e9cca"; // 네온 스타일 테두리
-        td1.style.padding = "5px"; // 셀 패딩
-        tr.appendChild(td1)
-        var td2 = document.createElement('td')
-        td2.style.border = "1px solid #2e9cca"; // 네온 스타일 테두리
-        td2.style.padding = "5px"; // 셀 패딩
-        tr.appendChild(td2)
-        var td3 = document.createElement('td')
-        td3.style.border = "1px solid #2e9cca"; // 네온 스타일 테두리
-        td3.style.padding = "5px"; // 셀 패딩
-        tr.appendChild(td3)
-        var td4 = document.createElement('td')
-        td4.style.border = "1px solid #2e9cca"; // 네온 스타일 테두리
-        td4.style.padding = "5px"; // 셀 패딩
-        tr.appendChild(td4)
-        td1.textContent = (page) * 10 + i + 1
-        td2.textContent = boardData[i].nickname
-        td3.textContent = boardData[i].score
-        td4.textContent = boardData[i].time + " s"
-
-        // show codes of each row
-        if((page) * 10 + i + 1 > 10){
-            var toggle = document.createElement('tr')
-            toggle.classList.add('details')
-            toggle.classList.add('details-hide')
-            toggle.setAttribute('id', boardData[i].id)
-            toggle.classList.add
-            tbody.appendChild(toggle)
-            tr.addEventListener('click', function () {
-                const details = this.nextElementSibling
-                details.classList.toggle('details-hide')
-                codeID = details.getAttribute('id')
-                if(details.children.length > 0){
-                    return
-                }
-                getBoard(urls[1] + codeID).then(result => {
-                    details.innerHTML = `<td colspan = "4">
-                    <p>코드</p>
-                    <pre><code class='language-javascript'>${result}</code></pre>
-                    </td>`
-                })
-                
-            })
-        }        
-    }
-}
-// Call functions to set current leaderboard page.
-function loadBoard(option, pageMoveBy){
-    var apiUrl = urls[option]
-    if (option == 0) {
-        newPage = page + pageMoveBy
-        if(newPage > 9 || newPage < 0) return
-        apiUrl += String(newPage)
-    }
-    getBoard(apiUrl).then(result => {
-        if (result.length == 0 && option == 0){
-            console.log('page is empty')
-            return
-        }
-        page += pageMoveBy
-        setBoard(result)
+function Code({id}){
+    const [code, setCode] = useState("");
+    getCode("/leaderboard/" + id).then(result => {
+        setCode(result);
     })
-    .catch(error => {
-        console.log('Error', error)
-    })   
+    return(
+        <tr className="details">
+            <td colSpan="4"><pre><code className="language-javascript">{code}</code></pre></td>
+        </tr>
+    )
+}
+function BoardRows({boardData, page}){
+    if(boardData.length == 0){
+        return(
+            <tbody><tr>
+                <td colSpan={4} style={{height: "200px"}}>No Results</td>
+            </tr></tbody>
+        )
+    }
+
+    const [showCode, setShowCode] = useState(boardData.map(() => false));
+    const toggleCode = (idx) => {
+        setShowCode((prevState) => {
+            const newState = [...prevState];
+            newState[idx] = !newState[idx];
+            return newState;
+        });
+    };
+
+    return(<tbody>
+        {boardData.map((item, idx) => (
+            <React.Fragment key={idx+"-w"}><tr
+            className="row" style={{border: "1px solid white"}}
+            key={idx+"-r"} onClick={() => {if (page == 0) return; toggleCode(idx)}}
+            >
+                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{(page) * 10 + idx + 1}</td>
+                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{item.nickname}</td>
+                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{item.score}</td>
+                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{item.time + " s"}</td>
+            </tr>
+            {showCode[idx] && <Code id={item.codeId} />}</React.Fragment>
+        ))}
+    </tbody>);
 }
