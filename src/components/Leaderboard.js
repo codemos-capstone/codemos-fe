@@ -3,6 +3,54 @@ import React, { useEffect, useState } from "react";
 const btnTexts = require('lang/kor.json').leader;
 const serverAddress = "";
 
+// Set <tbody> with given data.
+// Add toggle menu to show detail codes(set onClick event to <td> that uses getBoard())
+// -> loadBoard
+function Code({id}){
+    const [code, setCode] = useState("");
+    getCode("/leaderboard/" + id).then(result => {
+        setCode(result);
+    })
+    return(
+        <tr className="details">
+            <td colSpan="4"><pre><code className="language-javascript">{code}</code></pre></td>
+        </tr>
+    )
+}
+function BoardRows({boardData, page}){
+    if(boardData.length == 0){
+        return(
+            <tbody><tr>
+                <td colSpan={4} style={{height: "200px"}}>No Results</td>
+            </tr></tbody>
+        )
+    }
+
+    const [showCode, setShowCode] = useState(boardData.map(() => false));
+    const toggleCode = (idx) => {
+        setShowCode((prevState) => {
+            const newState = [...prevState];
+            newState[idx] = !newState[idx];
+            return newState;
+        });
+    };
+
+    return(<tbody>
+        {boardData.map((item, idx) => (
+            <React.Fragment key={idx+"-w"}><tr
+            className="row" style={{border: "1px solid white"}}
+            key={idx+"-r"} onClick={() => {if (page == 0) return; toggleCode(idx)}}
+            >
+                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{(page) * 10 + idx + 1}</td>
+                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{item.nickname}</td>
+                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{item.score}</td>
+                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{item.time + " s"}</td>
+            </tr>
+            {showCode[idx] && <Code id={item.codeId} />}</React.Fragment>
+        ))}
+    </tbody>);
+}
+
 export default function Leaderboard({ page }){
     const tableStyle = {
         width: "500px",
@@ -118,51 +166,4 @@ function getCode(url){
             reject(error);
         })
     })
-}
-// Set <tbody> with given data.
-// Add toggle menu to show detail codes(set onClick event to <td> that uses getBoard())
-// -> loadBoard
-function Code({id}){
-    const [code, setCode] = useState("");
-    getCode("/leaderboard/" + id).then(result => {
-        setCode(result);
-    })
-    return(
-        <tr className="details">
-            <td colSpan="4"><pre><code className="language-javascript">{code}</code></pre></td>
-        </tr>
-    )
-}
-function BoardRows({boardData, page}){
-    if(boardData.length == 0){
-        return(
-            <tbody><tr>
-                <td colSpan={4} style={{height: "200px"}}>No Results</td>
-            </tr></tbody>
-        )
-    }
-
-    const [showCode, setShowCode] = useState(boardData.map(() => false));
-    const toggleCode = (idx) => {
-        setShowCode((prevState) => {
-            const newState = [...prevState];
-            newState[idx] = !newState[idx];
-            return newState;
-        });
-    };
-
-    return(<tbody>
-        {boardData.map((item, idx) => (
-            <React.Fragment key={idx+"-w"}><tr
-            className="row" style={{border: "1px solid white"}}
-            key={idx+"-r"} onClick={() => {if (page == 0) return; toggleCode(idx)}}
-            >
-                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{(page) * 10 + idx + 1}</td>
-                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{item.nickname}</td>
-                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{item.score}</td>
-                <td style={{border: "1px solid #2e9cca", padding: "5px"}}>{item.time + " s"}</td>
-            </tr>
-            {showCode[idx] && <Code id={item.codeId} />}</React.Fragment>
-        ))}
-    </tbody>);
 }
