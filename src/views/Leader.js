@@ -18,7 +18,7 @@ export default function Leader(){
             <div>
                 <h1 style={{textAlign: 'center'}}>{btnTexts.btns[0]}</h1>
             </div>
-            <div id="board"><Leaderboard page={page} /></div>
+            <div id="board" style={{width: "50%", margin: "auto"}}><Leaderboard page={page} /></div>
             <div className="btns">
                 <button className="page-lbtn" onClick={() => {handlePage(-1);}}>&lt;&lt;</button>
                 <button className="page-rbtn" onClick={() => {handlePage(1);}}>&gt;&gt;</button>

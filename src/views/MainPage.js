@@ -24,13 +24,13 @@ export default function MainPage({setPage, isLogin, setIsLogin}){
                     <iframe id="rightIframe" src="https://lottie.host/embed/67e1faa4-2645-461f-a6f0-4952bc6e94c8/9K3VEbwQTX.json"></iframe>
                     <img src={susuk} style={{height: '400px'}} />{/*<iframe id="leftIframe" src="minigame.html"></iframe>*/}
                 </div>
-                <div className="menus" style={{padding: "50px"}}>
-                    <div className="buttons" style={{width: "400px"}}>
+                <div className="menus" style={{padding: "50px", margin: "auto"}}>
+                    <div className="buttons" style={{minWidth: "300px"}}>
                         <MainBtn btnType='game' handlePage={handlePage} />
                         <MainBtn btnType='docs' handlePage={handlePage} />
                         <MainBtn btnType='leader' handlePage={handlePage} />
                     </div>
-                    <Leaderboard page="0" />
+                    <div style={{width: "40%",minWidth: "400px"}}><Leaderboard page="0" /></div>
                 </div>
             </div>
         </div>

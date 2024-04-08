@@ -41,18 +41,12 @@
 }
 
 .main .buttons {
-    width: 100%;
+    width: 40%;
     margin: 0px 30px;
 }
 
 .main .mainpage {
     margin: 0px auto;
-}
-
-.main .leader_board {
-    width: 100%;
-    margin: 0px 30px;
-    color: white;
 }
 .main .home-login-btn {
     position: fixed;

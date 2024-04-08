@@ -53,7 +53,7 @@ function BoardRows({boardData, page}){
 
 export default function Leaderboard({ page }){
     const tableStyle = {
-        width: "500px",
+        width: "100%",
         marginLeft: "auto",
         marginRight: "auto",
         backgroundColor: "#0a0f1c", // dark navy
@@ -89,7 +89,7 @@ export default function Leaderboard({ page }){
     }
 
     return(
-        <table style={tableStyle}>
+        <table className="leaderboard" style={tableStyle}>
             <thead>
                 <tr>
                     <td style={thStyle}>{btnTexts.cols[0]}</td>
