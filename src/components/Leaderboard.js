@@ -1,66 +1,50 @@
-import { React, useEffect } from "react";
-import "./Leader.css"
+import { React, useState } from "react";
 
 const btnTexts = require('lang/kor.json').leader;
-
-export default function Leader(){
-    return(
-        <div className="container">
-            <div>
-                <h1 style={{textAlign: 'center'}}>{btnTexts.btns[0]}</h1>
-            </div>
-            <div id="board"></div>
-            {/*<div className="btns">
-                <button className="page-lbtn" onClick="loadBoard(0, -1)">&lt;&lt;</button>
-                <button className="page-rbtn" onClick="loadBoard(0, 1)">&gt;&gt;</button>
-            </div>
-            <div className="btns load" style="margin: 30px 2px;">
-                <div><button className="load-btn" onclick="loadBoard(0, 0)">{btnTexts.btns[1]}</button></div>
-    </div>*/}
-        </div>
-    )
-}
-
-/*let serverAddress = "https://18.183.210.86:8080"
-
-var page = 0
-var savedBoard
-
 const urls = [
     "/leaderboard?pageno=",
     "/leaderboard/",
 ]
-var board = document.getElementById("board");
-var table = document.createElement('table');
-table.style.width = "500px";
-table.style.marginLeft = "auto"
-table.style.marginRight = "auto"
-table.style.backgroundColor = "#0a0f1c"; // 어두운 네이비 색상
-table.style.color = "#fff"; // 흰색 텍스트
-table.style.borderRadius = "10px"; // 둥근 모서리
-table.style.borderCollapse = "collapse"; // 테두리 겹침 방지
-table.style.border = "1px solid white";
 
-board.appendChild(table)
-var thead = document.createElement('thead')
-var tbody = document.createElement('tbody')
-table.appendChild(thead)
-table.appendChild(tbody)
+export default function Leaderboard(){
+    const serverAddress = "";
+    const tableStyle = {
+        width: "500px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        backgroundColor: "#0a0f1c", // dark navy
+        color: "#fff",
+        borderRadius: "10px",
+        borderCollapse: "collapse", // prevent border overlap
+        border: "1px solid white"
+    }
+    const thStyle = {
+        border: "1px solid #2e9cca",
+        backgroundColor: "#1c223a",
+        padding: "5px"
+    }
 
-thead.innerHTML = `<tr><td>`+btnTexts.cols[0]+`</td><td>`+btnTexts.cols[1]+`</td><td>`+btnTexts.cols[2]+`</td><td>`+btnTexts.cols[3]+`</td></tr>`
-var ths = thead.getElementsByTagName("td");
-for (var i = 0; i < ths.length; i++) {
-    ths[i].style.border = "1px solid #2e9cca"; // 네온 스타일 테두리
-    ths[i].style.backgroundColor = "#1c223a"; // 어두운 배경색
-    ths[i].style.padding = "5px"; // 셀 패딩
+    const [page, setPage] = useState(0);
+    const [save, setSave] = useState(null);
+
+    return(
+        <table style={tableStyle}>
+            <thead>
+                <tr>
+                    <td style={thStyle}>{btnTexts.cols[0]}</td>
+                    <td style={thStyle}>{btnTexts.cols[1]}</td>
+                    <td style={thStyle}>{btnTexts.cols[2]}</td>
+                    <td style={thStyle}>{btnTexts.cols[3]}</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    )
 }
-loadBoard(0, 0)
 
-document.addEventListener('DOMContentLoaded', function () {
-    var currentPath = window.location.pathname
-    history.replaceState(null, null, currentPath.replace('.html', ''))
-})
-
+// Sends requests to backend server.
+// Get a page of leaderboard except each specific code or each submitted code.
+// -> setBoard, loadBoard
 function getBoard(url){
     return new Promise((resolve, reject) => {
         fetch(serverAddress + url,{
@@ -90,7 +74,7 @@ function getBoard(url){
             for(var i = 0; i < leaderboards.length; i++){
                 leaderboards[i].score /= 100000 
             }
-            savedBoard = leaderboards
+            save = leaderboards
             //data.sort((a,b) => a.score - b.score)
             resolve(leaderboards)
         })
@@ -100,6 +84,9 @@ function getBoard(url){
     })
         
 }
+// Set <table> with given data.
+// Add toggle menu to show detail codes(set onClick event to <td> that uses getBoard())
+// -> loadBoard
 function setBoard(boardData){
     tbody.innerHTML = ""
 
@@ -168,15 +155,16 @@ function setBoard(boardData){
         }        
     }
 }
-function loadBoard(urlOp, pageMoveBy){
-    var apiUrl = urls[urlOp]
-    if (urlOp == 0) {
+// Call functions to set current leaderboard page.
+function loadBoard(option, pageMoveBy){
+    var apiUrl = urls[option]
+    if (option == 0) {
         newPage = page + pageMoveBy
         if(newPage > 9 || newPage < 0) return
         apiUrl += String(newPage)
     }
     getBoard(apiUrl).then(result => {
-        if (result.length == 0 && urlOp == 0){
+        if (result.length == 0 && option == 0){
             console.log('page is empty')
             return
         }
@@ -186,4 +174,4 @@ function loadBoard(urlOp, pageMoveBy){
     .catch(error => {
         console.log('Error', error)
     })   
-}*/
+}
