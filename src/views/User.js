@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import "./User.css"
 
 const btnTexts = require('lang/kor.json').user;
@@ -6,13 +7,8 @@ const serverAddress = "";
 
 import symbol from 'assets/images/main-symbol.png'
 
-function HomeBtn(){
-    return(
-        <Link to="/"><button btntype='main' className="home-btn">{btnTexts[4]}</button></Link>
-    )   
-}
-
 export default function User({ isLogin}){
+    const navigate = useNavigate();
     const [badAccess, setBadAccess] = useState(true);
     const [userData, setUserData] = useState(null);
 
@@ -44,7 +40,7 @@ export default function User({ isLogin}){
     if (isLogin && !badAccess && userData) {
         return(
         <div className="container">
-            <HomeBtn />
+            <button btntype='main' className="home-btn" onClick={()=>{navigate("/");}}>{btnTexts[4]}</button>
             <div className="box">
                 <div className="logo">
                     {/*로고 이미지 경로를 'logo.png'로 가정합니다. 실제 경로로 변경하세요.*/}

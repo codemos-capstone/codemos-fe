@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const btnTexts = require('lang/kor.json').btns;
 
 export default function MainBtn({btnType}){
+    const navigate = useNavigate();
     if(btnType === 'main'){
-        return <Link to="/"><button btntype={btnType} className='home-btn'>Home</button></Link>
+        return <button btntype={btnType} className='home-btn' onClick={()=>{navigate("/");}}>Home</button>
     }
     let btnText = btnTexts[btnType]
-    return <Link to={"/" + btnType}><button btntype={btnType} className='button'>{btnText}</button></Link>
+    return <button btntype={btnType} className='button' onClick={()=>{navigate("/" + btnType);}}>{btnText}</button>
 }

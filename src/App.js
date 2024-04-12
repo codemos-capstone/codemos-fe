@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react"
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import MainPage from "views/MainPage"
 import Game from "views/Game"
 import Docs from "views/Docs"
 import LoginPage from "views/LoginPage"
 import User from "views/User"
 import Leader from "views/Leader"
+import OnLogin from "views/OnLogin"
 
 export default function App(){
     const location = useLocation();
@@ -24,6 +25,7 @@ export default function App(){
                 <Route path="/userpage" element={<User isLogin={isLogin} />} />
                 <Route path="/game" element={<Game isLogin={isLogin}/>} />
                 <Route path="/leader" element={<Leader />} />
+                <Route path="/google/callback" element={<OnLogin />} />
             </Routes>
         </div>
     )
