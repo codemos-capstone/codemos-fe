@@ -6,16 +6,13 @@ const serverAddress = "";
 
 import symbol from 'assets/images/main-symbol.png'
 
-function HomeBtn({handlePage}){
+function HomeBtn(){
     return(
-        <button btntype='main' className="home-btn" onClick={handlePage}>{btnTexts[0]}</button>
+        <Link to="/"><button btntype='main' className="home-btn">{btnTexts[4]}</button></Link>
     )   
 }
 
-export default function User({setPage, isLogin}){
-    const handlePage = (e) => {
-        setPage(e.currentTarget.getAttribute('btnType'))
-    }
+export default function User({ isLogin}){
     const [badAccess, setBadAccess] = useState(true);
     const [userData, setUserData] = useState(null);
 
@@ -47,7 +44,7 @@ export default function User({setPage, isLogin}){
     if (isLogin && !badAccess && userData) {
         return(
         <div className="container">
-            <HomeBtn handlePage={handlePage} />
+            <HomeBtn />
             <div className="box">
                 <div className="logo">
                     {/*로고 이미지 경로를 'logo.png'로 가정합니다. 실제 경로로 변경하세요.*/}

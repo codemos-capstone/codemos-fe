@@ -1,4 +1,4 @@
-.user-page .container {
+.userpage .container {
     font-family: Arial, sans-serif;
     background-color: #02071e;
     color: white;
@@ -6,7 +6,7 @@
     padding: 0;
     overflow-y: auto;
 }
-.user-page .home-btn{
+.userpage .home-btn{
     position: fixed;
     top: 15px;
     left: 15px;
@@ -17,30 +17,30 @@
     border-radius: 5px;
     cursor: pointer;
 }
-.user-page .home-btn:hover{
+.userpage .home-btn:hover{
     background-color: #0056b3;
 }
 
-.user-page .box {
+.userpage .box {
     width: 80%;
     margin: 0 auto;
     text-align: center;
 }
 
-.user-page .logo img {
+.userpage .logo img {
     max-width: 15%;
     margin-top: 3%;
 
     height: auto;
 }
 
-.user-page .profile {
+.userpage .profile {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 20px;
 }
-.user-page .user-info-block {
+.userpage .user-info-block {
     align-items: center; /* 수직 중앙 정렬 */
     background-color: #333;
     border-radius: 10px;
@@ -51,7 +51,7 @@
     color: white;
 }
 
-.user-page .profile-icon {
+.userpage .profile-icon {
     width: 100px;
     height: 100px;
     background-image: url("assets/images/dol.jpg"); /* 이 부분은 실제 프로필 이미지로 대체 가능 */
@@ -62,26 +62,26 @@
     background-repeat: no-repeat; /* 이미지 반복 방지 */
 }
 
-.user-page .user-details {
+.userpage .user-details {
     text-align: left;
     display: flex;
     flex-direction: column; /* 세로 방향 정렬 */
 }
 
-.user-page .user-details h2 {
+.userpage .user-details h2 {
     margin: 5px 0; /* 상하 여백 */
 }
 
-.user-page .user-details .nickname {
+.userpage .user-details .nickname {
     font-size: 1.5em;
     font-weight: bold;
 }
 
-.user-page .user-info-block .small-text {
+.userpage .user-info-block .small-text {
     font-size: 0.8em; /* 아이디와 역할의 글자 크기를 작게 */
 }
 
-.user-page .reg-btn{
+.userpage .reg-btn{
     align-items: center;
     margin: 10px 0;
     justify-content: center;
@@ -95,7 +95,7 @@
     padding: 0 4px;
     background-color: #189f2a;
 }
-.user-page .reg-btn:hover{
+.userpage .reg-btn:hover{
     background-color: #0d5b17;
 }
 
@@ -114,19 +114,19 @@
     background-color: #801519;
 }
 
-.user-page .code-entities {
+.userpage .code-entities {
     margin-top: 20px;
     /* 동적인 코드 엔티티 목록 스타일링 */
 }
-.user-page .code{
+.userpage .code{
     border-radius: 5px;
     padding: 5px;
     cursor: pointer;
     text-align: left;
 }
-.user-page .code:hover {
+.userpage .code:hover {
     background-color: #0a0f58;
 }
-.user-page code{
+.userpage code{
     max-width: 100%;
 }

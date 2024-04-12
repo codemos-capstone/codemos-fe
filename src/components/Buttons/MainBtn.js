@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 const btnTexts = require('lang/kor.json').btns;
 
-export default function MainBtn({btnType, handlePage}){
+export default function MainBtn({btnType}){
     if(btnType === 'main'){
-        return <button btntype={btnType} className='home-btn' onClick={handlePage}>HOME</button>
+        return <Link to="/"><button btntype={btnType} className='home-btn'>Home</button></Link>
     }
     let btnText = btnTexts[btnType]
-    return <button btntype={btnType} className='button' onClick={handlePage}>{btnText}</button>
+    return <Link to={"/" + btnType}><button btntype={btnType} className='button'>{btnText}</button></Link>
 }

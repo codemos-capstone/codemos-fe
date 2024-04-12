@@ -1,36 +1,30 @@
 import React, { useEffect, useState } from "react"
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import MainPage from "views/MainPage"
 import Game from "views/Game"
 import Docs from "views/Docs"
-import Login from "views/LoginPage"
+import LoginPage from "views/LoginPage"
 import User from "views/User"
 import Leader from "views/Leader"
 
 export default function App(){
-    const [page, setPage] = useState('main');
+    const location = useLocation();
+    let pageName = location.pathname.split('/')[1];
+    if (pageName == ""){pageName = 'main'}
     const [isLogin, setIsLogin] = useState(false);
     useEffect(()=>{
         if (sessionStorage.getItem('jwtToken')) setIsLogin(true);
     }, [])
-
-    let pageContent
-    if (page === 'main')
-        pageContent = <MainPage setPage={setPage} isLogin={isLogin} setIsLogin={setIsLogin}/>;
-    else if (page === 'docs') {
-        pageContent = <Docs />
-    } else if (page === 'login') {
-        pageContent = <Login setPage={setPage} setIsLogin={setIsLogin} />
-    } else if (page === 'user-page'){
-        pageContent = <User setPage={setPage} isLogin={isLogin} />
-    } else if (page === 'game'){
-        pageContent = <Game setPage={setPage} isLogin={isLogin}/>
-    } else if (page === 'leader'){
-        pageContent = <Leader />
-    } else
-        pageContent = <MainPage isLogin={isLogin} setPage={setPage}/>;
     return(
-        <div className={page}>
-            {pageContent}
+        <div className={pageName}>
+            <Routes>
+                <Route path="/" element={<MainPage isLogin={isLogin} setIsLogin={setIsLogin} />}/>
+                <Route path="/docs" element={<Docs />} />
+                <Route path="/login" element={<LoginPage setIsLogin={setIsLogin} />} />
+                <Route path="/userpage" element={<User isLogin={isLogin} />} />
+                <Route path="/game" element={<Game isLogin={isLogin}/>} />
+                <Route path="/leader" element={<Leader />} />
+            </Routes>
         </div>
     )
 

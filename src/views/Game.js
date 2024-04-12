@@ -7,12 +7,9 @@ import MainBtn from "components/Buttons/MainBtn";
 import LoginBtn from "components/Buttons/LoginBtn";
 
 export default function Game({setPage, isLogin}){
-    const handlePage = (e) => {
-        setPage(e.currentTarget.getAttribute('btnType'))
-    }
     return(
         <div className="container">
-            <LoginBtn handlePage={handlePage} isLogin={isLogin}/>
+            <LoginBtn isLogin={isLogin}/>
         
             {/*<div className="game-window"></div>*/}
             <div id="endGameStats" className="fullSizeContainer">
@@ -118,7 +115,7 @@ export default function Game({setPage, isLogin}){
             <button className="code-btn">Code</button> {/** onClick="toggleVisibility()" */}
             <button className="apply-btn">Apply</button> {/** onClick="applyCodeHandler()" */}
             <button className="logout-btn" style={{display: 'none'}}>Logout</button> {/** onClick="logout()" */}
-            <MainBtn btnType='main' handlePage={handlePage} />
+            <MainBtn btnType='main' />
 
             {/*} <div id="tally" className="topRightCorner">L<span id="landingTotal"></span> C<span id="crashTotal"></span></div> */}
         </div>

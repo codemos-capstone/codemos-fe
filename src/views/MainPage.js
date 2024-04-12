@@ -8,13 +8,10 @@ import logo from 'assets/images/main-logo.png'
 
 import susuk from 'assets/images/dol.jpg'
 
-export default function MainPage({setPage, isLogin, setIsLogin}){
-    const handlePage = (e) => {
-        setPage(e.currentTarget.getAttribute('btnType'))
-    }
+export default function MainPage({isLogin, setIsLogin}){
     return(
         <div className='container'>
-            <LoginBtn handlePage={handlePage} isLogin={isLogin} setIsLogin={setIsLogin}/>
+            <LoginBtn isLogin={isLogin} setIsLogin={setIsLogin}/>
             <div>
                 <div className="mainpage">
                     <img src={symbol} width="100px" /><br />
@@ -26,9 +23,9 @@ export default function MainPage({setPage, isLogin, setIsLogin}){
                 </div>
                 <div className="menus" style={{padding: "50px", margin: "auto"}}>
                     <div className="buttons" style={{minWidth: "300px"}}>
-                        <MainBtn btnType='game' handlePage={handlePage} />
-                        <MainBtn btnType='docs' handlePage={handlePage} />
-                        <MainBtn btnType='leader' handlePage={handlePage} />
+                        <MainBtn btnType='game' />
+                        <MainBtn btnType='docs' />
+                        <MainBtn btnType='leader' />
                     </div>
                     <div style={{width: "40%",minWidth: "400px"}}><Leaderboard page="0" /></div>
                 </div>
