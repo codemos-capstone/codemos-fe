@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./User.css"
 
 const btnTexts = require('lang/kor.json').user;
+const serverAddress = "";
 
 import symbol from 'assets/images/main-symbol.png'
 
@@ -11,14 +12,43 @@ function HomeBtn({handlePage}){
     )   
 }
 
-export default function User({setPage}){
+export default function User({setPage, isLogin}){
     const handlePage = (e) => {
         setPage(e.currentTarget.getAttribute('btnType'))
     }
-    return(
-       <div className="container">
+    const [badAccess, setBadAccess] = useState(true);
+    const [userData, setUserData] = useState(null);
+
+    useEffect(()=>{
+        let token = sessionStorage.getItem('jwtToken')
+        if (token == null){
+            setBadAccess(true);
+            /*setTimeout(() => {
+                history.back()
+            }, 2000);*/
+        } else {
+            fetch(serverAddress + '/user/mypage', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                setBadAccess(false);
+                return response.json()
+            })
+            .then(data => {
+                setUserData(data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }, [])
+
+    if (isLogin && !badAccess && userData) {
+        return(
+        <div className="container">
             <HomeBtn handlePage={handlePage} />
-            <div className="container">
+            <div className="box">
                 <div className="logo">
                     {/*로고 이미지 경로를 'logo.png'로 가정합니다. 실제 경로로 변경하세요.*/}
                     <img src={symbol} alt="Logo" />
@@ -26,121 +56,65 @@ export default function User({setPage}){
                 <div className="profile">
                     <div className="user-info-block">
                         <div className="profile-icon"></div>
-                        <div className="user-details">
-                            <h2 className="nickname">{btnTexts[1]}</h2>
-                            <h2 className="small-text">ID: </h2>
-                            <h2 className="small-text">ROLE: </h2>
-                        </div>
+                        <UserInfo userDetail={[userData.loginId, userData.role]}  />
                         {/*<button id="deleteAccount">회원탈퇴</button>*/}
                     </div>
                 </div>
-                <div className="code-entities">
-                    <div id="code-buttons"></div>
-                    <pre id="display-code"></pre>
-                </div>
+                <CodeEntities codes={userData.leaderBoards} />
             </div>
-       </div> 
+        </div> 
+        );
+    } else {
+        return(<div className="container"><div className="box" style={{paddingTop: "100px"}}><div>Bad Access</div></div></div>);
+    }
+}
+function UserInfo({userDetail}){
+    return(
+        <div className="user-details">
+            <h2 className="nickname">{btnTexts[1]}</h2>
+            <h2 className="small-text">ID: {userDetail[0]}</h2>
+            <h2 className="small-text">ROLE: {userDetail[1]}</h2>
+        </div>
+    )
+}
+function CodeEntities({codes}){
+    const [showCode, setShowCode] = useState(codes.map(() => false));
+    const toggleCode = (idx) => {
+        setShowCode((prevState) => {
+            const newState = [...prevState];
+            newState[idx] = !newState[idx];
+            return newState;
+        });
+    };
+
+    return(
+        <div id="code-buttons">
+            {codes.map((item, idx)=>(
+                <div style={{display: "flex"}}>
+                    <div className="code" style={{width: "90%", margin: "5px"}} onClick={() => {toggleCode(idx);}}>
+                        [Code {item.leaderBoardId}]
+                        {showCode[idx] && <pre>
+                            <code style={{whiteSpace:"pre-wrap", overflowWrap:"break-word"}}>{item.code}</code>
+                        </pre>}
+                    </div>
+                    <button className="reg-btn" onClick={() => {registerCode(item.leaderBoardId)}}>{btnTexts[2]}</button>
+                    <button className="close" onClick={deleteCode} style={{
+                        color: "#fff",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        border: "none",
+                        backgroundColor: "transparent"}}>&#215;</button>
+                </div>
+            ))}
+        </div>
     )
 }
 
-/*var serverAddress = "http://18.179.38.25:8080"
-var codeList
-document.addEventListener("DOMContentLoaded", function () {
-    var currentPath = window.location.pathname;
-    history.replaceState(null, null, currentPath.replace(".html", ""));
-
-    var token = sessionStorage.getItem('jwtToken')
-    if (token == null){
-        var profile = document.querySelector('.profile')
-        profile.innerHTML = `<div>Bad Access</div>`
-        setTimeout(() => {
-            history.back()
-        }, 2000);
-    } else {
-        fetch(serverAddress + '/user/mypage', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            return response.json()
-        })
-        .then(data => {
-            console.log(data)
-            updateUserInfo(data);
-            createCodeButtons(data.leaderBoards);
-        })
-        .catch(error => console.error('Error:', error));
-    }
-});
-
-// 사용자 정보 업데이트
-function updateUserInfo(data) {
-    document.querySelector('.nickname').innerText = data.nickname;
-    var smallTextElements = document.querySelectorAll('.small-text');
-    if (smallTextElements.length >= 2) {
-        smallTextElements[0].innerText = 'ID: ' + data.loginId;
-        smallTextElements[1].innerText = 'ROLE: ' + data.role;
-    }
-}
-
-// 코드 엔티티에 대한 버튼 생성
-function createCodeButtons(leaderboards) {
-    codeList = leaderboards
-    var codeboxesContainer = document.getElementById('code-buttons');
-    leaderboards.forEach(board => {
-        var row = document.createElement('div');
-        row.style.display = "flex"
-        codeboxesContainer.appendChild(row);
-        var codebox = document.createElement('div');
-        row.appendChild(codebox);
-        codebox.classList.add('code')
-        codebox.innerText = '[Code ' + board.leaderBoardId + ']';
-        codebox.style.width = "90%"
-        codebox.style.margin = "5px"
-        codebox.addEventListener('click', function(){
-            this.classList.toggle("show")
-            if(this.classList.contains("show")){
-                this.innerHTML += `<pre><code style ="white-space: pre-wrap;overflow-wrap: break-word;"></code></pre>`
-                this.querySelector('code').innerText = board.code                   
-            } else {
-                this.querySelector('pre').remove()
-            }
-            event.stopPropagation()
-        })
-        var regButton = document.createElement('button')
-        regButton.classList.add("reg-btn")
-        regButton.innerText = '등록'
-        regButton.addEventListener('click', registerCode)
-        codebox.insertAdjacentElement('afterend', regButton)*/
-        /*var delButton = document.createElement('button')
-        delButton.style.cssText = `
-            color: #fff;
-            font-size: 20px;
-            cursor: pointer;
-            border: none;
-            background-color: transparent;`
-        delButton.classList.add('close')
-        delButton.innerText = '&#215;';
-        delButton.addEventListener('click', deleteCode)  
-        codebox.insertAdjacentElement('afterend', delButton)*//*
-    });
-}
-function registerCode(){
-    var conf = confirm("이 코드를 등록할까요?")
-    var str = this.previousElementSibling.innerText
-    let matches = str.match(/\[Code (\d+)\]/);
-    let codeNumber
-    if (matches) {
-        codeNumber = parseInt(matches[1], 10);
-    } else {
-        console.log("No code number found");
-        return
-    }
+function registerCode(codeNum){
+    var conf = confirm(btnTexts[3]);
     var token = sessionStorage.getItem('jwtToken')
     if(conf){
-        fetch(serverAddress+"/user/updateRanking/"+codeNumber,{
+        fetch(serverAddress+"/user/updateRanking/"+codeNum,{
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -160,8 +134,8 @@ function registerCode(){
 function deleteCode(){
     var conf = confirm("이 코드를 삭제할까요?")
     if(conf){
-        this.parentNode.parentNode.remove()
-        //fetch(삭제~~)
+        //fetch(_delete from server_)
+        //reload page
     }
 }
-function deleteAccount(){}*/
+function deleteAccount(){}

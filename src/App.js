@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import MainPage from "views/MainPage"
 import Game from "views/Game"
 import Docs from "views/Docs"
@@ -9,6 +9,10 @@ import Leader from "views/Leader"
 export default function App(){
     const [page, setPage] = useState('main');
     const [isLogin, setIsLogin] = useState(false);
+    useEffect(()=>{
+        if (sessionStorage.getItem('jwtToken')) setIsLogin(true);
+    }, [])
+
     let pageContent
     if (page === 'main')
         pageContent = <MainPage setPage={setPage} isLogin={isLogin} setIsLogin={setIsLogin}/>;
@@ -17,7 +21,7 @@ export default function App(){
     } else if (page === 'login') {
         pageContent = <Login setPage={setPage} setIsLogin={setIsLogin} />
     } else if (page === 'user-page'){
-        pageContent = <User isLogin={isLogin} setPage={setPage} />
+        pageContent = <User setPage={setPage} isLogin={isLogin} />
     } else if (page === 'game'){
         pageContent = <Game setPage={setPage} isLogin={isLogin}/>
     } else if (page === 'leader'){
