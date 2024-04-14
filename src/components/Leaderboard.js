@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const btnTexts = require('lang/kor.json').leader;
-const serverAddress = "";
+const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
 
 // Set <tbody> with given data.
 // Add toggle menu to show detail codes(set onClick event to <td> that uses getBoard())
@@ -107,6 +107,7 @@ export default function Leaderboard({ page }){
 // Get a page of leaderboard except each specific code or each submitted code.
 // -> loadBoard
 function getBoard(url){
+    console.log(serverAddress)
     return new Promise((resolve, reject) => {
         fetch(serverAddress + url,{
             method: "GET",

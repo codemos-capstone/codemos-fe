@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const btnTexts = require('lang/kor.json').login;
 
 export default function Login({ setForm, setToLogin }){
-    const serverAddress = "";
+    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     const [userid, setUserid] = useState("");
     const [password, setPassword] = useState("");
     function handleLogin(e){
