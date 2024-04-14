@@ -107,7 +107,6 @@ export default function Leaderboard({ page }){
 // Get a page of leaderboard except each specific code or each submitted code.
 // -> loadBoard
 function getBoard(url){
-    console.log(serverAddress)
     return new Promise((resolve, reject) => {
         fetch(serverAddress + url,{
             method: "GET",
