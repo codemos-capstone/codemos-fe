@@ -25,7 +25,7 @@ export default function LoginPage({setPage, setIsLogin}){
         <div className="container" style={{padding: '10px'}}>
             <div className="success-message" id="successMessage">{btnTexts[0]}</div>
             {form}
-            <Link to=""><button>구글</button></Link>
+            <Link to={process.env.REACT_APP_GOOGLE_AUTH}><button>구글</button></Link>
             <div className="home">
                 <button btntype='main' className="home-btn" onClick={()=>{navigate("/");}}>{btnTexts[4]}</button>
             </div>
