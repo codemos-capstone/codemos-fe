@@ -19,21 +19,19 @@ import { makeTheme } from "utils/theme.js";
 import { TRANSITION_TO_SPACE, VELOCITY_MULTIPLIER } from "utils/helpers/constants.js";
 import { landingScoreDescription, crashScoreDescription, destroyedDescription } from "utils/helpers/scoring.js";
 
-let isisLogin = true;
-
-var serverAddress = "http://18.179.38.25:8080";
+let isLogin = false;
 var checkLoginID;
 document.addEventListener("DOMContentLoaded", () => {
     //로그인 확인
     console.log(sessionStorage.getItem("jwtToken"));
     if (sessionStorage.getItem("jwtToken") == null) {
         console.log("no token");
-        isisLogin = false;
+        isLogin = false;
         /*document.querySelector(".home-login-btn").style.display = "block";
         document.querySelector(".home-logout-btn").style.display = "none";
         document.querySelector(".home-mypage-btn").style.display = "none";*/
     } else {
-        isisLogin = true;
+        isLogin = true;
         /*document.querySelector(".home-login-btn").style.display = "none";
         document.querySelector(".home-logout-btn").style.display = "block";
         document.querySelector(".home-mypage-btn").style.display = "block";*/
@@ -51,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 if (response.text() == "Invalid token.") {
                     sessionStorage.removeItem("jwtToken");
-                    isisLogin = false;
+                    isLogin = false;
                     /*document.querySelector(".home-login-btn").style.display = "block";
                     document.querySelector(".home-logout-btn").style.display = "none";
                     document.querySelector(".home-mypage-btn").style.display = "none";*/
@@ -66,12 +64,12 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(sessionStorage.getItem("jwtToken"));
         if (sessionStorage.getItem("jwtToken") == null) {
             console.log("no token");
-            isisLogin = false;
+            isLogin = false;
             /*document.querySelector(".home-login-btn").style.display = "block";
             document.querySelector(".home-logout-btn").style.display = "none";
             document.querySelector(".home-mypage-btn").style.display = "none";*/
         } else {
-            isisLogin = true;
+            isLogin = true;
             /*document.querySelector(".home-login-btn").style.display = "none";
             document.querySelector(".home-logout-btn").style.display = "block";
             document.querySelector(".home-mypage-btn").style.display = "block";*/
@@ -89,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                     if (response.text() == "Invalid token.") {
                         sessionStorage.removeItem("jwtToken");
-                        isisLogin = false;
+                        isLogin = false;
                         /*document.querySelector(".home-login-btn").style.display = "block";
                         document.querySelector(".home-logout-btn").style.display = "none";
                         document.querySelector(".home-mypage-btn").style.display = "none";*/
@@ -105,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 export function logout() {
     sessionStorage.removeItem("jwtToken");
-    isisLogin = false;
+    isLogin = false;
     /*document.querySelector(".home-login-btn").style.display = "block";
     document.querySelector(".home-logout-btn").style.display = "none";
     document.querySelector(".home-mypage-btn").style.display = "none";*/

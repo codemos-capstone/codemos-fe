@@ -21,9 +21,9 @@ export const manageInstructions = (onCloseInstructions) => {
     document.querySelector("#instructions").classList.add("show");
 
     if (likelyTouchDevice) {
-      document.querySelector("#forKeyboard").remove();
+      if (document.querySelector("#forKeyboard")) document.querySelector("#forKeyboard").remove();
     } else {
-      document.querySelector("#forTouch").remove();
+      if (document.querySelector("#forTouch")) document.querySelector("#forTouch").remove();
     }
   };
 

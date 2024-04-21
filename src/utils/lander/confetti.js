@@ -12,11 +12,11 @@ export const makeConfetti = (state, amount, passedPosition, passedVelocity) => {
   const CTX = state.get("CTX");
   const canvasWidth = state.get("canvasWidth");
   const canvasHeight = state.get("canvasHeight");
-  const audio = state.get("audioManager");
+  //const audio = state.get("audioManager");
   const confettiTypeAmount = Math.round(amount / 2);
   const timeOfInit = Date.now();
   const visibilityDuration = 5_000;
-  let hasPlayedAudio = false;
+  //let hasPlayedAudio = false;
 
   const _startingPosition = (index) =>
     passedPosition
@@ -88,10 +88,10 @@ export const makeConfetti = (state, amount, passedPosition, passedVelocity) => {
         twirlPieces.length = 0;
         confettiPieces.length = 0;
       } else {
-        if (!hasPlayedAudio) {
+        /*if (!hasPlayedAudio) {
           audio.playConfetti();
           hasPlayedAudio = true;
-        }
+        }*/
         CTX.save();
         const animationProgress = clampedProgress(
           0,

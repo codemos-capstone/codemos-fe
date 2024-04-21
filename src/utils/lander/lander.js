@@ -137,6 +137,7 @@ export const makeLander = (state, onGameEnd) => {
 
     const _updateProps = (deltaTime) => {
         const deltaTimeMultiplier = deltaTime / INTERVAL;
+        //let temp = _position.y;
 
         _position.y = _position.y + deltaTimeMultiplier * _velocity.y;
 
@@ -145,6 +146,7 @@ export const makeLander = (state, onGameEnd) => {
             (_position.y + LANDER_HEIGHT / 2 >= _landingData.terrainHeight &&
                 !CTX.isPointInPath(_landingData.terrainPath2D, _position.x * state.get("scaleFactor"), (_position.y + LANDER_HEIGHT / 2) * state.get("scaleFactor")))
         ) {
+            //console.log(_position.y+"= "+_position.y+" + "+deltaTimeMultiplier+" * "+_velocity.y)
             // Update ballistic properties
             if (_rotatingRight) _rotationVelocity += deltaTimeMultiplier * 0.01;
             if (_rotatingLeft) _rotationVelocity -= deltaTimeMultiplier * 0.01;
@@ -201,6 +203,7 @@ export const makeLander = (state, onGameEnd) => {
                 _babySoundPlayed = false;
             }
         } else if (!gameEndData) {
+            //console.log(_position, _landingData)
             _engineOn = false;
             _rotatingLeft = false;
             _rotatingRight = false;

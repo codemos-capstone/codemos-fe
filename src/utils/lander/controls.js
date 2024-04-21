@@ -14,17 +14,17 @@ export const makeControls = (state, lander) => { //, audioManager
   function onKeyDown({ key }) {
     if (key === "w" || key === "ArrowUp") {
       lander.engineOn();
-      lander.setIsPressKey();
+      //lander.setIsPressKey();
       //audioManager.playEngineSound();
     }
     if (key === "a" || key === "ArrowLeft") {
       lander.rotateLeft();
-      lander.setIsPressKey();
+      //lander.setIsPressKey();
       //audioManager.playBoosterSound1();
     }
     if (key === "d" || key === "ArrowRight") {
       lander.rotateRight();
-      lander.setIsPressKey();
+      //lander.setIsPressKey();
       //audioManager.playBoosterSound2();
     }
     hasKeyboard = true;

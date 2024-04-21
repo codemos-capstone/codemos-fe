@@ -11,8 +11,8 @@ export default function Canvas({ appState }){
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
 
-        element.width = Math.floor(width * scale);
-        element.height = Math.floor(height * scale);
+        canvas.width = Math.floor(width * scale);
+        canvas.height = Math.floor(height * scale);
         
         height = window.innerHeight;
         width = window.innerWidth;
