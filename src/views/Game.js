@@ -346,8 +346,8 @@ export default function Game({ isLogin }){
                 />
             </div>
 
-            <div id="docs" style={{visibility: 'hidden'}}>
-                {/*<Docs />*/}
+            <div id="docs" style={{visibility: 'hidden', overflowY: "auto"}}>
+                <Docs />
             </div>
 
             <button className="docs-btn" onClick={apiDocsToggle}>Docs</button>
