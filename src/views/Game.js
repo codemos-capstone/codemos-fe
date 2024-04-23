@@ -1,5 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Game.css"
+import Docs from "./Docs";
+
+import AceEditor from "react-ace-builds";
+import "react-ace-builds/webpack-resolver-min";
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/theme-ambiance';
 
 import { animate, clampedProgress, generateCanvas, randomBetween, seededRandomBetween, seededRandomBool, transition } from "utils/helpers/helpers.js";
 import { makeLander } from "utils/lander/lander.js";
@@ -27,12 +33,33 @@ import { landingScoreDescription, crashScoreDescription, destroyedDescription } 
 import MainBtn from "components/Buttons/MainBtn";
 import LoginBtn from "components/Buttons/LoginBtn";
 
+let _lander;
+
 
 export default function Game({ isLogin }){
+    const [code, setCode] = useState('// TODO: \nnewInterval = setInterval(() => {\n    // TODO: \n}, 1);\n// TODO:');
+    const onChange = (value) => {setCode(value);};
+
     const canvasRef = useRef(null);
     let scale = window.devicePixelRatio;
     let height = window.innerHeight;
     let width = window.innerWidth;
+
+    const applyCodeHandler = () => {
+        applyCode(code);
+        setSaveCode(code);
+        saveCode(code);
+    }
+    
+    
+    const loadCode = () => {
+        const code = localStorage.getItem("myCodemosCode");
+        if (code) {
+            setCode(code);
+        } else {
+            setCode("// TODO: \nnewInterval = setInterval(() => {\n    // TODO: \n}, 1);\n// TODO:");
+        }
+    }
 
     useEffect(()=>{
         const canvasElement = canvasRef.current;
@@ -88,6 +115,7 @@ export default function Game({ isLogin }){
             );
             const toyLanderControls = makeControls(appState, toyLander); //, audioManager
             const lander = makeLander(appState, onGameEnd);
+            _lander = lander
             const landerControls = makeControls(appState, lander);
             const tally = makeTallyManger();
 
@@ -173,14 +201,6 @@ export default function Game({ isLogin }){
                 terrain.setShowLandingSurfaces();
             }
 
-            //let _code;
-
-            /*export function setSaveCode(code) {
-                _code = code;
-            }*/
-
-            //window.setSaveCode = setSaveCode;
-
             function onGameEnd(data) {
                 gameEnded = true;
                 landerControls.detachEventListeners();
@@ -230,7 +250,7 @@ export default function Game({ isLogin }){
             <LoginBtn isLogin={isLogin}/>
         
             <canvas ref={ canvasRef } style={{width: `${width}px`, height: `${height}px`}}></canvas>
-            <div id="endGameStats" className="fullSizeContainer">
+            <div id="endGameStats" className="fullSizeContainer" style={{color: "white"}}>
                 <h1 id="description"></h1>
                 <div className="scoreContainer"><span id="score"></span> point <span id="type"></span></div>
                 <div className="meterAndLabel">
@@ -314,25 +334,26 @@ export default function Game({ isLogin }){
             <div id="drag-handle"></div>
 
             {/* 코드 에디터 */}
-            <div id="editorWrap" style={{visibility: 'hidden'}}>
-                <div id="editor"></div>
+            <div id="editorWrap" style={{visibility: "hidden"}}>
+                <AceEditor
+                    id="editor"
+                    mode="javascript"
+                    theme="ambiance"
+                    onChange={onChange}
+                    value={code}
+                    name="code-editor"
+                    editorProps={{ $blockScrolling: true }}
+                />
             </div>
 
             <div id="docs" style={{visibility: 'hidden'}}>
-                {/*<iframe src="docs.html" width="100%" height="100%"></iframe>*/}
+                {/*<Docs />*/}
             </div>
 
-            {/*<script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-            <script src="index.js" type="module"></script>
-            <script src="func.js" type="module"></script>
-            <script>
-                원래 코드들 있던 자리
-            </script>*/}
-
-            <button className="docs-btn">Docs</button> {/** onClick="apiDocsToggle()" */}
-            <button className="code-btn">Code</button> {/** onClick="toggleVisibility()" */}
-            <button className="apply-btn">Apply</button> {/** onClick="applyCodeHandler()" */}
-            <button className="logout-btn" style={{ display: 'none' }}>Logout</button> {/** onClick="logout()" */}
+            <button className="docs-btn" onClick={apiDocsToggle}>Docs</button>
+            <button className="code-btn" onClick={toggleVisibility}>Code</button>
+            <button className="apply-btn" onClick={applyCodeHandler}>Apply</button>
+            <button className="logout-btn" style={{ display: 'none' }}>Logout</button> {/**onClick={logout} */}
             <MainBtn btnType='main' />
 
             {/*} <div id="tally" className="topRightCorner">L<span id="landingTotal"></span> C<span id="crashTotal"></span></div> */}
@@ -379,6 +400,94 @@ function checkHandleVisibility() {
         handle.style.visibility = "hidden";
     }
 }
+
+let _code;
+
+function setSaveCode(code) {
+    _code = code;
+}
+
+window.setSaveCode = setSaveCode;
+
+function getVelocityX() {
+    return _lander.getVelocity().x * VELOCITY_MULTIPLIER;
+}
+
+function getVelocityY() {
+    return _lander.getVelocity().y * VELOCITY_MULTIPLIER;
+}
+
+function getAngle() {
+    return Number(_lander.getAngle());
+}
+
+function getHeight() {
+    return Number(_lander.getHeight());
+}
+
+function getRotationVelocity() {
+    return _lander.getRotationVelocity();
+}
+
+function engineOn() {
+    _lander.engineOn();
+}
+
+function engineOff() {
+    _lander.engineOff();
+}
+
+function rotateLeft() {
+    _lander.rotateLeft();
+}
+
+function stopLeftRotation() {
+    _lander.stopLeftRotation();
+}
+
+function rotateRight() {
+    _lander.rotateRight();
+}
+
+function stopRightRotation() {
+    _lander.stopRightRotation();
+}
+
+function logging() {
+    console.log(
+        "getVelocityX()        : " +
+            getVelocityX() +
+            "\ngetVelocityY()        : " +
+            getVelocityY() +
+            "\ngetAngle()            : " +
+            getAngle() +
+            "\ngetHeight()           : " +
+            getHeight() +
+            "\ngetRotationVelocity() : " +
+            getRotationVelocity()
+    );
+}
+
+function removeComment(code) {
+    return code
+        .replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+}
+
+var newInterval;
+var isFirst = true;
+
+function applyCode(userCode) {
+    console.log(userCode);
+    var code = removeComment(userCode); 
+
+    if (!isFirst) clearInterval(newInterval);
+    (function() {
+        eval(code);
+    })();
+    isFirst = false;
+}
+
+window.applyCode = applyCode;
 /*
 document.addEventListener("DOMContentLoaded", function () {
     var handle = document.getElementById("drag-handle");
@@ -412,24 +521,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });*/
 
-function applyCodeHandler() {
-    var code = editor.getValue();
-    applyCode(code);
-    setSaveCode(code);
-    saveCode(code);
-}
-
 function saveCode(code) {
     localStorage.setItem("myCodemosCode", code);
     console.log("코드가 저장되었습니다.");
-}
-
-function loadCode() {
-    var code = localStorage.getItem("myCodemosCode");
-    var editorElement = document.getElementById("editor");
-    if (code) {
-        editor.setValue(code);
-    } else {
-        editor.setValue("// TODO: \nnewInterval = setInterval(() => {\n    // TODO: \n}, 1);\n// TODO:");
-    }
 }
