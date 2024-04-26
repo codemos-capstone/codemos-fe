@@ -5,4 +5,4 @@ export const TRANSITION_TO_SPACE = LANDER_HEIGHT * 4;
 export const CRASH_VELOCITY = 0.6;
 export const VELOCITY_MULTIPLIER = 20;
 export const CRASH_ANGLE = 11;
-export const INTERVAL = Math.floor(1000 / 120);
+export const INTERVAL = Math.floor(1000 / 120); // 
