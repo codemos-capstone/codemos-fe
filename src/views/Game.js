@@ -42,8 +42,8 @@ export default function Game({ isLogin }){
 
     const canvasRef = useRef(null);
     let scale = window.devicePixelRatio;
-    let height = window.innerHeight;
-    let width = window.innerWidth;
+    let height = 500; //window.innerHeight;
+    let width = 500; //window.innerWidth;
 
     const applyCodeHandler = () => {
         applyCode(code);
@@ -69,8 +69,8 @@ export default function Game({ isLogin }){
             canvasElement.width = Math.floor(width * scale);
             canvasElement.height = Math.floor(height * scale);
             
-            height = window.innerHeight;
-            width = window.innerWidth;
+            height = 500; // window.innerHeight;
+            width = 500; //window.innerWidth;
             scale = window.devicePixelRatio;
             const scaleFactor = scale;
             const canvasHeight = height;
