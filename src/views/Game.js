@@ -250,7 +250,7 @@ export default function Game({ isLogin }){
             <LoginBtn isLogin={isLogin}/>
         
             <canvas ref={ canvasRef } style={{width: `${width}px`, height: `${height}px`}}></canvas>
-            <div id="endGameStats" className="fullSizeContainer" style={{color: "white"}}>
+            <div id="endGameStats" className="fullSizeContainer">
                 <h1 id="description"></h1>
                 <div className="scoreContainer"><span id="score"></span> point <span id="type"></span></div>
                 <div className="meterAndLabel">
