@@ -1,0 +1,116 @@
+.main .container {
+    margin: 100px;
+    background: #02071e;
+    font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.main .button {
+    background-color: #0a0f1c;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 20px;
+    border: 2px solid #2e9cca;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    margin: 30px auto 20px auto;
+    text-decoration: none;
+    text-align: center;
+    width: 250px;
+    box-shadow: 0 0 10px #2e9cca;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.main .button:hover, .main .home-login-btn:hover, .main .home-logout-btn:hover {
+    background-color: #2e9cca;
+    box-shadow: 0 0 20px #2e9cca;
+}
+
+.main .menus {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+@media screen and (max-width: 1080px) {
+    .main .menus {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+.main .buttons {
+    width: 40%;
+    margin: 0px 30px;
+}
+
+.main .mainpage {
+    margin: 0px auto;
+}
+.main .home-login-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: #fff;
+    background-color: #0a0a1a;
+    box-shadow: 0 0 10px #4d4dff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration-line: none;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+.main .home-logout-btn {
+    position: fixed;
+    top: 20px;
+    right: 100px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: #fff;
+    background-color: #0a0a1a;
+    box-shadow: 0 0 10px #4d4dff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+.main .home-mypage-btn {
+    position: fixed;
+    top: 8px;
+    right: 10px;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #02071e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.main .iframe-container {
+    display: flex;
+}
+
+.main .iframe-container iframe {
+    width: 50%;
+    border: none;
+}
+
+.main .iframe-container iframe {
+    height: 400px;
+    border-radius: 10px;
+}
+
+.main .profile-image {
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #4d4dff;
+    box-shadow: 0 0 10px #4d4dff;
+}
+.main .profile {
+    object-fit: cover;
+    width: 40px;
+    height: 30px;
+}

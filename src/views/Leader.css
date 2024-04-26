@@ -1,0 +1,81 @@
+.leader .container {
+    margin: 0;
+    background: #02071e;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: hidden;
+    font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #fff;
+    padding: 10px;
+    overflow-y: auto;
+}
+.leader  #board table{
+    border-collapse: collapse;
+    color: #fff;
+    margin: 10px 0;
+}
+.leader  button {
+    margin: 1px 3px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.leader  button:hover {
+    background-color: #0056b3;
+}
+.leader .load-btn{
+    background-color: #124b89;
+}
+.leader .load-btn:hover{
+    background-color: #396798;
+}
+
+.leader  .btns{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 2px;
+}
+
+.leader .load div{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+#board td, #board th{
+    width: 20%;
+    text-align: center;
+}
+#board td p{
+    text-align: initial;
+}
+#board tr{
+    border-radius: 8px;
+    overflow: hidden;
+}
+#board .row:hover{
+    background-color: #00244b;
+}
+.leader .details{
+    background-color: #0f0f25;
+    display: table-row;
+    margin: 0 auto;
+    padding: 4px;
+    opacity: 1;
+    overflow: hidden;
+}
+.leader .details pre{
+    text-align: left;
+    margin: 10px 10px;
+}
+.leader .details-hide{
+    display: none;
+}
+.leader .row:hover {
+    background-color: #2e9cca; /* 마우스 오버 시 네온 색상 */
+    cursor: pointer; /* 마우스 포인터 변경 */
+}
