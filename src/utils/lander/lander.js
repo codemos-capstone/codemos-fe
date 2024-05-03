@@ -5,20 +5,19 @@ import { makeLanderExplosion } from "./explosion.js";
 import { makeConfetti } from "./confetti.js";
 import { drawTrajectory } from "./trajectory.js";
 import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.js";
+import { _mainLoop  } from "../../views/Game.js";
 
 export const makeLander = (state, onGameEnd) => {
     const CTX = state.get("CTX");
     const canvasWidth = state.get("canvasWidth");
     const canvasHeight = state.get("canvasHeight");
-    //const audioManager = state.get("audioManager");
+    const audioManager = null;
     const bonusPointsManager = state.get("bonusPointsManager");
 
     // Use grounded height to approximate distance from ground
     const _landingData = state.get("terrain").getLandingData();
     const _groundedHeight = _landingData.terrainAvgHeight - LANDER_HEIGHT + LANDER_HEIGHT / 2;
     
-    // xxx : #3
-    const _thrust = 0.01;
 
     let _position;
     let _displayPosition;
@@ -45,13 +44,35 @@ export const makeLander = (state, onGameEnd) => {
 
     let _isPressKeyVal;
 
+
+
     // xxx : #4
     let fuel;
-
     let time;
 
-    const fuelLimit = 100;
-    const timeLimit = 5000;
+
+//****************** 서버가 던진거 받아서 초기화 ㄱㄱ ********************* */
+
+    
+    let _fuelLimit = 100;                   // 연료 제한 l
+    let _timeLimit = 5000;                  // 시간 제한 ms
+
+    // xxx : #3
+    let _thrust = 0.01;                     // 주 엔진 추력
+    let _rThrust = 0.01;                    // 보조 엔진(방향) 추력
+
+    // xxx : #2
+    let _startPosX = canvasWidth / 2;       // 우주선 시작 좌표
+    let _startPosY = canvasHeight / 2;
+
+    let _startVelX = 0;                     // 우주선 시작 속도
+    let _startVelY = 0;
+    
+    let _startRotVel = 0;                   // 우주선 시작 각속도
+    let _startAngle = 0;                    // 우주선 시작 각도
+
+//****************************************************************** */
+
 
 
     // xxx : #2
@@ -59,16 +80,16 @@ export const makeLander = (state, onGameEnd) => {
         const seededRandom = state.get("seededRandom");
         // const seededRandom = Math.random(); // XXX: temp
         _position = {
-            x: canvasWidth / 2,//seededRandomBetween(canvasWidth * 0.33, canvasWidth * 0.66, seededRandom),
-            y: canvasHeight / 2// LANDER_HEIGHT * 2,
+            x: _startPosX,//seededRandomBetween(canvasWidth * 0.33, canvasWidth * 0.66, seededRandom),
+            y: _startPosY// LANDER_HEIGHT * 2,
         };
         _displayPosition = { ..._position };
         _velocity = {
-            x: 0, // seededRandomBetween(-_thrust * (canvasWidth / 10), _thrust * (canvasWidth / 10), seededRandom),
-            y: 0 // seededRandomBetween(0, _thrust * (canvasWidth / 10), seededRandom),
+            x: _startVelX, // seededRandomBetween(-_thrust * (canvasWidth / 10), _thrust * (canvasWidth / 10), seededRandom),
+            y: _startVelY // seededRandomBetween(0, _thrust * (canvasWidth / 10), seededRandom),
         };
-        _rotationVelocity = 0; // seededRandomBetween(-0.2, 0.2, seededRandom);
-        _angle = 0; // seededRandomBetween(Math.PI * 1.5, Math.PI * 2.5, seededRandom);
+        _rotationVelocity = _startRotVel; // seededRandomBetween(-0.2, 0.2, seededRandom);
+        _angle = _startAngle; // seededRandomBetween(Math.PI * 1.5, Math.PI * 2.5, seededRandom);
         _engineOn = false;
         _rotatingLeft = false;
         _rotatingRight = false;
@@ -96,7 +117,7 @@ export const makeLander = (state, onGameEnd) => {
 
     const _isFixedPositionInSpace = () => _position.y < 0;
 
-    const _setGameEndData = (landed, struckByAsteroid = false) => {
+    const _setGameEndData = (landed, struckByAsteroid = false, isTimeOver = false) => {
         gameEndData = {
             isPressKey: _isPressKeyVal,
             landed,
@@ -110,6 +131,10 @@ export const makeLander = (state, onGameEnd) => {
             maxHeight: heightInFeet(_maxHeight, _groundedHeight),
             speedPercent: percentProgress(0, CRASH_VELOCITY, getVectorVelocity(_velocity)),
             anglePercent: percentProgress(0, CRASH_ANGLE, getAngleDeltaUpright(_angle)),
+            fuel: fuel,
+            time: time,
+            timeOver: isTimeOver,
+            timeLimit: _timeLimit
         };
         if (landed) {
             const score = scoreLanding(getAngleDeltaUpright(_angle), getVectorVelocity(_velocity));
@@ -125,6 +150,7 @@ export const makeLander = (state, onGameEnd) => {
             const score = scoreCrash(getAngleDeltaUpright(_angle), getVectorVelocity(_velocity));
 
             gameEndData.landerScore = score;
+            if (isTimeOver) gameEndData.landerScore = 999;
 
             _gameEndExplosion = makeLanderExplosion(state, _isFixedPositionInSpace() ? _displayPosition : _position, _velocity, _angle, !_isFixedPositionInSpace());
 
@@ -142,9 +168,9 @@ export const makeLander = (state, onGameEnd) => {
             _engineOn = false;
             _rotatingLeft = false;
             _rotatingRight = false;
-            //audioManager.stopEngineSound();
-            //audioManager.stopBoosterSound1();
-            //audioManager.stopBoosterSound2();
+            // audioManager.stopEngineSound();
+            // audioManager.stopBoosterSound1();
+            // audioManager.stopBoosterSound2();
             _setGameEndData(false, true);
         }
     };
@@ -152,7 +178,7 @@ export const makeLander = (state, onGameEnd) => {
     const _updateProps = (deltaTime) => {
         const deltaTimeMultiplier = 1;// deltaTime / INTERVAL;
 
-        if (time > timeLimit) _setGameEndData(false);
+        if (time > _timeLimit) _setGameEndData(false, false, true);
 
         _position.y = _position.y + deltaTimeMultiplier * _velocity.y;
 
@@ -163,13 +189,13 @@ export const makeLander = (state, onGameEnd) => {
         ) {
             // Update ballistic properties
             // xxx : #3
-            if (_rotatingRight && fuel < fuelLimit) { // xxx : #4
-                _rotationVelocity += deltaTimeMultiplier * 0.01;
-                fuel += deltaTimeMultiplier * _thrust * 2; // xxx : #4
+            if (_rotatingRight && fuel < _fuelLimit) { // xxx : #4
+                _rotationVelocity += deltaTimeMultiplier * _rThrust;
+                fuel += deltaTimeMultiplier * _rThrust * 2; // xxx : #4
             }
-            if (_rotatingLeft && fuel < fuelLimit) { // xxx : #4
-                _rotationVelocity -= deltaTimeMultiplier * 0.01;
-                fuel += deltaTimeMultiplier * _thrust * 2; // xxx : #4
+            if (_rotatingLeft && fuel < _fuelLimit) { // xxx : #4
+                _rotationVelocity -= deltaTimeMultiplier * _rThrust;
+                fuel += deltaTimeMultiplier * _rThrust * 2; // xxx : #4
             }
             if (_position.x < 0) _position.x = canvasWidth;
 
@@ -181,13 +207,13 @@ export const makeLander = (state, onGameEnd) => {
 
             _displayPosition.x = _position.x;
 
-            if (_engineOn && fuel < fuelLimit) { // xxx : #4
+            if (_engineOn && fuel < _fuelLimit) { // xxx : #4
                 _velocity.x += deltaTimeMultiplier * (_thrust * Math.sin(_angle));
                 _velocity.y -= deltaTimeMultiplier * (_thrust * Math.cos(_angle));
                 fuel += deltaTimeMultiplier * _thrust * 20; // xxx : #4
             }
 
-            console.log("fuel : " + fuel.toFixed(2) + "L & time : " + time + "ms");
+            // console.log("fuel : " + fuel.toFixed(2) + "L & time : " + time + "ms");
 
             // Log new rotations
             const rotations = Math.floor(_angle / (Math.PI * 2));
@@ -220,7 +246,7 @@ export const makeLander = (state, onGameEnd) => {
 
             // Play easter egg baby sound
             if (getVectorVelocity(_velocity) > 20 && !_babySoundPlayed) {
-                //state.get("audioManager").playBaby();
+                // state.get("audioManager").playBaby();
                 _babySoundPlayed = true;
             } else if (getVectorVelocity(_velocity) < 20 && _babySoundPlayed) {
                 _babySoundPlayed = false;
@@ -229,9 +255,9 @@ export const makeLander = (state, onGameEnd) => {
             _engineOn = false;
             _rotatingLeft = false;
             _rotatingRight = false;
-            //audioManager.stopEngineSound();
-            //audioManager.stopBoosterSound1();
-            //audioManager.stopBoosterSound2();
+            // audioManager.stopEngineSound();
+            // audioManager.stopBoosterSound1();
+            // audioManager.stopBoosterSound2();
 
             const landingArea = _landingData.landingSurfaces.find(({ x, width }) => _position.x - LANDER_WIDTH / 2 >= x && _position.x + LANDER_WIDTH / 2 <= x + width);
 
@@ -243,6 +269,8 @@ export const makeLander = (state, onGameEnd) => {
         }
 
         time += INTERVAL;
+        
+        _mainLoop();
     };
 
     const _drawHUD = () => {
@@ -413,7 +441,7 @@ export const makeLander = (state, onGameEnd) => {
         // Translate to the top-left corner of the lander so engine and booster
         // flames can be drawn from 0, 0
         CTX.translate(-LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
-        if (fuel < fuelLimit) {
+        if (fuel < _fuelLimit) {
             if (_engineOn || _rotatingLeft || _rotatingRight) {
                 CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
             }
