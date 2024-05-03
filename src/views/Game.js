@@ -302,7 +302,7 @@ export default function Game({ isLogin }){
                     </div>
                 </div>
             </div>
-            <div id="instructions" className="fullSizeContainer instructions">
+            {/*<div id="instructions" className="fullSizeContainer instructions">
                 <div>
                     <h1>CodeMos</h1>
                     <p>착륙 알고리즘을 작성해 착륙 지점에 우주선을 안전하게 착륙시켜야 합니다</p>
@@ -326,7 +326,7 @@ export default function Game({ isLogin }){
                         </ul>
                     </div>
                 </div>
-            </div>
+            /div>*/}
             {/*} <div id="cornerChallenge" className="topLeftCorner show">Daily Challenge <span id="cornerChallengeNumber"></span></div> */}
 
             <div id="drag-handle"></div>
