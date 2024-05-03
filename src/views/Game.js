@@ -419,47 +419,81 @@ function setSaveCode(code) {
 
 window.setSaveCode = setSaveCode;
 
-function getVelocityX() {
-    return _lander.getVelocity().x * VELOCITY_MULTIPLIER;
+//****************** 서버가 던진거 받아서 초기화 ㄱㄱ ******************* */
+
+// #2
+
+let _allowGetVelocityX = true;
+let _allowGetVelocityY = true;
+let _allowGetAngle = true;
+let _allowGetHeight = true;
+let _allowGetRotationVelocity = true;
+let _allowEngineOn = true;
+let _allowEngineOff = true;
+let _allowRotateLeft = true;
+let _allowStopLeftRotation = true;
+let _allowRotateRight = true;
+let _allowStopRightRotation = true;
+
+//************************************************************** */
+
+export function getVelocityX() {
+    if (_allowGetVelocityX)
+        return _lander.getVelocity().x * VELOCITY_MULTIPLIER;
+    else return null;
 }
 
-function getVelocityY() {
-    return _lander.getVelocity().y * VELOCITY_MULTIPLIER;
+export function getVelocityY() {
+    if (_allowGetVelocityY)
+        return _lander.getVelocity().y * VELOCITY_MULTIPLIER;
+    else return null;
 }
 
-function getAngle() {
-    return Number(_lander.getAngle());
+export function getAngle() {
+    if (_allowGetAngle)
+        return Number(_lander.getAngle());
+    else return null;
 }
 
-function getHeight() {
-    return Number(_lander.getHeight());
+export function getHeight() {
+    if (_allowGetHeight)
+        return Number(_lander.getHeight());
+    else return null;
 }
 
-function getRotationVelocity() {
-    return _lander.getRotationVelocity();
+export function getRotationVelocity() {
+    if (_allowGetRotationVelocity)
+        return _lander.getRotationVelocity();
+    else return null;
 }
 
-function engineOn() {
+export function engineOn() {
+    if (_allowEngineOn)
     _lander.engineOn();
 }
 
-function engineOff() {
+export function engineOff() {
+    if (_allowEngineOff)
     _lander.engineOff();
 }
 
-function rotateLeft() {
+export function rotateLeft() {
+    if (_allowRotateLeft)
     _lander.rotateLeft();
 }
 
-function stopLeftRotation() {
+export function stopLeftRotation() {
+    if (_allowStopLeftRotation)
     _lander.stopLeftRotation();
 }
 
-function rotateRight() {
+export function rotateRight() {
+    if (_allowRotateRight)
     _lander.rotateRight();
 }
 
-function stopRightRotation() {
+export function stopRightRotation() {
+    if (_allowStopRightRotation)
     _lander.stopRightRotation();
 }
 
@@ -480,23 +514,75 @@ function logging() {
 
 function removeComment(code) {
     return code
-        .replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+    .replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
 }
 
-var newInterval;
+function detectMaliciousCode(code) {
+    const maliciousPatterns = [
+      /setInterval\s*\(/,
+      /setTimeout\s*\(/,
+      /requestAnimationFrame\s*\(/,
+      /process\.nextTick\s*\(/,
+      /setImmediate\s*\(/,
+      /eval\s*\(/,
+      /new\s+Function\s*\(/,
+      /process\.(exit|env)/,
+      /require\s*\(/,
+      /global\./,
+      /window\./,
+      /fetch\s*\(/,
+      /new\s+XMLHttpRequest\s*\(/,
+    ];
+  
+    for (const pattern of maliciousPatterns) {
+      if (pattern.test(code)) {
+        return true;
+      }
+    }
+  
+    return false;
+  }
 var isFirst = true;
+export var _mainLoop;
 
-function applyCode(userCode) {
-    console.log(userCode);
+// 금지 함수
+
+const setInterval = {};
+const setTimeout = {};
+const requestAnimationFrame = {};
+const setImmediate = {};
+
+/*
+// TODO : 
+_mainLoop = function() {
+    // TODO : 
+};
+// TODO : 
+*/
+var afterApply = false;
+export function applyCode(userCode) {
+    afterApply = true;
+    // console.log(userCode);
     var code = removeComment(userCode); 
 
-    if (!isFirst) clearInterval(newInterval);
+    // if (!isFirst) clearInterval(newInterval);
     (function() {
-        eval(code);
+        if (!detectMaliciousCode(code)) {
+            try {
+                eval(code);
+            } catch (error) {
+                //process.send({ type: 'error', error: error.message });process.exit()
+            }
+            // newInterval = setInterval(() => {
+            //     _mainLoop();
+            // }, 1);
+        } else {
+            //process.send({ type: 'error', error: "사용 금지 메서드 사용" });process.exit()
+            // console.log("사용자 정의 비동기 루프 사용 금지, _mainLoop만 사용.");
+        }
     })();
     isFirst = false;
 }
-
 window.applyCode = applyCode;
 /*
 document.addEventListener("DOMContentLoaded", function () {
