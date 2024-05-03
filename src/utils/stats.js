@@ -108,6 +108,7 @@ ${data.speed}mph | ${data.angle}° | ${data.rotationsFormatted} flip${
     // Delay showing the reset button in case the user is actively tapping
     // in that area for thrust
     setTimeout(() => {
+      if (!document.querySelector("#endGameStats")) return;
       document.querySelector("#tryAgain").classList.remove("loading");
       document.querySelector("#tryAgain").addEventListener("click", tryAgain);
     }, buttonDelayTime);

@@ -552,13 +552,13 @@ const setTimeout = {};
 const requestAnimationFrame = {};
 const setImmediate = {};
 
-/*
+
 // TODO : 
 _mainLoop = function() {
     // TODO : 
 };
 // TODO : 
-*/
+
 var afterApply = false;
 export function applyCode(userCode) {
     afterApply = true;
