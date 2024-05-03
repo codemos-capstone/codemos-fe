@@ -150,6 +150,11 @@ export const makeLander = (state, onGameEnd) => {
     };
 
     const _updateProps = (deltaTime) => {
+        if (!document.querySelector("#endGameStats")){
+            fuel = 0;
+            time = 0;
+            return;
+        }
         const deltaTimeMultiplier = 1;// deltaTime / INTERVAL;
 
         if (time > timeLimit) _setGameEndData(false);

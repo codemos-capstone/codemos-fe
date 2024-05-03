@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import "./Game.css"
 import Docs from "./Docs";
 
@@ -16,7 +17,6 @@ import { makeTerrain } from "utils/terrain.js";
 import { showStatsAndResetControl } from "utils/stats.js";
 //import { manageInstructions } from "utils/instructions.js";
 //import { makeAudioManager } from "utils/helpers/audio.js";
-import { makeStateManager } from "utils/helpers/state.js";
 import { makeConfetti } from "utils/lander/confetti.js";
 import { makeTallyManger } from "utils/tally.js";
 import { makeAsteroid } from "utils/asteroids.js";
@@ -28,10 +28,19 @@ import { makeTheme } from "utils/theme.js";
 import { TRANSITION_TO_SPACE, VELOCITY_MULTIPLIER } from "utils/helpers/constants.js";
 import { landingScoreDescription, crashScoreDescription, destroyedDescription } from "utils/helpers/scoring.js";
 
-import MainBtn from "components/Buttons/MainBtn";
 import LoginBtn from "components/Buttons/LoginBtn";
 
 let _lander;
+
+function MainBtn({ animationID }){
+    const navigate = useNavigate();
+    return <button btntype={"main"} className='home-btn' onClick={
+        ()=>{
+            navigate("/");
+            window.cancelAnimationFrame(animationID);
+        }
+    }>Home</button>
+};
 
 
 export default function Game({ isLogin }){
@@ -42,6 +51,8 @@ export default function Game({ isLogin }){
     let scale = window.devicePixelRatio;
     let height = 500; //window.innerHeight;
     let width = 500; //window.innerWidth;
+
+    let animationID;
 
     const applyCodeHandler = () => {
         applyCode(code);
@@ -83,7 +94,7 @@ export default function Game({ isLogin }){
             const challengeManager = makeChallengeManager();
             const seededRandom = makeSeededRandom();
 
-            const appState = makeStateManager()
+            const appState = new Map()
                 .set("CTX", CTX)
                 .set("canvasWidth", canvasWidth)
                 .set("canvasHeight", canvasHeight)
@@ -189,6 +200,7 @@ export default function Game({ isLogin }){
                 //     toyLanderControls.drawTouchOverlay();
                 // }
             });
+            animationID = animationObject.animationID;
 
             // PASSED FUNCTIONS
 
@@ -352,7 +364,7 @@ export default function Game({ isLogin }){
             <button className="code-btn" onClick={toggleVisibility}>Code</button>
             <button className="apply-btn" onClick={applyCodeHandler}>Apply</button>
             <button className="logout-btn" style={{ display: 'none' }}>Logout</button> {/**onClick={logout} */}
-            <MainBtn btnType='main' />
+            <MainBtn animationID={animationID} />
 
             {/*} <div id="tally" className="topRightCorner">L<span id="landingTotal"></span> C<span id="crashTotal"></span></div> */}
         </div>
