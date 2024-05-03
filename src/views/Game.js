@@ -9,12 +9,12 @@ import 'ace-builds/src-noconflict/theme-ambiance';
 
 import { animate, clampedProgress, generateCanvas, randomBetween, seededRandomBetween, seededRandomBool, transition } from "utils/helpers/helpers.js";
 import { makeLander } from "utils/lander/lander.js";
-import { makeToyLander } from "utils/lander/toylander.js";
+//import { makeToyLander } from "utils/lander/toylander.js";
 import { makeStarfield } from "utils/starfield.js";
 import { makeControls } from "utils/lander/controls.js";
 import { makeTerrain } from "utils/terrain.js";
 import { showStatsAndResetControl } from "utils/stats.js";
-import { manageInstructions } from "utils/instructions.js";
+//import { manageInstructions } from "utils/instructions.js";
 //import { makeAudioManager } from "utils/helpers/audio.js";
 import { makeStateManager } from "utils/helpers/state.js";
 import { makeConfetti } from "utils/lander/confetti.js";
@@ -28,8 +28,6 @@ import { makeTheme } from "utils/theme.js";
 import { TRANSITION_TO_SPACE, VELOCITY_MULTIPLIER } from "utils/helpers/constants.js";
 import { landingScoreDescription, crashScoreDescription, destroyedDescription } from "utils/helpers/scoring.js";
 
-//import "utils/tempindex"
-//import "utils/func"
 import MainBtn from "components/Buttons/MainBtn";
 import LoginBtn from "components/Buttons/LoginBtn";
 
@@ -105,15 +103,15 @@ export default function Game({ isLogin }){
             appState.set("bonusPointsManager", bonusPointsManager);
 
             const stars = makeStarfield(appState);
-            const instructions = manageInstructions(onCloseInstructions);
-            const toyLander = makeToyLander(
-                appState,
-                () => instructions.setEngineDone(),
-                () => instructions.setLeftRotationDone(),
-                () => instructions.setRightRotationDone(),
-                () => instructions.setEngineAndRotationDone()
-            );
-            const toyLanderControls = makeControls(appState, toyLander); //, audioManager
+            // const instructions = manageInstructions(onCloseInstructions);
+            // const toyLander = makeToyLander(
+            //     appState,
+            //     () => instructions.setEngineDone(),
+            //     () => instructions.setLeftRotationDone(),
+            //     () => instructions.setRightRotationDone(),
+            //     () => instructions.setEngineAndRotationDone()
+            // );
+            //const toyLanderControls = makeControls(appState, toyLander); //, audioManager
             const lander = makeLander(appState, onGameEnd);
             _lander = lander
             const landerControls = makeControls(appState, lander);
@@ -129,14 +127,14 @@ export default function Game({ isLogin }){
 
             // INSTRUCTIONS SHOW/HIDE
 
-            if (!instructions.hasClosedInstructions()) {
-                instructions.show();
-                toyLanderControls.attachEventListeners();
-            } else {
+            //if (!instructions.hasClosedInstructions()) {
+            //    instructions.show();
+            //    toyLanderControls.attachEventListeners();
+            //} else {
                 landerControls.attachEventListeners();
                 challengeManager.populateCornerInfo();
                 terrain.setShowLandingSurfaces();
-            }
+            //}
 
             // MAIN ANIMATION LOOP
 
@@ -153,7 +151,7 @@ export default function Game({ isLogin }){
                 terrain.draw();
                 CTX.restore();
 
-                if (instructions.hasClosedInstructions()) {
+                // if (true) {
                     landerControls.drawTouchOverlay();
 
                     bonusPointsManager.draw(lander.getPosition().y < TRANSITION_TO_SPACE);
@@ -185,11 +183,11 @@ export default function Game({ isLogin }){
                     }
 
                     lander.draw(timeSinceStart, deltaTime);
-                } else {
-                    toyLander.draw(deltaTime);
+                // } else {
+                //     toyLander.draw(deltaTime);
 
-                    toyLanderControls.drawTouchOverlay();
-                }
+                //     toyLanderControls.drawTouchOverlay();
+                // }
             });
 
             // PASSED FUNCTIONS
