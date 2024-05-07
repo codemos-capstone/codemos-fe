@@ -1,41 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './MainPage.css'
-import Leaderboard from "components/Leaderboard";
-import LoginBtn from 'components/Buttons/LoginBtn'
+import Leaderboard from "components/LeaderBoard/Leaderboard";
 import MainBtn from 'components/Buttons/MainBtn'
-import symbol from 'assets/images/main-symbol.png'
-import logo from 'assets/images/main-logo.png'
+import Header from 'components/Header/Header';
+import Main from 'components/Main/Main';
 
-import susuk from 'assets/images/dol.jpg'
+export default function MainPage({ isLogin, setIsLogin }) {
+    useEffect(() => {
+        // sessionStorage에서 accessToken을 가져옵니다.
+        const accessToken = sessionStorage.getItem('accessToken');
 
-export default function MainPage({isLogin, setIsLogin}){
-    return(
+        // accessToken이 존재하면 로그인 상태로 업데이트합니다.
+        if (accessToken) {
+            setIsLogin(true);
+        } else {
+            setIsLogin(false);
+        }
+    }, [setIsLogin]); // setIsLogin이 변경되면 useEffect가 다시 실행됩니다.
+
+    return (
         <div className='container'>
-            <LoginBtn isLogin={isLogin} setIsLogin={setIsLogin}/>
-            <div>
-                <div className="mainpage">
-                    <img src={symbol} width="100px" /><br />
-                    <img src={logo} width="250px" />
-                </div>
-                <div className="iframe-container">
-                    <iframe id="rightIframe" src="https://lottie.host/embed/67e1faa4-2645-461f-a6f0-4952bc6e94c8/9K3VEbwQTX.json"></iframe>
-                    <img src={susuk} style={{height: '400px'}} />{/*<iframe id="leftIframe" src="minigame.html"></iframe>*/}
-                </div>
-                <div className="menus" style={{padding: "50px", margin: "auto"}}>
-                    <div className="buttons" style={{minWidth: "300px"}}>
-                        <MainBtn btnType='game' />
-                        <MainBtn btnType='docs' />
-                        <MainBtn btnType='leader' />
-                    </div>
-                    <div style={{width: "40%",minWidth: "400px"}}><Leaderboard page="0" /></div>
-                </div>
-            </div>
+            {/* Header 컴포넌트 */}
+            <Header isLogin={isLogin} setIsLogin={setIsLogin} />
+            {/* Main 컴포넌트 */}
+            <Main></Main>
         </div>
-    )
+    );
 }
-/*function logout() {
-    sessionStorage.removeItem("jwtToken");
-    document.querySelector(".home-login-btn").style.display = "block";
-    document.querySelector(".home-logout-btn").style.display = "none";
-    document.querySelector(".home-mypage-btn").style.display = "none";
-}*/

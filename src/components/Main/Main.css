@@ -1,0 +1,10 @@
+.contents{
+    height: 70vh;
+}
+.space{
+    width: 100vw;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
