@@ -162,32 +162,32 @@ export default function Game({ isLogin }){
                 terrain.draw();
                 CTX.restore();
 
-                // if (true) {
-                    landerControls.drawTouchOverlay();
+                // if (instructions.hasClosedInstructions()) {
+                    //landerControls.drawTouchOverlay();
 
                     bonusPointsManager.draw(lander.getPosition().y < TRANSITION_TO_SPACE);
 
                     // Generate and draw space asteroids
-                    if (lander.getPosition().y < -canvasHeight * 2) {
-                        // The chance that an asteroid will be sent is determined by the screen
-                        // width. This means that the density of asteroids will be similar across
-                        // phones and wider desktop screens. On a 14" MacBook the chance of an
-                        // asteroid being sent in any given frame is ~1 in 50; on an iPhone 14
-                        // it's ~1 in 200, or 1/4 the chance for a screen ~1/4 the width.
-                        if (!gameEnded && Math.round(randomBetween(0, 100 / (canvasWidth / 800))) === 0) {
-                            spaceAsteroids.push(makeSpaceAsteroid(appState, lander.getVelocity, lander.getDisplayPosition, onAsteroidImpact));
-                        }
+                    // if (lander.getPosition().y < -canvasHeight * 2) {
+                    //     // The chance that an asteroid will be sent is determined by the screen
+                    //     // width. This means that the density of asteroids will be similar across
+                    //     // phones and wider desktop screens. On a 14" MacBook the chance of an
+                    //     // asteroid being sent in any given frame is ~1 in 50; on an iPhone 14
+                    //     // it's ~1 in 200, or 1/4 the chance for a screen ~1/4 the width.
+                    //     if (!gameEnded && Math.round(randomBetween(0, 100 / (canvasWidth / 800))) === 0) {
+                    //         spaceAsteroids.push(makeSpaceAsteroid(appState, lander.getVelocity, lander.getDisplayPosition, onAsteroidImpact));
+                    //     }
 
-                        //spaceAsteroids.forEach((a) => a.draw(deltaTime));
-                    }
+                    //     //spaceAsteroids.forEach((a) => a.draw(deltaTime));
+                    // }
 
-                    // Move asteroids as lander flies high
-                    CTX.save();
-                    CTX.translate(0, transition(0, terrain.getLandingData().terrainHeight, clampedProgress(TRANSITION_TO_SPACE, 0, lander.getPosition().y)));
-                    if (sendAsteroid && timeSinceStart > asteroidCountdown) {
-                        //asteroids.forEach((a) => a.draw(deltaTime));
-                    }
-                    CTX.restore();
+                    // // Move asteroids as lander flies high
+                    // CTX.save();
+                    // CTX.translate(0, transition(0, terrain.getLandingData().terrainHeight, clampedProgress(TRANSITION_TO_SPACE, 0, lander.getPosition().y)));
+                    // if (sendAsteroid && timeSinceStart > asteroidCountdown) {
+                    //     //asteroids.forEach((a) => a.draw(deltaTime));
+                    // }
+                    // CTX.restore();
 
                     if (randomConfetti.length > 0) {
                         randomConfetti.forEach((c) => c.draw(deltaTime));
