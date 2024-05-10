@@ -31,28 +31,30 @@ import { landingScoreDescription, crashScoreDescription, destroyedDescription } 
 import LoginBtn from "components/Buttons/LoginBtn";
 
 let _lander;
+let appState;
+let canvasWidth;
+let canvasHeight;
 
-function MainBtn({ animationID }){
+function MainBtn({  }){
     const navigate = useNavigate();
     return <button btntype={"main"} className='home-btn' onClick={
         ()=>{
             navigate("/");
-            window.cancelAnimationFrame(animationID);
+            //window.cancelAnimationFrame(animationID);
         }
     }>Home</button>
 };
 
 
 export default function Game({ isLogin }){
-    const [code, setCode] = useState('// TODO: \nnewInterval = setInterval(() => {\n    // TODO: \n}, 1);\n// TODO:');
+    const [code, setCode] = useState('// TODO: ');
+    //const [animationID, setAnimationID] = useState(null);
     const onChange = (value) => {setCode(value);};
 
     const canvasRef = useRef(null);
     let scale = window.devicePixelRatio;
     let height = 500; //window.innerHeight;
     let width = 500; //window.innerWidth;
-
-    let animationID;
 
     const applyCodeHandler = () => {
         applyCode(code);
@@ -66,8 +68,41 @@ export default function Game({ isLogin }){
         if (code) {
             setCode(code);
         } else {
-            setCode("// TODO: \nnewInterval = setInterval(() => {\n    // TODO: \n}, 1);\n// TODO:");
+            setCode("// TODO: ");
         }
+    }
+
+    const apply = () => {
+        console.log("apply")
+        console.log(code)
+        const lander = _lander;
+        const initState = {
+            position: { x: canvasWidth / 2, y: canvasHeight / 2 },
+            displayPosition: { x: canvasWidth / 2, y: canvasHeight / 2 },
+            velocity: { x: 0, y: 0 },
+            rotationVelocity: 0,
+            angle: 0,
+            engineOn: false,
+            rotatingLeft: false,
+            rotatingRight: false,
+        
+            timeSinceStart: 0,
+            lastRotation: 1,
+            lastRotationAngle: Math.PI * 2,
+            rotationCount: 0,
+            maxVelocity: { x: 0, y: 0 },
+            velocityMilestone: { x: 0, y: 0 },
+            heightMilestone: 0,
+        
+            startTime: Date.now(),
+            usedfuel: 0,
+            GRAVITY: 0.004,
+            ROCKET_WIDTH: 20,
+            ROCKET_HEIGHT: 40
+        };
+        const logs = [initState]
+        const didLand = lander.updateIterator(code, logs);
+        lander.newDraw(logs, didLand);
     }
 
     useEffect(()=>{
@@ -82,8 +117,8 @@ export default function Game({ isLogin }){
             width = 500; //window.innerWidth;
             scale = window.devicePixelRatio;
             const scaleFactor = scale;
-            const canvasHeight = height;
-            const canvasWidth = width;
+            canvasHeight = height;
+            canvasWidth = width;
             CTX.scale(scale, scale);
 
 
@@ -94,7 +129,7 @@ export default function Game({ isLogin }){
             const challengeManager = makeChallengeManager();
             const seededRandom = makeSeededRandom();
 
-            const appState = new Map()
+            appState = new Map()
                 .set("CTX", CTX)
                 .set("canvasWidth", canvasWidth)
                 .set("canvasHeight", canvasHeight)
@@ -114,16 +149,8 @@ export default function Game({ isLogin }){
             appState.set("bonusPointsManager", bonusPointsManager);
 
             const stars = makeStarfield(appState);
-            // const instructions = manageInstructions(onCloseInstructions);
-            // const toyLander = makeToyLander(
-            //     appState,
-            //     () => instructions.setEngineDone(),
-            //     () => instructions.setLeftRotationDone(),
-            //     () => instructions.setRightRotationDone(),
-            //     () => instructions.setEngineAndRotationDone()
-            // );
-            //const toyLanderControls = makeControls(appState, toyLander); //, audioManager
-            const lander = makeLander(appState, onGameEnd);
+            appState.set("stars", stars);
+            const lander = makeLander(appState);
             _lander = lander
             const landerControls = makeControls(appState, lander);
             const tally = makeTallyManger();
@@ -136,20 +163,13 @@ export default function Game({ isLogin }){
 
             let gameEnded = false;
 
-            // INSTRUCTIONS SHOW/HIDE
-
-            //if (!instructions.hasClosedInstructions()) {
-            //    instructions.show();
-            //    toyLanderControls.attachEventListeners();
-            //} else {
-                landerControls.attachEventListeners();
-                challengeManager.populateCornerInfo();
-                terrain.setShowLandingSurfaces();
-            //}
+            landerControls.attachEventListeners();
+            challengeManager.populateCornerInfo();
+            terrain.setShowLandingSurfaces();
 
             // MAIN ANIMATION LOOP
 
-            const animationObject = animate((timeSinceStart, deltaTime) => {
+            /*const animationObject = animate((timeSinceStart, deltaTime) => {
                 CTX.fillStyle = theme.backgroundGradient;
                 CTX.fillRect(0, 0, canvasWidth, canvasHeight);
 
@@ -200,7 +220,7 @@ export default function Game({ isLogin }){
                 //     toyLanderControls.drawTouchOverlay();
                 // }
             });
-            animationID = animationObject.animationID;
+            animationID = animationObject.animationID;*/
 
             // PASSED FUNCTIONS
 
@@ -362,9 +382,9 @@ export default function Game({ isLogin }){
 
             <button className="docs-btn" onClick={apiDocsToggle}>Docs</button>
             <button className="code-btn" onClick={toggleVisibility}>Code</button>
-            <button className="apply-btn" onClick={applyCodeHandler}>Apply</button>
+            <button className="apply-btn" onClick={apply}>Apply</button>
             <button className="logout-btn" style={{ display: 'none' }}>Logout</button> {/**onClick={logout} */}
-            <MainBtn animationID={animationID} />
+            <MainBtn />
 
             {/*} <div id="tally" className="topRightCorner">L<span id="landingTotal"></span> C<span id="crashTotal"></span></div> */}
         </div>
