@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import useRegister from './useRegister'; // 사용자 정의 훅 import
-import googleLoginImage from 'assets/images/continueGoogle.png';
 const btnTexts = require('lang/kor.json').login;
 
-export default function Register({ setForm }) {
+export default function Register({ setForm, initialEmail }) {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const register = useRegister(); // 사용자 정의 훅 사용
+    useEffect(() => {
+        // initialEmail이 제공되면 이메일 상태를 초기화합니다.
+        if (initialEmail) {
+            setEmail(initialEmail);
+        }
+    }, [initialEmail]);
 
     function handleRegister(e) {
         e.preventDefault();
@@ -34,6 +41,12 @@ export default function Register({ setForm }) {
         fontSize: '60%'
     };
 
+    // readOnly 상태일 때 input 스타일
+    const inputReadOnlyStyle = {
+        backgroundColor: '#e0e0e0', // 회색 배경
+        color: '#6c757d', // 어두운 글자 색
+    };
+
     return (
         <div className="register-container" style={containerStyle}>
             <h2>{btnTexts[2]}</h2>
@@ -44,7 +57,8 @@ export default function Register({ setForm }) {
                 </div>
                 <div className="form-group">
                     <label htmlFor="email" style={labelStyle}>Email</label>
-                    <input type="text" id="reg-id" name="email" placeholder="Enter your email" onChange={e => setEmail(e.target.value)} required />
+                    <input type="text" id="reg-id" name="email" value={email} onChange={e => setEmail(e.target.value)} required 
+                           readOnly={!!initialEmail} style={!!initialEmail ? inputReadOnlyStyle : {}} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="password" style={labelStyle}>Password</label>
@@ -54,11 +68,11 @@ export default function Register({ setForm }) {
                     <label htmlFor="confirmPassword" style={labelStyle}>Confirm Password</label>
                     <input type="password" id="re-password" name="re-password" placeholder="Re-enter your password" onChange={e => setConfirmPassword(e.target.value)} required />
                 </div>
-                <div className="form-group">
-                    <img src={googleLoginImage} style={{ width: '50%', height: '20%', cursor: 'pointer' }} alt="Continue with Google" />
-                </div>
                 <button type="submit" style={{ margin: '5px' }}>{btnTexts[2]}</button>
-                <button type="button" onClick={() => setForm('login')}>{btnTexts[3]}</button>
+                <button type="button" onClick={() => {
+                    setForm('login');
+                    navigate('/login');
+                }}>{btnTexts[3]}</button>
             </form>
         </div>
     );

@@ -14,7 +14,6 @@
     transform: translateX(-50%);
     background-color: #4caf50;
     color: white;
-    padding: 15px;
     border-radius: 5px;
     animation: fadeInOut 2s ease-in-out; /* Customize the animation duration */
 }

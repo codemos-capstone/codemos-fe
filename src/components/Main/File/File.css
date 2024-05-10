@@ -2,4 +2,6 @@
     background-color: gray;
     width: 250px;
     height: 100vh;
+    display: flex;
+    justify-content: flex-start;
 }
