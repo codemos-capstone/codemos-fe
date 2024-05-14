@@ -519,8 +519,17 @@ export const makeLander = (state) => {
         let end = false;
         let didLand = false;
 
-        const engineOn = () => {rocket.engineOn = true;};
-        const engineOff = () => {rocket.engineOn = false;};
+        const engineOn = () => { rocket.engineOn = true; };
+        const engineOff = () => { rocket.engineOn = false; };
+        const getVelocityX = () => { return rocket.velocity.x; };
+        const getVelocityY = () => { return rocket.velocity.y; };
+        const getAngle = () => { return rocket.angle; };
+        const getHeight = () => { return heightInFeet(rocket.position.y, _groundedHeight); };
+        const getRotationVelocity = () => { return rocket.rotationVelocity; };
+        const rotateLeft = () => { rocket.rotatingLeft = true; };
+        const rotateRight = () => { rocket.rotatingRight = true; };
+        const stopLeftRotation = () => { rocket.rotatingLeft = false; };
+        const stopRightRotation = () => { rocket.rotatingRight = false; };
 
         while(!end){
             let err;
@@ -818,9 +827,6 @@ export const makeLander = (state) => {
         getPosition: () => _position,
         getDisplayPosition: () => _displayPosition,
         getVelocity: () => _velocity,
-        getAngle: () => getAngleDeltaUprightWithSign(_angle).toFixed(1), // added, TODO: 검증필요
-        getHeight: () => heightInFeet(_position.y, _groundedHeight), // added, TODO: 검증필요
-        getRotationVelocity: () => _rotationVelocity, // added, TODO: 검증필요
         engineOn: () => (_engineOn = true),
         engineOff: () => (_engineOn = false),
         rotateLeft: () => (_rotatingLeft = true),

@@ -456,67 +456,6 @@ let _allowRotateRight = true;
 let _allowStopRightRotation = true;
 
 //************************************************************** */
-
-export function getVelocityX() {
-    if (_allowGetVelocityX)
-        return _lander.getVelocity().x * VELOCITY_MULTIPLIER;
-    else return null;
-}
-
-export function getVelocityY() {
-    if (_allowGetVelocityY)
-        return _lander.getVelocity().y * VELOCITY_MULTIPLIER;
-    else return null;
-}
-
-export function getAngle() {
-    if (_allowGetAngle)
-        return Number(_lander.getAngle());
-    else return null;
-}
-
-export function getHeight() {
-    if (_allowGetHeight)
-        return Number(_lander.getHeight());
-    else return null;
-}
-
-export function getRotationVelocity() {
-    if (_allowGetRotationVelocity)
-        return _lander.getRotationVelocity();
-    else return null;
-}
-
-export function engineOn() {
-    if (_allowEngineOn)
-    _lander.engineOn();
-}
-
-export function engineOff() {
-    if (_allowEngineOff)
-    _lander.engineOff();
-}
-
-export function rotateLeft() {
-    if (_allowRotateLeft)
-    _lander.rotateLeft();
-}
-
-export function stopLeftRotation() {
-    if (_allowStopLeftRotation)
-    _lander.stopLeftRotation();
-}
-
-export function rotateRight() {
-    if (_allowRotateRight)
-    _lander.rotateRight();
-}
-
-export function stopRightRotation() {
-    if (_allowStopRightRotation)
-    _lander.stopRightRotation();
-}
-
 function logging() {
     console.log(
         "getVelocityX()        : " +
