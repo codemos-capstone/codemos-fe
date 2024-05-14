@@ -48,7 +48,6 @@ function MainBtn({  }){
 
 export default function Game({ isLogin }){
     const [code, setCode] = useState('// TODO: ');
-    //const [animationID, setAnimationID] = useState(null);
     const onChange = (value) => {setCode(value);};
 
     const canvasRef = useRef(null);
@@ -220,7 +219,7 @@ export default function Game({ isLogin }){
                 //     toyLanderControls.drawTouchOverlay();
                 // }
             });
-            animationID = animationObject.animationID;*/
+            animationID = animationObject.animationID;
 
             // PASSED FUNCTIONS
 
@@ -229,7 +228,7 @@ export default function Game({ isLogin }){
                 landerControls.attachEventListeners();
                 challengeManager.populateCornerInfo();
                 terrain.setShowLandingSurfaces();
-            }
+            }*/
 
             function onGameEnd(data) {
                 gameEnded = true;
@@ -391,10 +390,6 @@ export default function Game({ isLogin }){
     )
 }
 
-// var editor = ace.edit("editor");
-// editor.setTheme("ace/theme/ambiance");
-// editor.session.setMode("ace/mode/javascript");
-
 function toggleVisibility() {
     var editor = document.getElementById("editorWrap");
     var handle = document.getElementById("drag-handle");
@@ -502,7 +497,6 @@ function detectMaliciousCode(code) {
     return false;
   }
 var isFirst = true;
-export var _mainLoop;
 
 // 금지 함수
 
@@ -510,13 +504,6 @@ const setInterval = {};
 const setTimeout = {};
 const requestAnimationFrame = {};
 const setImmediate = {};
-
-
-// TODO : 
-_mainLoop = function() {
-    // TODO : 
-};
-// TODO : 
 
 var afterApply = false;
 export function applyCode(userCode) {
@@ -543,6 +530,12 @@ export function applyCode(userCode) {
     isFirst = false;
 }
 window.applyCode = applyCode;
+
+function saveCode(code) {
+    localStorage.setItem("myCodemosCode", code);
+    console.log("코드가 저장되었습니다.");
+}
+
 /*
 document.addEventListener("DOMContentLoaded", function () {
     var handle = document.getElementById("drag-handle");
@@ -575,8 +568,3 @@ document.addEventListener("DOMContentLoaded", function () {
         printMargin.style.visibility = "hidden";
     }
 });*/
-
-function saveCode(code) {
-    localStorage.setItem("myCodemosCode", code);
-    console.log("코드가 저장되었습니다.");
-}

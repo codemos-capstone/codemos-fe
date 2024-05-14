@@ -5,7 +5,6 @@ import { makeLanderExplosion } from "./explosion.js";
 import { makeConfetti } from "./confetti.js";
 import { drawTrajectory } from "./trajectory.js";
 import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.js";
-import { _mainLoop  } from "../../views/Game.js";
 
 export const makeLander = (state) => {
     const CTX = state.get("CTX");
@@ -269,8 +268,6 @@ export const makeLander = (state) => {
 
             _setGameEndData(didLand);
         }
-        
-        _mainLoop();
     };
 
     const drawHUD = (rocket) => {
@@ -821,7 +818,6 @@ export const makeLander = (state) => {
     };
 
     return {
-        draw,
         destroy,
         resetProps,
         getPosition: () => _position,
