@@ -60,7 +60,6 @@ export default function Game({ isLogin }){
         saveCode(code);
     }
     
-    
     const loadCode = () => {
         const code = localStorage.getItem("myCodemosCode");
         if (code) {
@@ -72,7 +71,6 @@ export default function Game({ isLogin }){
 
     const apply = () => {
         console.log("apply")
-        console.log(code)
         const lander = _lander;
         const initState = {
             position: { x: canvasWidth / 2, y: canvasHeight / 2 },
@@ -107,172 +105,61 @@ export default function Game({ isLogin }){
 
     useEffect(()=>{
         const canvasElement = canvasRef.current;
-        if ( canvasElement ){
-            const CTX = canvasElement.getContext('2d');
-    
-            canvasElement.width = Math.floor(width * scale);
-            canvasElement.height = Math.floor(height * scale);
-            
-            height = 500; // window.innerHeight;
-            width = 500; //window.innerWidth;
-            scale = window.devicePixelRatio;
-            const scaleFactor = scale;
-            canvasHeight = height;
-            canvasWidth = width;
-            CTX.scale(scale, scale);
+        const CTX = canvasElement.getContext('2d');
 
+        canvasElement.width = Math.floor(width * scale);
+        canvasElement.height = Math.floor(height * scale);
+        
+        height = 500; // window.innerHeight;
+        width = 500; //window.innerWidth;
+        scale = window.devicePixelRatio;
+        const scaleFactor = scale;
+        canvasHeight = height;
+        canvasWidth = width;
+        CTX.scale(scale, scale);
 
-            //---------------------------------
+        //const audioManager = makeAudioManager();
 
-            //const audioManager = makeAudioManager();
+        const challengeManager = makeChallengeManager();
+        const seededRandom = makeSeededRandom();
 
-            const challengeManager = makeChallengeManager();
-            const seededRandom = makeSeededRandom();
+        appState = new Map()
+            .set("CTX", CTX)
+            .set("canvasWidth", canvasWidth)
+            .set("canvasHeight", canvasHeight)
+            .set("canvasElement", canvasElement)
+            .set("scaleFactor", scaleFactor)
+            //.set("audioManager", audioManager)
+            .set("challengeManager", challengeManager)
+            .set("seededRandom", seededRandom);
 
-            appState = new Map()
-                .set("CTX", CTX)
-                .set("canvasWidth", canvasWidth)
-                .set("canvasHeight", canvasHeight)
-                .set("canvasElement", canvasElement)
-                .set("scaleFactor", scaleFactor)
-                //.set("audioManager", audioManager)
-                .set("challengeManager", challengeManager)
-                .set("seededRandom", seededRandom);
+        const theme = makeTheme(appState);
+        appState.set("theme", theme);
 
-            const theme = makeTheme(appState);
-            appState.set("theme", theme);
+        const terrain = makeTerrain(appState);
+        appState.set("terrain", terrain);
 
-            const terrain = makeTerrain(appState);
-            appState.set("terrain", terrain);
+        const bonusPointsManager = makeBonusPointsManager(appState);
+        appState.set("bonusPointsManager", bonusPointsManager);
 
-            const bonusPointsManager = makeBonusPointsManager(appState);
-            appState.set("bonusPointsManager", bonusPointsManager);
+        const stars = makeStarfield(appState);
+        appState.set("stars", stars);
+        const lander = makeLander(appState);
+        _lander = lander
+        const landerControls = makeControls(appState, lander);
+        //const tally = makeTallyManger();
 
-            const stars = makeStarfield(appState);
-            appState.set("stars", stars);
-            const lander = makeLander(appState);
-            _lander = lander
-            const landerControls = makeControls(appState, lander);
-            const tally = makeTallyManger();
+        // let sendAsteroid = seededRandomBool(seededRandom);
+        // let asteroidCountdown = seededRandomBetween(2000, 15000, seededRandom);
+        // let asteroids = [makeAsteroid(appState, lander.getPosition, onAsteroidImpact)];
+        // let spaceAsteroids = [];
+        // let randomConfetti = [];
 
-            let sendAsteroid = seededRandomBool(seededRandom);
-            let asteroidCountdown = seededRandomBetween(2000, 15000, seededRandom);
-            let asteroids = [makeAsteroid(appState, lander.getPosition, onAsteroidImpact)];
-            let spaceAsteroids = [];
-            let randomConfetti = [];
+        // let gameEnded = false;
 
-            let gameEnded = false;
-
-            landerControls.attachEventListeners();
-            challengeManager.populateCornerInfo();
-            terrain.setShowLandingSurfaces();
-
-            // MAIN ANIMATION LOOP
-
-            /*const animationObject = animate((timeSinceStart, deltaTime) => {
-                CTX.fillStyle = theme.backgroundGradient;
-                CTX.fillRect(0, 0, canvasWidth, canvasHeight);
-
-                // Move stars in parallax as lander flies high
-                stars.draw(lander.getVelocity());
-
-                // Move terrain as lander flies high
-                CTX.save();
-                CTX.translate(0, transition(0, terrain.getLandingData().terrainHeight, clampedProgress(TRANSITION_TO_SPACE, 0, lander.getPosition().y)));
-                terrain.draw();
-                CTX.restore();
-
-                // if (instructions.hasClosedInstructions()) {
-                    //landerControls.drawTouchOverlay();
-
-                    bonusPointsManager.draw(lander.getPosition().y < TRANSITION_TO_SPACE);
-
-                    // Generate and draw space asteroids
-                    // if (lander.getPosition().y < -canvasHeight * 2) {
-                    //     // The chance that an asteroid will be sent is determined by the screen
-                    //     // width. This means that the density of asteroids will be similar across
-                    //     // phones and wider desktop screens. On a 14" MacBook the chance of an
-                    //     // asteroid being sent in any given frame is ~1 in 50; on an iPhone 14
-                    //     // it's ~1 in 200, or 1/4 the chance for a screen ~1/4 the width.
-                    //     if (!gameEnded && Math.round(randomBetween(0, 100 / (canvasWidth / 800))) === 0) {
-                    //         spaceAsteroids.push(makeSpaceAsteroid(appState, lander.getVelocity, lander.getDisplayPosition, onAsteroidImpact));
-                    //     }
-
-                    //     //spaceAsteroids.forEach((a) => a.draw(deltaTime));
-                    // }
-
-                    // // Move asteroids as lander flies high
-                    // CTX.save();
-                    // CTX.translate(0, transition(0, terrain.getLandingData().terrainHeight, clampedProgress(TRANSITION_TO_SPACE, 0, lander.getPosition().y)));
-                    // if (sendAsteroid && timeSinceStart > asteroidCountdown) {
-                    //     //asteroids.forEach((a) => a.draw(deltaTime));
-                    // }
-                    // CTX.restore();
-
-                    if (randomConfetti.length > 0) {
-                        randomConfetti.forEach((c) => c.draw(deltaTime));
-                    }
-
-                    lander.draw(timeSinceStart, deltaTime);
-                // } else {
-                //     toyLander.draw(deltaTime);
-
-                //     toyLanderControls.drawTouchOverlay();
-                // }
-            });
-            animationID = animationObject.animationID;
-
-            // PASSED FUNCTIONS
-
-            function onCloseInstructions() {
-                toyLanderControls.detachEventListeners();
-                landerControls.attachEventListeners();
-                challengeManager.populateCornerInfo();
-                terrain.setShowLandingSurfaces();
-            }*/
-
-            function onGameEnd(data) {
-                gameEnded = true;
-                landerControls.detachEventListeners();
-                bonusPointsManager.hide();
-
-                const finalScore = data.landerScore + bonusPointsManager.getTotalPoints();
-                const scoreDescription = data.landed ? landingScoreDescription(finalScore) : data.struckByAsteroid ? destroyedDescription() : crashScoreDescription(finalScore);
-                const scoreForDisplay = Intl.NumberFormat().format(finalScore.toFixed(1));
-
-                showStatsAndResetControl(appState, lander, animationObject, { ...data, scoreDescription, scoreForDisplay }, landerControls.getHasKeyboard(), onResetGame);
-
-                if (data.landed) {
-                    //audioManager.playLanding();
-                    tally.storeLanding();
-                } else {
-                    //audioManager.playCrash();
-                    tally.storeCrash();
-                }
-
-                tally.updateDisplay();
-            }
-
-            function onResetGame() {
-                gameEnded = false;
-                lander.resetProps(); // added, replay시 리셋
-                landerControls.attachEventListeners();
-                seededRandom.setDailyChallengeSeed();
-                randomConfetti = [];
-                terrain.reGenerate();
-                stars.reGenerate();
-                sendAsteroid = seededRandomBool(seededRandom);
-                asteroidCountdown = seededRandomBetween(2000, 15000, seededRandom);
-                asteroids = [makeAsteroid(appState, lander.getPosition, onAsteroidImpact)];
-                spaceAsteroids = [];
-                bonusPointsManager.reset();
-            }
-            
-            function onAsteroidImpact(asteroidVelocity) {
-                console.log("destroyed!")
-                lander.destroy(asteroidVelocity);
-            }
-        }
+        landerControls.attachEventListeners();
+        challengeManager.populateCornerInfo();
+        //terrain.setShowLandingSurfaces();
     }, [])
 
     return(
