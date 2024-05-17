@@ -93,6 +93,8 @@ export default function Game({ isLogin }){
             heightMilestone: 0,
         
             startTime: Date.now(),
+            thrust: 0.01,
+            rThrust: 0.01,
             usedfuel: 0,
             GRAVITY: 0.004,
             ROCKET_WIDTH: 20,

@@ -572,12 +572,12 @@ export const makeLander = (state) => {
         // Update ballistic properties
         // xxx : #3
         if (rocket.rotatingRight && rocket.usedfuel < _fuelLimit) { // xxx : #4
-            rocket.rotationVelocity += deltaTimeMultiplier * _rThrust;
-            rocket.usedfuel += deltaTimeMultiplier * _rThrust * 2; // xxx : #4
+            rocket.rotationVelocity += deltaTimeMultiplier * rocket.rThrust;
+            rocket.usedfuel += deltaTimeMultiplier * rocket.rThrust * 2; // xxx : #4
         }
         if (rocket.rotatingLeft && rocket.usedfuel < _fuelLimit) { // xxx : #4
-            rocket.rotationVelocity -= deltaTimeMultiplier * _rThrust;
-            rocket.usedfuel += deltaTimeMultiplier * _rThrust * 2; // xxx : #4
+            rocket.rotationVelocity -= deltaTimeMultiplier * rocket.rThrust;
+            rocket.usedfuel += deltaTimeMultiplier * rocket.rThrust * 2; // xxx : #4
         }
         if (rocket.position.x < 0) rocket.position.x = canvasWidth;
 
@@ -590,9 +590,9 @@ export const makeLander = (state) => {
         _displayPosition.x = rocket.position.x;
 
         if (rocket.engineOn && rocket.usedfuel < _fuelLimit) { // xxx : #4
-            rocket.velocity.x += deltaTimeMultiplier * (_thrust * Math.sin(rocket.angle));
-            rocket.velocity.y -= deltaTimeMultiplier * (_thrust * Math.cos(rocket.angle));
-            rocket.usedfuel += deltaTimeMultiplier * _thrust * 20; // xxx : #4
+            rocket.velocity.x += deltaTimeMultiplier * (rocket.thrust * Math.sin(rocket.angle));
+            rocket.velocity.y -= deltaTimeMultiplier * (rocket.thrust * Math.cos(rocket.angle));
+            rocket.usedfuel += deltaTimeMultiplier * rocket.thrust * 20; // xxx : #4
         }
 
         // console.log("fuel : " + fuel.toFixed(2) + "L & time : " + time + "ms");
