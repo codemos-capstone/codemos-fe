@@ -186,6 +186,12 @@ export const makeLander = (state, setting, animationEnded) => {
             }
         };
 
+        // prohibited functions
+        const setInterval = () => { throw new TypeError("setInterval is not a function") };
+        const setTimeout = () => { throw new TypeError("setTimeout is not a function") };
+        const requestAnimationFrame = () => { throw new TypeError("requestAnimationFrame is not a function") };
+        const setImmediate = () => { throw new TypeError("setImmediate is not a function") };
+
         while(!end){
             let err;
             try{eval(code)} catch (e) {

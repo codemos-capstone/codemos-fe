@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import "./Game.css"
 import Docs from "./Docs";
 import GameCanvas from "components/GameCanvas";
@@ -155,8 +155,6 @@ export default function Game({ isLogin }){
             <button className="apply-btn" onClick={() => {setShowCanvas(true)}}>Apply</button>
             <button className="logout-btn" style={{ display: 'none' }}>Logout</button> {/**onClick={logout} */}
             <MainBtn btnType = 'main' />
-
-            {/*} <div id="tally" className="topRightCorner">L<span id="landingTotal"></span> C<span id="crashTotal"></span></div> */}
         </div>
     )
 }
@@ -197,24 +195,6 @@ function checkHandleVisibility() {
     }
 }
 
-// #2
-
-//************************************************************** */
-function logging() {
-    console.log(
-        "getVelocityX()        : " +
-            getVelocityX() +
-            "\ngetVelocityY()        : " +
-            getVelocityY() +
-            "\ngetAngle()            : " +
-            getAngle() +
-            "\ngetHeight()           : " +
-            getHeight() +
-            "\ngetRotationVelocity() : " +
-            getRotationVelocity()
-    );
-}
-
 function removeComment(code) {
     return code
     .replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
@@ -244,41 +224,7 @@ function detectMaliciousCode(code) {
     }
   
     return false;
-  }
-var isFirst = true;
-
-// 금지 함수
-
-const setInterval = {};
-const setTimeout = {};
-const requestAnimationFrame = {};
-const setImmediate = {};
-
-var afterApply = false;
-export function applyCode(userCode) {
-    afterApply = true;
-    // console.log(userCode);
-    var code = removeComment(userCode); 
-
-    // if (!isFirst) clearInterval(newInterval);
-    (function() {
-        if (!detectMaliciousCode(code)) {
-            try {
-                eval(code);
-            } catch (error) {
-                //process.send({ type: 'error', error: error.message });process.exit()
-            }
-            // newInterval = setInterval(() => {
-            //     _mainLoop();
-            // }, 1);
-        } else {
-            //process.send({ type: 'error', error: "사용 금지 메서드 사용" });process.exit()
-            // console.log("사용자 정의 비동기 루프 사용 금지, _mainLoop만 사용.");
-        }
-    })();
-    isFirst = false;
 }
-window.applyCode = applyCode;
 
 function saveCode(code) {
     localStorage.setItem("myCodemosCode", code);
