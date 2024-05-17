@@ -1,12 +1,12 @@
 import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPH, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInFeet, percentProgress } from "../helpers/helpers.js";
 import { scoreLanding, scoreCrash } from "../helpers/scoring.js";
-import { GRAVITY, LANDER_WIDTH, LANDER_HEIGHT, CRASH_VELOCITY, CRASH_ANGLE, INTERVAL, TRANSITION_TO_SPACE } from "../helpers/constants.js";
+import { CRASH_VELOCITY, CRASH_ANGLE, INTERVAL, TRANSITION_TO_SPACE } from "../helpers/constants.js";
 import { makeLanderExplosion } from "./explosion.js";
 import { makeConfetti } from "./confetti.js";
 import { drawTrajectory } from "./trajectory.js";
 import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.js";
 
-export const makeLander = (state) => {
+export const makeLander = (state, setting, animationEnded) => {
     const CTX = state.get("CTX");
     const canvasWidth = state.get("canvasWidth");
     const canvasHeight = state.get("canvasHeight");
@@ -14,8 +14,9 @@ export const makeLander = (state) => {
     const bonusPointsManager = state.get("bonusPointsManager");
 
     // Use grounded height to approximate distance from ground
+    const constants = setting[0];
     const _landingData = state.get("terrain").getLandingData();
-    const _groundedHeight = _landingData.terrainAvgHeight - LANDER_HEIGHT + LANDER_HEIGHT / 2;
+    const _groundedHeight = _landingData.terrainAvgHeight - constants.ROCKET_HEIGHT + constants.ROCKET_HEIGHT / 2;
     
 
     let _position;
@@ -271,7 +272,7 @@ export const makeLander = (state) => {
 
     const drawHUD = (rocket) => {
         const textWidth = CTX.measureText("100.0 MPH").width + 2;
-        const xPosBasis = Math.abs(rocket.velocity.x) > 6 ? canvasWidth / 2 - textWidth / 2 : Math.min(rocket.position.x + rocket.ROCKET_WIDTH * 2, canvasWidth - textWidth);
+        const xPosBasis = Math.abs(rocket.velocity.x) > 6 ? canvasWidth / 2 - textWidth / 2 : Math.min(rocket.position.x + constants.ROCKET_WIDTH * 2, canvasWidth - textWidth);
         const yPosBasis = Math.max(rocket.position.y, TRANSITION_TO_SPACE);
         const lineHeight = 14;
         const rotatingLeft = rocket.rotationVelocity < 0;
@@ -318,8 +319,8 @@ export const makeLander = (state) => {
     };
 
     const drawBottomHUD = (rocket) => {
-        const yPadding = rocket.ROCKET_HEIGHT;
-        const xPadding = rocket.ROCKET_HEIGHT;
+        const yPadding = constants.ROCKET_HEIGHT;
+        const xPadding = constants.ROCKET_HEIGHT;
 
         const secondsUntilTerrain = rocket.velocity.y > 0 ? Math.abs(Math.round((rocket.position.y - canvasHeight + (canvasHeight - _landingData.terrainAvgHeight)) / rocket.velocity.y / 100)) : 99;
 
@@ -351,163 +352,6 @@ export const makeLander = (state) => {
         }
 
         CTX.restore();
-    };
-
-    const _drawLander = () => {
-        CTX.save();
-
-        // The lander positions is handled differently in two "altitude zones"
-        // Zone 1:
-        //   The lander is close to the ground - the viewport is static, and the
-        //   terrain is visible. The _position is the same as the display position
-        // Zone 2:
-        //   The lander has transitioned to space, and over the course of two
-        //   viewport heights, it's moved linearly to the center of the screen
-
-        // Zone 1 positioning
-        CTX.translate(_position.x, _position.y < TRANSITION_TO_SPACE ? TRANSITION_TO_SPACE : _position.y);
-
-        _displayPosition.y = _position.y < TRANSITION_TO_SPACE ? TRANSITION_TO_SPACE : _position.y;
-
-        // Zone 2 positioning
-        if (_isFixedPositionInSpace()) {
-            const yPosTransition = transition(0, canvasHeight / 2 - TRANSITION_TO_SPACE, clampedProgress(0, -canvasHeight * 2, _position.y), easeInOutSine);
-
-            CTX.translate(0, yPosTransition);
-            _displayPosition.y += yPosTransition;
-        }
-
-        CTX.rotate(_angle);
-
-        // Draw the lander
-        //
-        // We want the center of rotation to be in the center of the bottom
-        // rectangle, excluding the tip of the lander. To accomplish this, the
-        // lander is drawn offset to the top and left of _position.x and y.
-        // The tip is also drawn offset to the top of that so that the lander
-        // is a bit taller than LANDER_HEIGHT.
-        //
-        //                                      /\
-        //                                     /  \
-        // Start at top left of this segment → |  |
-        // and work clockwise.                 |__|
-        CTX.beginPath();
-        CTX.moveTo(-LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
-        CTX.lineTo(0, -LANDER_HEIGHT);
-        CTX.lineTo(LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
-        CTX.lineTo(LANDER_WIDTH / 2, LANDER_HEIGHT / 2);
-        CTX.lineTo(-LANDER_WIDTH / 2, LANDER_HEIGHT / 2);
-        CTX.closePath();
-        CTX.fillStyle = state.get("theme").landerGradient;
-        CTX.fill();
-        
-        CTX.beginPath();
-        CTX.moveTo(-LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
-        CTX.lineTo(0, -(LANDER_HEIGHT));
-        CTX.lineTo(LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
-        CTX.arc(0, 0, Math.sqrt(LANDER_WIDTH * LANDER_WIDTH + LANDER_HEIGHT * LANDER_HEIGHT) / 2, 2 * Math.PI - Math.atan2(LANDER_HEIGHT, LANDER_WIDTH), Math.PI + Math.atan2(LANDER_HEIGHT, LANDER_WIDTH), true);
-        CTX.fillStyle = state.get("theme").threeGradient("#EB8C0C", '#6a3b0c', "#401f1a", LANDER_WIDTH, 0, 0.5);
-        CTX.fill();
-
-        CTX.beginPath();
-        CTX.moveTo(-LANDER_WIDTH / 2, 0);
-        CTX.lineTo(-LANDER_WIDTH , 5 *LANDER_HEIGHT / 8);
-        CTX.lineTo(-LANDER_WIDTH / 2, LANDER_HEIGHT / 2);
-        CTX.closePath();
-        CTX.fillStyle = state.get("theme").threeGradient("#DFE5E5", "#4A4E6F", "#3D4264", LANDER_WIDTH / 2, -3 * LANDER_WIDTH / 4, 0.8);
-        CTX.fill();
-
-        CTX.beginPath();
-        CTX.moveTo(LANDER_WIDTH / 2, 0);
-        CTX.lineTo(LANDER_WIDTH , 5 *LANDER_HEIGHT / 8);
-        CTX.lineTo(LANDER_WIDTH / 2, LANDER_HEIGHT / 2);
-        CTX.closePath();
-        CTX.fillStyle = state.get("theme").threeGradient("#3D4264", "#4A4E6F", "#DFE5E5", LANDER_WIDTH / 2, 3 * LANDER_WIDTH / 4, 0.2);
-        CTX.fill();
-
-        CTX.beginPath();
-        CTX.moveTo(0, 0.2 * LANDER_HEIGHT);
-        CTX.lineTo(- LANDER_WIDTH / 4, LANDER_HEIGHT / 2);
-        CTX.lineTo(0, 0.8 * LANDER_HEIGHT);
-        CTX.lineTo(LANDER_WIDTH / 4, LANDER_HEIGHT / 2);
-        CTX.closePath();
-        CTX.fillStyle = state.get("theme").threeGradient("#DFE5E5", '#262b4f', "#4A4E6F", LANDER_WIDTH / 2, 0, 0.5);
-        CTX.fill();
-
-        // Translate to the top-left corner of the lander so engine and booster
-        // flames can be drawn from 0, 0
-        CTX.translate(-LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
-        if (fuel < _fuelLimit) {
-            if (_engineOn || _rotatingLeft || _rotatingRight) {
-                CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
-            }
-
-            // Main engine flame
-            if (_engineOn) {
-                const _flameHeight = randomBetween(10, 50);
-                const _flameMargin = 3;
-                CTX.beginPath();
-                CTX.moveTo(_flameMargin, LANDER_HEIGHT);
-                CTX.lineTo(LANDER_WIDTH - _flameMargin, LANDER_HEIGHT);
-                CTX.lineTo(LANDER_WIDTH / 2, LANDER_HEIGHT + _flameHeight);
-                CTX.closePath();
-                CTX.fill();
-            }
-
-            const _boosterLength = randomBetween(5, 25);
-            // Right booster flame
-            if (_rotatingLeft) {
-                CTX.beginPath();
-                CTX.moveTo(LANDER_WIDTH, 0);
-                CTX.lineTo(LANDER_WIDTH + _boosterLength, LANDER_HEIGHT * 0.05);
-                CTX.lineTo(LANDER_WIDTH, LANDER_HEIGHT * 0.1);
-                CTX.closePath();
-                CTX.fill();
-            }
-
-            // Left booster flame
-            if (_rotatingRight) {
-                CTX.beginPath();
-                CTX.moveTo(0, 0);
-                CTX.lineTo(-_boosterLength, LANDER_HEIGHT * 0.05);
-                CTX.lineTo(0, LANDER_HEIGHT * 0.1);
-                CTX.closePath();
-                CTX.fill();
-            }
-        }
-        CTX.restore();
-    };
-
-    const draw = (timeSinceStart, deltaTime) => {
-        _timeSinceStart = timeSinceStart;
-
-        if (!gameEndData) {
-            _updateProps(deltaTime);
-
-            if (_position.y > TRANSITION_TO_SPACE) {
-                drawTrajectory(state, _position, _angle, _velocity, _rotationVelocity);
-            }
-        }
-
-        if (_flipConfetti.length > 0) _flipConfetti.forEach((c) => c.draw(deltaTime)); //confetties when the rocket flips
-
-        if (_gameEndConfetti) _gameEndConfetti.draw(deltaTime); //confetties when the rocket lands
-
-        if (_gameEndExplosion) _gameEndExplosion.draw(deltaTime); //rocket pieces when the rocket explodes
-
-        if (!gameEndData || (gameEndData && gameEndData.landed)) _drawLander(); //Draw rocket when the game is not ended or the rocket succesfully landed
-
-        // Draw speed and angle text beside lander, even after crashing
-        if (_position.y > TRANSITION_TO_SPACE) {
-            _drawHUD();
-        } else {
-            CTX.save();
-            const animateHUDProgress = clampedProgress(LANDER_HEIGHT, -LANDER_HEIGHT, _position.y);
-            CTX.globalAlpha = transition(0, 1, animateHUDProgress, easeInOutSine);
-            CTX.translate(0, transition(16, 0, animateHUDProgress, easeInOutSine));
-            _drawBottomHUD();
-            CTX.restore();
-        }
     };
 
     const updateIterator = (code, logs) => {
@@ -565,19 +409,19 @@ export const makeLander = (state) => {
     }
 
     const updateRocket = (rocket) => {
-        rocket.timeSinceStart = Date.now() - rocket.startTime;
+        rocket.timeSinceStart = Date.now() - constants.STARTTIME;
         const deltaTimeMultiplier = 1;// deltaTime / INTERVAL;
 
         rocket.position.y = rocket.position.y + deltaTimeMultiplier * rocket.velocity.y;
         // Update ballistic properties
         // xxx : #3
-        if (rocket.rotatingRight && rocket.usedfuel < _fuelLimit) { // xxx : #4
-            rocket.rotationVelocity += deltaTimeMultiplier * rocket.rThrust;
-            rocket.usedfuel += deltaTimeMultiplier * rocket.rThrust * 2; // xxx : #4
+        if (rocket.rotatingRight && rocket.usedfuel < constants.FUELLIMIT) { // xxx : #4
+            rocket.rotationVelocity += deltaTimeMultiplier * constants.RTHRUST;
+            rocket.usedfuel += deltaTimeMultiplier * constants.RTHRUST * 2; // xxx : #4
         }
-        if (rocket.rotatingLeft && rocket.usedfuel < _fuelLimit) { // xxx : #4
-            rocket.rotationVelocity -= deltaTimeMultiplier * rocket.rThrust;
-            rocket.usedfuel += deltaTimeMultiplier * rocket.rThrust * 2; // xxx : #4
+        if (rocket.rotatingLeft && rocket.usedfuel < constants.FUELLIMIT) { // xxx : #4
+            rocket.rotationVelocity -= deltaTimeMultiplier * constants.RTHRUST;
+            rocket.usedfuel += deltaTimeMultiplier * constants.RTHRUST * 2; // xxx : #4
         }
         if (rocket.position.x < 0) rocket.position.x = canvasWidth;
 
@@ -585,14 +429,14 @@ export const makeLander = (state) => {
 
         rocket.position.x += deltaTimeMultiplier * rocket.velocity.x;
         rocket.angle += deltaTimeMultiplier * ((Math.PI / 180) * rocket.rotationVelocity);
-        rocket.velocity.y += deltaTimeMultiplier * rocket.GRAVITY;
+        rocket.velocity.y += deltaTimeMultiplier * constants.GRAVITY;
 
-        _displayPosition.x = rocket.position.x;
+        rocket.displayPosition.x = rocket.position.x;
 
-        if (rocket.engineOn && rocket.usedfuel < _fuelLimit) { // xxx : #4
-            rocket.velocity.x += deltaTimeMultiplier * (rocket.thrust * Math.sin(rocket.angle));
-            rocket.velocity.y -= deltaTimeMultiplier * (rocket.thrust * Math.cos(rocket.angle));
-            rocket.usedfuel += deltaTimeMultiplier * rocket.thrust * 20; // xxx : #4
+        if (rocket.engineOn && rocket.usedfuel < constants.FUELLIMIT) { // xxx : #4
+            rocket.velocity.x += deltaTimeMultiplier * (constants.THRUST * Math.sin(rocket.angle));
+            rocket.velocity.y -= deltaTimeMultiplier * (constants.THRUST * Math.cos(rocket.angle));
+            rocket.usedfuel += deltaTimeMultiplier * constants.THRUST * 20; // xxx : #4
         }
 
         // console.log("fuel : " + fuel.toFixed(2) + "L & time : " + time + "ms");
@@ -604,7 +448,7 @@ export const makeLander = (state) => {
             rocket.rotationCount++;
             rocket.lastRotation = rotations;
             rocket.lastRotationAngle = rocket.angle;
-            _flipConfetti.push(makeConfetti(state, 10, _displayPosition, rocket.position.y > 0 ? rocket.velocity : { x: rocket.velocity.x, y: 0 }));
+            //_flipConfetti.push(makeConfetti(state, 10, rocket.displayPosition, rocket.position.y > 0 ? rocket.velocity : { x: rocket.velocity.x, y: 0 }));
         }
 
         // Log new max speed and height
@@ -631,17 +475,17 @@ export const makeLander = (state) => {
 
     const checkEnd = (rocket) => {
         console.log("Time passed by: ", rocket.timeSinceStart)
-        if (rocket.timeSinceStart > _timeLimit){
+        if (rocket.timeSinceStart > constants.TIMELIMIT){
             return {end: true, land: false}
-        } else if (rocket.position.y + LANDER_HEIGHT / 2 < _landingData.terrainHeight ||
-        (rocket.position.y + LANDER_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + LANDER_HEIGHT / 2) * state.get("scaleFactor")))){
+        } else if (rocket.position.y + constants.ROCKET_HEIGHT / 2 < _landingData.terrainHeight ||
+        (rocket.position.y + constants.ROCKET_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + constants.ROCKET_HEIGHT / 2) * state.get("scaleFactor")))){
             return { end: false, land: false};
         } else {
             return { end: true, land: false};
         }
     };
 
-    const newDraw = (logs, didLand) => {
+    const draw = (logs, didLand) => {
         let animationID;
         console.log("draw starts!")
         let randomConfetti = [];
@@ -682,14 +526,17 @@ export const makeLander = (state) => {
                 drawHUD(currentState);
             } else {
                 CTX.save();
-                const animateHUDProgress = clampedProgress(currentState.ROCKET_HEIGHT, -currentState.ROCKET_HEIGHT, currentState.position.y);
+                const animateHUDProgress = clampedProgress(constants.ROCKET_HEIGHT, -constants.ROCKET_HEIGHT, currentState.position.y);
                 CTX.globalAlpha = transition(0, 1, animateHUDProgress, easeInOutSine);
                 CTX.translate(0, transition(16, 0, animateHUDProgress, easeInOutSine));
                 drawBottomHUD(currentState);
                 CTX.restore();
             }
             animationID = window.requestAnimationFrame(drawFromLogs)
-            if (logs.length <= 0) window.cancelAnimationFrame(animationID);
+            if (logs.length <= 0) {
+                window.cancelAnimationFrame(animationID);
+                setTimeout(animationEnded, 2000);
+            }
         }
         drawFromLogs();
     };
@@ -731,52 +578,52 @@ export const makeLander = (state) => {
         // Start at top left of this segment → |  |
         // and work clockwise.                 |__|
         CTX.beginPath();
-        CTX.moveTo(-rocket.ROCKET_WIDTH / 2, -rocket.ROCKET_HEIGHT / 2);
-        CTX.lineTo(0, -rocket.ROCKET_HEIGHT);
-        CTX.lineTo(rocket.ROCKET_WIDTH / 2, -rocket.ROCKET_HEIGHT / 2);
-        CTX.lineTo(rocket.ROCKET_WIDTH / 2, rocket.ROCKET_HEIGHT / 2);
-        CTX.lineTo(-rocket.ROCKET_WIDTH / 2, rocket.ROCKET_HEIGHT / 2);
+        CTX.moveTo(-constants.ROCKET_WIDTH / 2, -constants.ROCKET_HEIGHT / 2);
+        CTX.lineTo(0, -constants.ROCKET_HEIGHT);
+        CTX.lineTo(constants.ROCKET_WIDTH / 2, -constants.ROCKET_HEIGHT / 2);
+        CTX.lineTo(constants.ROCKET_WIDTH / 2, constants.ROCKET_HEIGHT / 2);
+        CTX.lineTo(-constants.ROCKET_WIDTH / 2, constants.ROCKET_HEIGHT / 2);
         CTX.closePath();
         CTX.fillStyle = state.get("theme").landerGradient;
         CTX.fill();
         
         CTX.beginPath();
-        CTX.moveTo(-rocket.ROCKET_WIDTH / 2, -rocket.ROCKET_HEIGHT / 2);
-        CTX.lineTo(0, -(rocket.ROCKET_HEIGHT));
-        CTX.lineTo(rocket.ROCKET_WIDTH / 2, -rocket.ROCKET_HEIGHT / 2);
-        CTX.arc(0, 0, Math.sqrt(rocket.ROCKET_WIDTH * rocket.ROCKET_WIDTH + rocket.ROCKET_HEIGHT * rocket.ROCKET_HEIGHT) / 2, 2 * Math.PI - Math.atan2(rocket.ROCKET_HEIGHT, rocket.ROCKET_WIDTH), Math.PI + Math.atan2(rocket.ROCKET_HEIGHT, rocket.ROCKET_WIDTH), true);
-        CTX.fillStyle = state.get("theme").threeGradient("#EB8C0C", '#6a3b0c', "#401f1a", rocket.ROCKET_WIDTH, 0, 0.5);
+        CTX.moveTo(-constants.ROCKET_WIDTH / 2, -constants.ROCKET_HEIGHT / 2);
+        CTX.lineTo(0, -(constants.ROCKET_HEIGHT));
+        CTX.lineTo(constants.ROCKET_WIDTH / 2, -constants.ROCKET_HEIGHT / 2);
+        CTX.arc(0, 0, Math.sqrt(constants.ROCKET_WIDTH * constants.ROCKET_WIDTH + constants.ROCKET_HEIGHT * constants.ROCKET_HEIGHT) / 2, 2 * Math.PI - Math.atan2(constants.ROCKET_HEIGHT, constants.ROCKET_WIDTH), Math.PI + Math.atan2(constants.ROCKET_HEIGHT, constants.ROCKET_WIDTH), true);
+        CTX.fillStyle = state.get("theme").threeGradient("#EB8C0C", '#6a3b0c', "#401f1a", constants.ROCKET_WIDTH, 0, 0.5);
         CTX.fill();
 
         CTX.beginPath();
-        CTX.moveTo(-rocket.ROCKET_WIDTH / 2, 0);
-        CTX.lineTo(-rocket.ROCKET_WIDTH , 5 *rocket.ROCKET_HEIGHT / 8);
-        CTX.lineTo(-rocket.ROCKET_WIDTH / 2, rocket.ROCKET_HEIGHT / 2);
+        CTX.moveTo(-constants.ROCKET_WIDTH / 2, 0);
+        CTX.lineTo(-constants.ROCKET_WIDTH , 5 *constants.ROCKET_HEIGHT / 8);
+        CTX.lineTo(-constants.ROCKET_WIDTH / 2, constants.ROCKET_HEIGHT / 2);
         CTX.closePath();
-        CTX.fillStyle = state.get("theme").threeGradient("#DFE5E5", "#4A4E6F", "#3D4264", rocket.ROCKET_WIDTH / 2, -3 * rocket.ROCKET_WIDTH / 4, 0.8);
+        CTX.fillStyle = state.get("theme").threeGradient("#DFE5E5", "#4A4E6F", "#3D4264", constants.ROCKET_WIDTH / 2, -3 * constants.ROCKET_WIDTH / 4, 0.8);
         CTX.fill();
 
         CTX.beginPath();
-        CTX.moveTo(rocket.ROCKET_WIDTH / 2, 0);
-        CTX.lineTo(rocket.ROCKET_WIDTH , 5 *rocket.ROCKET_HEIGHT / 8);
-        CTX.lineTo(rocket.ROCKET_WIDTH / 2, rocket.ROCKET_HEIGHT / 2);
+        CTX.moveTo(constants.ROCKET_WIDTH / 2, 0);
+        CTX.lineTo(constants.ROCKET_WIDTH , 5 *constants.ROCKET_HEIGHT / 8);
+        CTX.lineTo(constants.ROCKET_WIDTH / 2, constants.ROCKET_HEIGHT / 2);
         CTX.closePath();
-        CTX.fillStyle = state.get("theme").threeGradient("#3D4264", "#4A4E6F", "#DFE5E5", rocket.ROCKET_WIDTH / 2, 3 * rocket.ROCKET_WIDTH / 4, 0.2);
+        CTX.fillStyle = state.get("theme").threeGradient("#3D4264", "#4A4E6F", "#DFE5E5", constants.ROCKET_WIDTH / 2, 3 * constants.ROCKET_WIDTH / 4, 0.2);
         CTX.fill();
 
         CTX.beginPath();
-        CTX.moveTo(0, 0.2 * rocket.ROCKET_HEIGHT);
-        CTX.lineTo(- rocket.ROCKET_WIDTH / 4, rocket.ROCKET_HEIGHT / 2);
-        CTX.lineTo(0, 0.8 * rocket.ROCKET_HEIGHT);
-        CTX.lineTo(rocket.ROCKET_WIDTH / 4, rocket.ROCKET_HEIGHT / 2);
+        CTX.moveTo(0, 0.2 * constants.ROCKET_HEIGHT);
+        CTX.lineTo(- constants.ROCKET_WIDTH / 4, constants.ROCKET_HEIGHT / 2);
+        CTX.lineTo(0, 0.8 * constants.ROCKET_HEIGHT);
+        CTX.lineTo(constants.ROCKET_WIDTH / 4, constants.ROCKET_HEIGHT / 2);
         CTX.closePath();
-        CTX.fillStyle = state.get("theme").threeGradient("#DFE5E5", '#262b4f', "#4A4E6F", rocket.ROCKET_WIDTH / 2, 0, 0.5);
+        CTX.fillStyle = state.get("theme").threeGradient("#DFE5E5", '#262b4f', "#4A4E6F", constants.ROCKET_WIDTH / 2, 0, 0.5);
         CTX.fill();
 
         // Translate to the top-left corner of the lander so engine and booster
         // flames can be drawn from 0, 0
-        CTX.translate(-rocket.ROCKET_WIDTH / 2, -rocket.ROCKET_HEIGHT / 2);
-        if (rocket.usedfuel < _fuelLimit) {
+        CTX.translate(-constants.ROCKET_WIDTH / 2, -constants.ROCKET_HEIGHT / 2);
+        if (rocket.usedfuel < constants.FUELLIMIT) {
             if (rocket.engineOn || rocket.rotatingLeft || rocket.rotatingRight) {
                 CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
             }
@@ -786,9 +633,9 @@ export const makeLander = (state) => {
                 const _flameHeight = randomBetween(10, 50);
                 const _flameMargin = 3;
                 CTX.beginPath();
-                CTX.moveTo(_flameMargin, rocket.ROCKET_HEIGHT);
-                CTX.lineTo(rocket.ROCKET_WIDTH - _flameMargin, rocket.ROCKET_HEIGHT);
-                CTX.lineTo(rocket.ROCKET_WIDTH / 2, rocket.ROCKET_HEIGHT + _flameHeight);
+                CTX.moveTo(_flameMargin, constants.ROCKET_HEIGHT);
+                CTX.lineTo(constants.ROCKET_WIDTH - _flameMargin, constants.ROCKET_HEIGHT);
+                CTX.lineTo(constants.ROCKET_WIDTH / 2, constants.ROCKET_HEIGHT + _flameHeight);
                 CTX.closePath();
                 CTX.fill();
             }
@@ -797,9 +644,9 @@ export const makeLander = (state) => {
             // Right booster flame
             if (rocket.rotatingLeft) {
                 CTX.beginPath();
-                CTX.moveTo(rocket.ROCKET_WIDTH, 0);
-                CTX.lineTo(rocket.ROCKET_WIDTH + _boosterLength, rocket.ROCKET_HEIGHT * 0.05);
-                CTX.lineTo(rocket.ROCKET_WIDTH, rocket.ROCKET_HEIGHT * 0.1);
+                CTX.moveTo(constants.ROCKET_WIDTH, 0);
+                CTX.lineTo(constants.ROCKET_WIDTH + _boosterLength, constants.ROCKET_HEIGHT * 0.05);
+                CTX.lineTo(constants.ROCKET_WIDTH, constants.ROCKET_HEIGHT * 0.1);
                 CTX.closePath();
                 CTX.fill();
             }
@@ -808,8 +655,8 @@ export const makeLander = (state) => {
             if (rocket.rotatingRight) {
                 CTX.beginPath();
                 CTX.moveTo(0, 0);
-                CTX.lineTo(-_boosterLength, rocket.ROCKET_HEIGHT * 0.05);
-                CTX.lineTo(0, rocket.ROCKET_HEIGHT * 0.1);
+                CTX.lineTo(-_boosterLength, constants.ROCKET_HEIGHT * 0.05);
+                CTX.lineTo(0, constants.ROCKET_HEIGHT * 0.1);
                 CTX.closePath();
                 CTX.fill();
             }
@@ -818,19 +665,7 @@ export const makeLander = (state) => {
     };
 
     return {
-        destroy,
-        resetProps,
-        getPosition: () => _position,
-        getDisplayPosition: () => _displayPosition,
-        getVelocity: () => _velocity,
-        engineOn: () => (_engineOn = true),
-        engineOff: () => (_engineOn = false),
-        rotateLeft: () => (_rotatingLeft = true),
-        rotateRight: () => (_rotatingRight = true),
-        stopLeftRotation: () => (_rotatingLeft = false),
-        stopRightRotation: () => (_rotatingRight = false),
-        setIsPressKey: () => (_isPressKeyVal = true),
-        updateIterator,
-        newDraw
+        draw,
+        updateIterator
     };
 };

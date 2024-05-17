@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./Game.css"
 import Docs from "./Docs";
+import GameCanvas from "components/GameCanvas";
 import MainBtn from "components/Buttons/MainBtn";
 
 import AceEditor from "react-ace-builds";
@@ -30,25 +31,56 @@ import { landingScoreDescription, crashScoreDescription, destroyedDescription } 
 
 import LoginBtn from "components/Buttons/LoginBtn";
 
-let _lander;
-let appState;
-let canvasWidth;
-let canvasHeight;
-
 export default function Game({ isLogin }){
     const [code, setCode] = useState('// TODO: ');
     const onChange = (value) => {setCode(value);};
 
-    const canvasRef = useRef(null);
-    let scale = window.devicePixelRatio;
-    let height = 500; //window.innerHeight;
-    let width = 500; //window.innerWidth;
-
-    const applyCodeHandler = () => {
-        applyCode(code);
-        setSaveCode(code);
-        saveCode(code);
+    let canvasWidth = 500;
+    let canvasHeight = 500; 
+    const [showCanvas, setShowCanvas] = useState(false);
+    const initRocket = {
+        position: { x: canvasWidth / 2, y: canvasHeight / 2 },
+        displayPosition: { x: canvasWidth / 2, y: canvasHeight / 2 },
+        velocity: { x: 0, y: 0 },
+        rotationVelocity: 0,
+        angle: 0,
+        engineOn: false,
+        rotatingLeft: false,
+        rotatingRight: false,
+    
+        timeSinceStart: 0,
+        lastRotation: 1,
+        lastRotationAngle: Math.PI * 2,
+        rotationCount: 0,
+        maxVelocity: { x: 0, y: 0 },
+        velocityMilestone: { x: 0, y: 0 },
+        heightMilestone: 0,
+        usedfuel: 0,
+    };
+    const constants = {
+        STARTTIME: Date.now(),
+        THRUST: 0.01,
+        RTHRUST: 0.01,
+        GRAVITY: 0.004,
+        ROCKET_WIDTH: 20,
+        ROCKET_HEIGHT: 40,
+        FUELLIMIT : 100,
+        TIMELIMIT : 2000,
     }
+    const allowed = {
+        getVelocityX : true,
+        getVelocityY : true,
+        getAngle : true,
+        getHeight : true,
+        getRotationVelocity : true,
+        engineOn : true,
+        engineOff : true,
+        rotateLeft : true,
+        stopLeftRotation : true,
+        rotateRight : true,
+        stopRightRotation : true
+    }
+    const initState = [initRocket, constants, allowed]
     
     const loadCode = () => {
         const code = localStorage.getItem("myCodemosCode");
@@ -59,104 +91,12 @@ export default function Game({ isLogin }){
         }
     }
 
-    const apply = () => {
-        console.log("apply")
-        const lander = _lander;
-        const initState = {
-            position: { x: canvasWidth / 2, y: canvasHeight / 2 },
-            displayPosition: { x: canvasWidth / 2, y: canvasHeight / 2 },
-            velocity: { x: 0, y: 0 },
-            rotationVelocity: 0,
-            angle: 0,
-            engineOn: false,
-            rotatingLeft: false,
-            rotatingRight: false,
-        
-            timeSinceStart: 0,
-            lastRotation: 1,
-            lastRotationAngle: Math.PI * 2,
-            rotationCount: 0,
-            maxVelocity: { x: 0, y: 0 },
-            velocityMilestone: { x: 0, y: 0 },
-            heightMilestone: 0,
-        
-            startTime: Date.now(),
-            thrust: 0.01,
-            rThrust: 0.01,
-            usedfuel: 0,
-            GRAVITY: 0.004,
-            ROCKET_WIDTH: 20,
-            ROCKET_HEIGHT: 40
-        };
-        const logs = [initState]
-        const didLand = lander.updateIterator(code, logs);
-        lander.newDraw(logs, didLand);
-    }
-
-    useEffect(()=>{
-        const canvasElement = canvasRef.current;
-        const CTX = canvasElement.getContext('2d');
-
-        canvasElement.width = Math.floor(width * scale);
-        canvasElement.height = Math.floor(height * scale);
-        
-        height = 500; // window.innerHeight;
-        width = 500; //window.innerWidth;
-        scale = window.devicePixelRatio;
-        const scaleFactor = scale;
-        canvasHeight = height;
-        canvasWidth = width;
-        CTX.scale(scale, scale);
-
-        //const audioManager = makeAudioManager();
-
-        const challengeManager = makeChallengeManager();
-        const seededRandom = makeSeededRandom();
-
-        appState = new Map()
-            .set("CTX", CTX)
-            .set("canvasWidth", canvasWidth)
-            .set("canvasHeight", canvasHeight)
-            .set("canvasElement", canvasElement)
-            .set("scaleFactor", scaleFactor)
-            //.set("audioManager", audioManager)
-            .set("challengeManager", challengeManager)
-            .set("seededRandom", seededRandom);
-
-        const theme = makeTheme(appState);
-        appState.set("theme", theme);
-
-        const terrain = makeTerrain(appState);
-        appState.set("terrain", terrain);
-
-        const bonusPointsManager = makeBonusPointsManager(appState);
-        appState.set("bonusPointsManager", bonusPointsManager);
-
-        const stars = makeStarfield(appState);
-        appState.set("stars", stars);
-        const lander = makeLander(appState);
-        _lander = lander
-        const landerControls = makeControls(appState, lander);
-        //const tally = makeTallyManger();
-
-        // let sendAsteroid = seededRandomBool(seededRandom);
-        // let asteroidCountdown = seededRandomBetween(2000, 15000, seededRandom);
-        // let asteroids = [makeAsteroid(appState, lander.getPosition, onAsteroidImpact)];
-        // let spaceAsteroids = [];
-        // let randomConfetti = [];
-
-        // let gameEnded = false;
-
-        landerControls.attachEventListeners();
-        challengeManager.populateCornerInfo();
-        //terrain.setShowLandingSurfaces();
-    }, [])
-
     return(
         <div className="container">
             <LoginBtn isLogin={isLogin}/>
-        
-            <canvas ref={ canvasRef } style={{width: `${width}px`, height: `${height}px`}}></canvas>
+            {showCanvas &&
+                <GameCanvas size={[canvasHeight, canvasWidth]} code={code} initState={initState} animationEnded = {() => setShowCanvas(false)} />
+            }
             <div id="endGameStats" className="fullSizeContainer">
                 <h1 id="description"></h1>
                 <div className="scoreContainer"><span id="score"></span> point <span id="type"></span></div>
@@ -211,36 +151,9 @@ export default function Game({ isLogin }){
                     </div>
                 </div>
             </div>
-            {/*<div id="instructions" className="fullSizeContainer instructions">
-                <div>
-                    <h1>CodeMos</h1>
-                    <p>착륙 알고리즘을 작성해 착륙 지점에 우주선을 안전하게 착륙시켜야 합니다</p>
-                </div>
-                <div className="instructionsControls" style={{color: "#fff"}}>
-                    <h2>키보드 방향키로 API 함수 테스트</h2>
-                    <div id="forKeyboard">
-                        <ul>
-                            <li id="engineCheck"><input type="checkbox" /> 위쪽 방향키(주 엔진), engineOn()</li>
-                            <li id="rightRotationCheck"><input type="checkbox" />왼쪽 방향키(오른쪽 추진체), rotateLeft()</li>
-                            <li id="leftRotationCheck"><input type="checkbox" />오른쪽 방향키(왼쪽 추진체), rotateRight()</li>
-                            <li id="engineAndRotationCheck"><input type="checkbox" /> 방향키 동시에 누르기, 모든 함수는 동시에 호출될 수 있습니다.</li>
-                        </ul>
-                    </div>
-                    <div id="forTouch">
-                        <ul>
-                            <li id="engineCheck"><input type="checkbox" /> Tap the center of the screen</li>
-                            <li id="rightRotationCheck"><input type="checkbox" /> Tap the left side</li>
-                            <li id="leftRotationCheck"><input type="checkbox" /> Tap the right side</li>
-                            <li id="engineAndRotationCheck"><input type="checkbox" /> Hold down on the center while you tap the sides</li>
-                        </ul>
-                    </div>
-                </div>
-            /div>*/}
-            {/*} <div id="cornerChallenge" className="topLeftCorner show">Daily Challenge <span id="cornerChallengeNumber"></span></div> */}
 
             <div id="drag-handle"></div>
 
-            {/* 코드 에디터 */}
             <div id="editorWrap" style={{visibility: "hidden"}}>
                 <AceEditor
                     id="editor"
@@ -259,7 +172,7 @@ export default function Game({ isLogin }){
 
             <button className="docs-btn" onClick={apiDocsToggle}>Docs</button>
             <button className="code-btn" onClick={toggleVisibility}>Code</button>
-            <button className="apply-btn" onClick={apply}>Apply</button>
+            <button className="apply-btn" onClick={() => {setShowCanvas(true)}}>Apply</button>
             <button className="logout-btn" style={{ display: 'none' }}>Logout</button> {/**onClick={logout} */}
             <MainBtn btnType = 'main' />
 
@@ -304,29 +217,7 @@ function checkHandleVisibility() {
     }
 }
 
-let _code;
-
-function setSaveCode(code) {
-    _code = code;
-}
-
-window.setSaveCode = setSaveCode;
-
-//****************** 서버가 던진거 받아서 초기화 ㄱㄱ ******************* */
-
 // #2
-
-let _allowGetVelocityX = true;
-let _allowGetVelocityY = true;
-let _allowGetAngle = true;
-let _allowGetHeight = true;
-let _allowGetRotationVelocity = true;
-let _allowEngineOn = true;
-let _allowEngineOff = true;
-let _allowRotateLeft = true;
-let _allowStopLeftRotation = true;
-let _allowRotateRight = true;
-let _allowStopRightRotation = true;
 
 //************************************************************** */
 function logging() {
