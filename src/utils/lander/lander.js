@@ -10,7 +10,6 @@ export const makeLander = (state) => {
     const CTX = state.get("CTX");
     const canvasWidth = state.get("canvasWidth");
     const canvasHeight = state.get("canvasHeight");
-    let animationID;
     //const audioManager = null;
     const bonusPointsManager = state.get("bonusPointsManager");
 
@@ -563,7 +562,7 @@ export const makeLander = (state) => {
           copy[key] = deepCopy(obj[key]);
         }
         return copy;
-      }
+    }
 
     const updateRocket = (rocket) => {
         rocket.timeSinceStart = Date.now() - rocket.startTime;
@@ -576,7 +575,7 @@ export const makeLander = (state) => {
             rocket.rotationVelocity += deltaTimeMultiplier * _rThrust;
             rocket.usedfuel += deltaTimeMultiplier * _rThrust * 2; // xxx : #4
         }
-        if (rocket.rotatingLeft && fuel < _fuelLimit) { // xxx : #4
+        if (rocket.rotatingLeft && rocket.usedfuel < _fuelLimit) { // xxx : #4
             rocket.rotationVelocity -= deltaTimeMultiplier * _rThrust;
             rocket.usedfuel += deltaTimeMultiplier * _rThrust * 2; // xxx : #4
         }
@@ -590,10 +589,10 @@ export const makeLander = (state) => {
 
         _displayPosition.x = rocket.position.x;
 
-        if (rocket.engineOn && fuel < _fuelLimit) { // xxx : #4
+        if (rocket.engineOn && rocket.usedfuel < _fuelLimit) { // xxx : #4
             rocket.velocity.x += deltaTimeMultiplier * (_thrust * Math.sin(rocket.angle));
             rocket.velocity.y -= deltaTimeMultiplier * (_thrust * Math.cos(rocket.angle));
-            fuel += deltaTimeMultiplier * _thrust * 20; // xxx : #4
+            rocket.usedfuel += deltaTimeMultiplier * _thrust * 20; // xxx : #4
         }
 
         // console.log("fuel : " + fuel.toFixed(2) + "L & time : " + time + "ms");
@@ -643,6 +642,7 @@ export const makeLander = (state) => {
     };
 
     const newDraw = (logs, didLand) => {
+        let animationID;
         console.log("draw starts!")
         let randomConfetti = [];
         const drawFromLogs = () => {

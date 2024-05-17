@@ -10,7 +10,6 @@ import 'ace-builds/src-noconflict/theme-ambiance';
 
 import { animate, clampedProgress, generateCanvas, randomBetween, seededRandomBetween, seededRandomBool, transition } from "utils/helpers/helpers.js";
 import { makeLander } from "utils/lander/lander.js";
-//import { makeToyLander } from "utils/lander/toylander.js";
 import { makeStarfield } from "utils/starfield.js";
 import { makeControls } from "utils/lander/controls.js";
 import { makeTerrain } from "utils/terrain.js";
