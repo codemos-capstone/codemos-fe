@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./Game.css"
 import Docs from "./Docs";
+import MainBtn from "components/Buttons/MainBtn";
 
 import AceEditor from "react-ace-builds";
 import "react-ace-builds/webpack-resolver-min";
@@ -33,17 +34,6 @@ let _lander;
 let appState;
 let canvasWidth;
 let canvasHeight;
-
-function MainBtn({  }){
-    const navigate = useNavigate();
-    return <button btntype={"main"} className='home-btn' onClick={
-        ()=>{
-            navigate("/");
-            //window.cancelAnimationFrame(animationID);
-        }
-    }>Home</button>
-};
-
 
 export default function Game({ isLogin }){
     const [code, setCode] = useState('// TODO: ');
@@ -271,7 +261,7 @@ export default function Game({ isLogin }){
             <button className="code-btn" onClick={toggleVisibility}>Code</button>
             <button className="apply-btn" onClick={apply}>Apply</button>
             <button className="logout-btn" style={{ display: 'none' }}>Logout</button> {/**onClick={logout} */}
-            <MainBtn />
+            <MainBtn btnType = 'main' />
 
             {/*} <div id="tally" className="topRightCorner">L<span id="landingTotal"></span> C<span id="crashTotal"></span></div> */}
         </div>
