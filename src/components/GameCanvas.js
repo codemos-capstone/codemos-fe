@@ -16,7 +16,6 @@ export default function GameCanvas({ size, code, initState, animationEnded }){
     let scale = window.devicePixelRatio;
 
     useEffect(() => {
-        console.log(initState[0])
         const canvasElement = canvasRef.current;
         const CTX = canvasElement.getContext('2d');
 

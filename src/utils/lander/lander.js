@@ -1,8 +1,6 @@
 import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPH, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInFeet, percentProgress } from "../helpers/helpers.js";
 import { scoreLanding, scoreCrash } from "../helpers/scoring.js";
 import { CRASH_VELOCITY, CRASH_ANGLE, INTERVAL, TRANSITION_TO_SPACE } from "../helpers/constants.js";
-import { makeLanderExplosion } from "./explosion.js";
-import { makeConfetti } from "./confetti.js";
 import { drawTrajectory } from "./trajectory.js";
 import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.js";
 
@@ -13,262 +11,12 @@ export const makeLander = (state, setting, animationEnded) => {
     //const audioManager = null;
     const bonusPointsManager = state.get("bonusPointsManager");
 
-    // Use grounded height to approximate distance from ground
     const constants = setting[0];
     const allowed = setting[1]
+
+    // Use grounded height to approximate distance from ground
     const _landingData = state.get("terrain").getLandingData();
     const _groundedHeight = _landingData.terrainAvgHeight - constants.ROCKET_HEIGHT + constants.ROCKET_HEIGHT / 2;    
-
-    let _position;
-    let _displayPosition;
-    let _velocity;
-    let _rotationVelocity;
-    let _angle;
-    let _engineOn;
-    let _rotatingLeft;
-    let _rotatingRight;
-
-    let _timeSinceStart;
-    let gameEndData; //
-    let _gameEndConfetti; //
-    let _gameEndExplosion; //
-    let _flipConfetti; //
-    let _lastRotation;
-    let _lastRotationAngle;
-    let _rotationCount;
-    let _maxVelocity;
-    let _velocityMilestone;
-    let _maxHeight; //
-    let _heightMilestone;
-    let _babySoundPlayed; //
-
-    let _isPressKeyVal; //
-
-
-
-    // xxx : #4
-    let fuel;
-
-
-//****************** 서버가 던진거 받아서 초기화 ㄱㄱ ********************* */
-
-    
-    let _fuelLimit = 100;                   // 연료 제한 l
-    let _timeLimit = 2000;                  // 시간 제한 ms
-
-    // xxx : #3
-    let _thrust = 0.01;                     // 주 엔진 추력
-    let _rThrust = 0.01;                    // 보조 엔진(방향) 추력
-
-    // xxx : #2
-    let _startPosX = canvasWidth / 2;       // 우주선 시작 좌표
-    let _startPosY = canvasHeight / 2;
-
-    let _startVelX = 0;                     // 우주선 시작 속도
-    let _startVelY = 0;
-    
-    let _startRotVel = 0;                   // 우주선 시작 각속도
-    let _startAngle = 0;                    // 우주선 시작 각도
-
-//****************************************************************** */
-
-
-
-    // xxx : #2
-    const resetProps = () => {
-        const seededRandom = state.get("seededRandom");
-        // const seededRandom = Math.random(); // XXX: temp
-        _position = {
-            x: _startPosX,//seededRandomBetween(canvasWidth * 0.33, canvasWidth * 0.66, seededRandom),
-            y: _startPosY// LANDER_HEIGHT * 2,
-        };
-        _displayPosition = { ..._position };
-        _velocity = {
-            x: _startVelX, // seededRandomBetween(-_thrust * (canvasWidth / 10), _thrust * (canvasWidth / 10), seededRandom),
-            y: _startVelY // seededRandomBetween(0, _thrust * (canvasWidth / 10), seededRandom),
-        };
-        _rotationVelocity = _startRotVel; // seededRandomBetween(-0.2, 0.2, seededRandom);
-        _angle = _startAngle; // seededRandomBetween(Math.PI * 1.5, Math.PI * 2.5, seededRandom);
-        _engineOn = false;
-        _rotatingLeft = false;
-        _rotatingRight = false;
-
-        _timeSinceStart = 0;
-        gameEndData = false;
-        _gameEndConfetti = false;
-        _gameEndExplosion = false;
-        _flipConfetti = [];
-        _lastRotation = 1;
-        _lastRotationAngle = Math.PI * 2;
-        _rotationCount = 0;
-        _maxVelocity = { ..._velocity };
-        _velocityMilestone = { x: 0, y: 0 };
-        _maxHeight = _position.y;
-        _heightMilestone = 0;
-        _babySoundPlayed = false;
-
-        _isPressKeyVal = false;
-
-        fuel = 0;
-    };
-    resetProps();
-
-    const _isFixedPositionInSpace = () => _position.y < 0;
-
-    const _setGameEndData = (landed, struckByAsteroid = false, isTimeOver = false) => {
-        gameEndData = {
-            isPressKey: _isPressKeyVal,
-            landed,
-            struckByAsteroid,
-            speed: velocityInMPH(_velocity),
-            angle: Intl.NumberFormat().format(getAngleDeltaUpright(_angle).toFixed(1)),
-            durationInSeconds: Intl.NumberFormat().format(Math.round(_timeSinceStart / 1000)),
-            rotationsInt: _rotationCount,
-            rotationsFormatted: Intl.NumberFormat().format(_rotationCount),
-            maxSpeed: velocityInMPH(_maxVelocity),
-            maxHeight: heightInFeet(_maxHeight, _groundedHeight),
-            speedPercent: percentProgress(0, CRASH_VELOCITY, getVectorVelocity(_velocity)),
-            anglePercent: percentProgress(0, CRASH_ANGLE, getAngleDeltaUpright(_angle)),
-            fuel: fuel,
-            timeOver: isTimeOver,
-            timeLimit: _timeLimit
-        };
-        if (landed) {
-            const score = scoreLanding(getAngleDeltaUpright(_angle), getVectorVelocity(_velocity));
-
-            gameEndData.landerScore = score;
-
-            _gameEndConfetti = makeConfetti(state, Math.round(score));
-
-            _angle = Math.PI * 2;
-            _velocity = { x: 0, y: 0 };
-            _rotationVelocity = 0;
-        } else {
-            const score = scoreCrash(getAngleDeltaUpright(_angle), getVectorVelocity(_velocity));
-
-            gameEndData.landerScore = score;
-            if (isTimeOver) gameEndData.landerScore = 999;
-
-            _gameEndExplosion = makeLanderExplosion(state, _isFixedPositionInSpace() ? _displayPosition : _position, _velocity, _angle, !_isFixedPositionInSpace());
-
-            _velocity = { x: 0, y: 0 };
-        }
-
-        //onGameEnd(gameEndData);
-    };
-
-    const destroy = (asteroidVelocity) => {
-        if (!gameEndData) {
-            const averageXVelocity = (_velocity.x + asteroidVelocity.x) / 2;
-            const averageYVelocity = (_velocity.y + asteroidVelocity.y) / 2;
-            _velocity = _isFixedPositionInSpace() ? { x: averageXVelocity, y: asteroidVelocity.y / 2 } : { x: averageXVelocity, y: averageYVelocity };
-            _engineOn = false;
-            _rotatingLeft = false;
-            _rotatingRight = false;
-            // audioManager.stopEngineSound();
-            // audioManager.stopBoosterSound1();
-            // audioManager.stopBoosterSound2();
-            _setGameEndData(false, true);
-        }
-    };
-
-    const _updateProps = (deltaTime) => {
-        if (!document.querySelector("#endGameStats")){
-            fuel = 0;
-            return;
-        }
-        const deltaTimeMultiplier = 1;// deltaTime / INTERVAL;
-
-        if (_timeSinceStart > _timeLimit) _setGameEndData(false, false, true);
-
-        _position.y = _position.y + deltaTimeMultiplier * _velocity.y;
-
-        if (
-            _position.y + LANDER_HEIGHT / 2 < _landingData.terrainHeight ||
-            (_position.y + LANDER_HEIGHT / 2 >= _landingData.terrainHeight &&
-                !CTX.isPointInPath(_landingData.terrainPath2D, _position.x * state.get("scaleFactor"), (_position.y + LANDER_HEIGHT / 2) * state.get("scaleFactor")))
-        ) {
-            // Update ballistic properties
-            // xxx : #3
-            if (_rotatingRight && fuel < _fuelLimit) { // xxx : #4
-                _rotationVelocity += deltaTimeMultiplier * _rThrust;
-                fuel += deltaTimeMultiplier * _rThrust * 2; // xxx : #4
-            }
-            if (_rotatingLeft && fuel < _fuelLimit) { // xxx : #4
-                _rotationVelocity -= deltaTimeMultiplier * _rThrust;
-                fuel += deltaTimeMultiplier * _rThrust * 2; // xxx : #4
-            }
-            if (_position.x < 0) _position.x = canvasWidth;
-
-            if (_position.x > canvasWidth) _position.x = 0;
-
-            _position.x += deltaTimeMultiplier * _velocity.x;
-            _angle += deltaTimeMultiplier * ((Math.PI / 180) * _rotationVelocity);
-            _velocity.y += deltaTimeMultiplier * GRAVITY;
-
-            _displayPosition.x = _position.x;
-
-            if (_engineOn && fuel < _fuelLimit) { // xxx : #4
-                _velocity.x += deltaTimeMultiplier * (_thrust * Math.sin(_angle));
-                _velocity.y -= deltaTimeMultiplier * (_thrust * Math.cos(_angle));
-                fuel += deltaTimeMultiplier * _thrust * 20; // xxx : #4
-            }
-
-            // console.log("fuel : " + fuel.toFixed(2) + "L & time : " + time + "ms");
-
-            // Log new rotations
-            const rotations = Math.floor(_angle / (Math.PI * 2));
-            if (Math.abs(_angle - _lastRotationAngle) > Math.PI * 2 && (rotations > _lastRotation || rotations < _lastRotation)) {
-                bonusPointsManager.addNamedPoint("newRotation");
-                _rotationCount++;
-                _lastRotation = rotations;
-                _lastRotationAngle = _angle;
-                _flipConfetti.push(makeConfetti(state, 10, _displayPosition, _position.y > 0 ? _velocity : { x: _velocity.x, y: 0 }));
-            }
-
-            // Log new max speed and height
-            if (_position.y < _maxHeight) _maxHeight = _position.y;
-
-            if (getVectorVelocity(_velocity) > getVectorVelocity(_maxVelocity)) {
-                _maxVelocity = { ..._velocity };
-            }
-
-            // Record bonus points for increments of height and speed
-            // Ints here are pixels / raw values, not MPH or FT
-            if (_position.y < _heightMilestone + Math.min(-3500, _heightMilestone * 3)) {
-                _heightMilestone = _position.y;
-                bonusPointsManager.addNamedPoint("newHeight");
-            }
-
-            if (getVectorVelocity(_velocity) > getVectorVelocity(_velocityMilestone) + 10) {
-                _velocityMilestone = { ..._velocity };
-                bonusPointsManager.addNamedPoint("newSpeed");
-            }
-
-            // Play easter egg baby sound
-            if (getVectorVelocity(_velocity) > 20 && !_babySoundPlayed) {
-                // state.get("audioManager").playBaby();
-                _babySoundPlayed = true;
-            } else if (getVectorVelocity(_velocity) < 20 && _babySoundPlayed) {
-                _babySoundPlayed = false;
-            }
-        } else if (!gameEndData) {
-            _engineOn = false;
-            _rotatingLeft = false;
-            _rotatingRight = false;
-            // audioManager.stopEngineSound();
-            // audioManager.stopBoosterSound1();
-            // audioManager.stopBoosterSound2();
-
-            const landingArea = _landingData.landingSurfaces.find(({ x, width }) => _position.x - LANDER_WIDTH / 2 >= x && _position.x + LANDER_WIDTH / 2 <= x + width);
-
-            const didLand = getVectorVelocity(_velocity) < CRASH_VELOCITY && getAngleDeltaUpright(_angle) < CRASH_ANGLE && landingArea;
-
-            if (didLand) bonusPointsManager.addNamedPoint(landingArea.name);
-
-            _setGameEndData(didLand);
-        }
-    };
 
     const drawHUD = (rocket) => {
         const textWidth = CTX.measureText("100.0 MPH").width + 2;
@@ -541,7 +289,6 @@ export const makeLander = (state, setting, animationEnded) => {
     }
 
     const checkEnd = (rocket) => {
-        console.log("Time passed by: ", rocket.timeSinceStart)
         if (rocket.timeSinceStart > constants.TIMELIMIT){
             return {end: true, land: false}
         } else if (rocket.position.y + constants.ROCKET_HEIGHT / 2 < _landingData.terrainHeight ||
@@ -554,7 +301,6 @@ export const makeLander = (state, setting, animationEnded) => {
 
     const draw = (logs, didLand) => {
         let animationID;
-        console.log("draw starts!")
         let randomConfetti = [];
         const drawFromLogs = () => {
             let currentState = logs.shift();
