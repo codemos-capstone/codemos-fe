@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from 'react-router-dom';
 import "./Game.css"
 import Docs from "./Docs";
 import GameCanvas from "components/GameCanvas";
@@ -9,25 +8,6 @@ import AceEditor from "react-ace-builds";
 import "react-ace-builds/webpack-resolver-min";
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-ambiance';
-
-import { animate, clampedProgress, generateCanvas, randomBetween, seededRandomBetween, seededRandomBool, transition } from "utils/helpers/helpers.js";
-import { makeLander } from "utils/lander/lander.js";
-import { makeStarfield } from "utils/starfield.js";
-import { makeControls } from "utils/lander/controls.js";
-import { makeTerrain } from "utils/terrain.js";
-import { showStatsAndResetControl } from "utils/stats.js";
-//import { manageInstructions } from "utils/instructions.js";
-//import { makeAudioManager } from "utils/helpers/audio.js";
-import { makeConfetti } from "utils/lander/confetti.js";
-import { makeTallyManger } from "utils/tally.js";
-import { makeAsteroid } from "utils/asteroids.js";
-import { makeSpaceAsteroid } from "utils/spaceAsteroids.js";
-import { makeChallengeManager } from "utils/challenge.js";
-import { makeSeededRandom } from "utils/helpers/seededrandom.js";
-import { makeBonusPointsManager } from "utils/bonuspoints.js";
-import { makeTheme } from "utils/theme.js";
-import { TRANSITION_TO_SPACE, VELOCITY_MULTIPLIER } from "utils/helpers/constants.js";
-import { landingScoreDescription, crashScoreDescription, destroyedDescription } from "utils/helpers/scoring.js";
 
 import LoginBtn from "components/Buttons/LoginBtn";
 

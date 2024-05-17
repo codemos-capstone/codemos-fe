@@ -15,9 +15,9 @@ export const makeLander = (state, setting, animationEnded) => {
 
     // Use grounded height to approximate distance from ground
     const constants = setting[0];
+    const allowed = setting[1]
     const _landingData = state.get("terrain").getLandingData();
-    const _groundedHeight = _landingData.terrainAvgHeight - constants.ROCKET_HEIGHT + constants.ROCKET_HEIGHT / 2;
-    
+    const _groundedHeight = _landingData.terrainAvgHeight - constants.ROCKET_HEIGHT + constants.ROCKET_HEIGHT / 2;    
 
     let _position;
     let _displayPosition;
@@ -358,18 +358,85 @@ export const makeLander = (state, setting, animationEnded) => {
         const rocket = deepCopy(logs[0]);
         let end = false;
         let didLand = false;
-
-        const engineOn = () => { rocket.engineOn = true; };
-        const engineOff = () => { rocket.engineOn = false; };
-        const getVelocityX = () => { return rocket.velocity.x; };
-        const getVelocityY = () => { return rocket.velocity.y; };
-        const getAngle = () => { return rocket.angle; };
-        const getHeight = () => { return heightInFeet(rocket.position.y, _groundedHeight); };
-        const getRotationVelocity = () => { return rocket.rotationVelocity; };
-        const rotateLeft = () => { rocket.rotatingLeft = true; };
-        const rotateRight = () => { rocket.rotatingRight = true; };
-        const stopLeftRotation = () => { rocket.rotatingLeft = false; };
-        const stopRightRotation = () => { rocket.rotatingRight = false; };
+        
+        // Rocket functions
+        const engineOn = () => {
+            if(allowed.engineOn)
+                rocket.engineOn = true;
+            else {
+                throw new TypeError("engineOn is not a function")
+            }
+        };
+        const engineOff = () => {
+            if(allowed.engineOff)
+                rocket.engineOn = false;
+            else {
+                throw new TypeError("engineOff is not a function")
+            }
+        };
+        const getVelocityX = () => {
+            if(allowed.getVelocityX)
+                return rocket.velocity.x;
+            else {
+                throw new TypeError("getVelocityX is not a function")
+            }
+        };
+        const getVelocityY = () => {
+            if(allowed.getVelocityY)
+                return rocket.velocity.y;
+            else {
+                throw new TypeError("getVelocityY is not a function")
+            }
+        };
+        const getAngle = () => {
+            if(allowed.getAngle)
+                return rocket.angle;
+            else {
+                throw new TypeError("getAngle is not a function")
+            }
+        };
+        const getHeight = () => {
+            if(allowed.getHeight)
+                return heightInFeet(rocket.position.y, _groundedHeight);
+            else {
+                throw new TypeError("getHeight is not a function")
+            }
+        };
+        const getRotationVelocity = () => {
+            if(allowed.getRotationVelocity)
+                return rocket.rotationVelocity;
+            else {
+                throw new TypeError("getRotationVelocity is not a function")
+            }
+        };
+        const rotateLeft = () => {
+            if(allowed.rotateLeft)
+                rocket.rotatingLeft = true;
+            else {
+                throw new TypeError("rotateLeft is not a function")
+            }
+        };
+        const rotateRight = () => {
+            if(allowed.rotateRight)
+                rocket.rotatingRight = true;
+            else {
+                throw new TypeError("rotateRight is not a function")
+            }
+        };
+        const stopLeftRotation = () => {
+            if(allowed.stopLeftRotation)
+                rocket.rotatingLeft = false;
+            else {
+                throw new TypeError("stopLeftRotation is not a function")
+            }
+        };
+        const stopRightRotation = () => {
+            if(allowed.stopRightRotation)
+                rocket.rotatingRight = false;
+            else {
+                throw new TypeError("stopRightRotation is not a function")
+            }
+        };
 
         while(!end){
             let err;
