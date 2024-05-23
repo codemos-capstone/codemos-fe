@@ -198,7 +198,6 @@ export const makeLander = (state, setting, animationEnded) => {
                 err = e;
             };
             let isend = checkEnd(rocket);
-            //if (logs.length >= 1000) return false;
             if (err){
                 console.log(err);
                 return;
@@ -211,7 +210,15 @@ export const makeLander = (state, setting, animationEnded) => {
                 didLand = isend.land;
             }
         }
-        return didLand;
+
+        let landingEffect = [rocket];
+
+        if (didLand){
+            rocketLand(landingEffect)
+        } else {
+            rocketExplode(landingEffect)
+        }
+        return landingEffect;
     };
 
     function deepCopy(obj) {
@@ -227,7 +234,18 @@ export const makeLander = (state, setting, animationEnded) => {
           copy[key] = deepCopy(obj[key]);
         }
         return copy;
-    }
+    };
+
+    const checkEnd = (rocket) => {
+        if (rocket.timeSinceStart > constants.TIMELIMIT){
+            return {end: true, land: false}
+        } else if (rocket.position.y + constants.ROCKET_HEIGHT / 2 < _landingData.terrainHeight ||
+        (rocket.position.y + constants.ROCKET_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + constants.ROCKET_HEIGHT / 2) * state.get("scaleFactor")))){
+            return { end: false, land: false};
+        } else {
+            return { end: true, land: false};
+        }
+    };
 
     const updateRocket = (rocket) => {
         rocket.timeSinceStart = Date.now() - constants.STARTTIME;
@@ -292,20 +310,17 @@ export const makeLander = (state, setting, animationEnded) => {
         }
 
         rocket.displayPosition.y = rocket.position.y < TRANSITION_TO_SPACE ? TRANSITION_TO_SPACE : rocket.position.y;
-    }
-
-    const checkEnd = (rocket) => {
-        if (rocket.timeSinceStart > constants.TIMELIMIT){
-            return {end: true, land: false}
-        } else if (rocket.position.y + constants.ROCKET_HEIGHT / 2 < _landingData.terrainHeight ||
-        (rocket.position.y + constants.ROCKET_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + constants.ROCKET_HEIGHT / 2) * state.get("scaleFactor")))){
-            return { end: false, land: false};
-        } else {
-            return { end: true, land: false};
-        }
     };
 
-    const draw = (logs, didLand) => {
+    const rocketLand = (landingEffect) => {
+        return landingEffect
+    };
+
+    const rocketExplode = (landingEffect) => {
+        return landingEffect
+    };
+
+    const draw = (logs, landingEffect) => {
         let animationID;
         let randomConfetti = [];
         const drawFromLogs = () => {
