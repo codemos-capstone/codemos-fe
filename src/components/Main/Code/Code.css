@@ -8,3 +8,10 @@
     justify-content: flex-end;
     flex-direction: column;
 }
+.problems{
+    display: flex;
+    background-color: white;
+    height: fit-content;
+    justify-content: flex-start;
+    flex-direction: column;
+}
