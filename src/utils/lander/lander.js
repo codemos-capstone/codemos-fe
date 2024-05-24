@@ -4,6 +4,7 @@ import { CRASH_VELOCITY, CRASH_ANGLE, LAND_MAX_FRAME, TRANSITION_TO_SPACE } from
 import { drawTrajectory } from "./trajectory.js";
 import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.js";
 import { makeLanderExplosion } from "./explosion.js";
+import { makeConfetti } from "./confetti.js";
 
 export const makeLander = (state, setting, animationEnded) => {
     const CTX = state.get("CTX");
@@ -236,11 +237,15 @@ export const makeLander = (state, setting, animationEnded) => {
     };
 
     const checkEnd = (rocket) => {
+        const landingArea = _landingData.landingSurfaces.find(({ x, width }) => rocket.position.x - constants.ROCKET_WIDTH / 2 >= x && rocket.position.x + constants.ROCKET_WIDTH / 2 <= x + width);
+        const didLand = getVectorVelocity(rocket.velocity) < CRASH_VELOCITY && getAngleDeltaUpright(rocket.angle) < CRASH_ANGLE && landingArea;
         if (rocket.timeSinceStart > constants.TIMELIMIT){
             return {end: true, land: false, ground: false}
         } else if (rocket.position.y + constants.ROCKET_HEIGHT / 2 < _landingData.terrainHeight ||
         (rocket.position.y + constants.ROCKET_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + constants.ROCKET_HEIGHT / 2) * state.get("scaleFactor")))){
             return { end: false, land: false, ground: true};
+        } else if (didLand) {
+            return { end: true, land: true, ground: true};
         } else {
             return { end: true, land: false, ground: true};
         }
@@ -285,7 +290,6 @@ export const makeLander = (state, setting, animationEnded) => {
             rocket.rotationCount++;
             rocket.lastRotation = rotations;
             rocket.lastRotationAngle = rocket.angle;
-            //_flipConfetti.push(makeConfetti(state, 10, rocket.displayPosition, rocket.position.y > 0 ? rocket.velocity : { x: rocket.velocity.x, y: 0 }));
         }
 
         // Log new max speed and height
@@ -308,8 +312,9 @@ export const makeLander = (state, setting, animationEnded) => {
         rocket.displayPosition.y = rocket.position.y < TRANSITION_TO_SPACE ? TRANSITION_TO_SPACE : rocket.position.y;
     };
 
-    const drawLanding = (position) => {
+    const drawLanding = (position, confetti) => {
         //draw and update effects
+        confetti.draw();
     };
 
     const drawExploding = (isGround, explosion, clouds) => {
@@ -352,6 +357,8 @@ export const makeLander = (state, setting, animationEnded) => {
             lastLog.position.y >= 0
         );
         let clouds = makeClouds(lastLog);
+        //const score = scoreLanding(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity));
+        let confetti = makeConfetti(state, Math.round(100)); //amount depends on score
         const drawFromLogs = () => {
             if(logs.length > 0) currentState = logs.shift();
 
@@ -371,7 +378,7 @@ export const makeLander = (state, setting, animationEnded) => {
             if(logs.length <= 0){
                 if(landingState.land) {
                     drawRocket(currentState);
-                    drawLanding(currentState.position);
+                    drawLanding(currentState.position, confetti);
                 } else drawExploding(landingState.ground, explosion, clouds);
                 landAnimationCount++;
             } else {

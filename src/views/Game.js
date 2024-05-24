@@ -41,7 +41,7 @@ export default function Game({ isLogin }){
         STARTTIME: Date.now(),
         THRUST: 0.01,
         RTHRUST: 0.01,
-        GRAVITY: 0.04,
+        GRAVITY: 0.004,
         ROCKET_WIDTH: 20,
         ROCKET_HEIGHT: 40,
         FUELLIMIT : 100,
