@@ -19,7 +19,7 @@ export default function Game({ isLogin }){
     let canvasHeight = 500; 
     const [showCanvas, setShowCanvas] = useState(false);
     const initRocket = {
-        position: { x: canvasWidth / 2, y: canvasHeight / 2 },
+        position: { x: canvasWidth / 2, y: canvasHeight * 3 / 4 },
         displayPosition: { x: canvasWidth / 2, y: canvasHeight / 2 },
         velocity: { x: 0, y: 0 },
         rotationVelocity: 0,
@@ -41,7 +41,7 @@ export default function Game({ isLogin }){
         STARTTIME: Date.now(),
         THRUST: 0.01,
         RTHRUST: 0.01,
-        GRAVITY: 0.004,
+        GRAVITY: 0.04,
         ROCKET_WIDTH: 20,
         ROCKET_HEIGHT: 40,
         FUELLIMIT : 100,

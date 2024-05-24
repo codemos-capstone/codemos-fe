@@ -1,8 +1,9 @@
 import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPH, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInFeet, percentProgress } from "../helpers/helpers.js";
 import { scoreLanding, scoreCrash } from "../helpers/scoring.js";
-import { CRASH_VELOCITY, CRASH_ANGLE, INTERVAL, TRANSITION_TO_SPACE } from "../helpers/constants.js";
+import { CRASH_VELOCITY, CRASH_ANGLE, LAND_MAX_FRAME, TRANSITION_TO_SPACE } from "../helpers/constants.js";
 import { drawTrajectory } from "./trajectory.js";
 import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.js";
+import { makeLanderExplosion } from "./explosion.js";
 
 export const makeLander = (state, setting, animationEnded) => {
     const CTX = state.get("CTX");
@@ -281,7 +282,6 @@ export const makeLander = (state, setting, animationEnded) => {
         // Log new rotations
         const rotations = Math.floor(rocket.angle / (Math.PI * 2));
         if (Math.abs(rocket.angle - rocket.lastRotationAngle) > Math.PI * 2 && (rotations > rocket.lastRotation || rotations < rocket.lastRotation)) {
-            bonusPointsManager.addNamedPoint("newRotation");
             rocket.rotationCount++;
             rocket.lastRotation = rotations;
             rocket.lastRotationAngle = rocket.angle;
@@ -299,43 +299,59 @@ export const makeLander = (state, setting, animationEnded) => {
         // Ints here are pixels / raw values, not MPH or FT
         if (rocket.position.y < rocket.heightMilestone + Math.min(-3500, rocket.heightMilestone * 3)) {
             rocket.heightMilestone = rocket.position.y;
-            bonusPointsManager.addNamedPoint("newHeight");
         }
 
         if (getVectorVelocity(rocket.velocity) > getVectorVelocity(rocket.velocityMilestone) + 10) {
             rocket.velocityMilestone = { ...rocket.velocity };
-            bonusPointsManager.addNamedPoint("newSpeed");
         }
 
         rocket.displayPosition.y = rocket.position.y < TRANSITION_TO_SPACE ? TRANSITION_TO_SPACE : rocket.position.y;
     };
 
     const drawLanding = (position) => {
-        //pass
+        //draw and update effects
     };
 
-    const drawExploding = (isGround, rocketState) => {
-        //pass
+    const drawExploding = (isGround, explosion, clouds) => {
+        //draw and update clouds
+        /*if(isGround) clouds.foreach(cloud => {
+            cloud.position.y = cloud.position.y + cloud.velocity.y;
+            if (cloud.position.x < 0) cloud.position.x = canvasWidth;
+    
+            if (cloud.position.x > canvasWidth) cloud.position.x = 0;
+    
+            cloud.position.x += cloud.velocity.x;
+            cloud.angle += ((Math.PI / 180) * cloud.rotationVelocity);
+            cloud.velocity.y += constants.GRAVITY;
+    
+            cloud.displayPosition.x = cloud.position.x;
+        });*/
+       explosion.draw();
     };
 
-    const generateRandomPieces = () => {
-        let fragments = [];
-        //pass
-        return fragments;
-    };
+    const drawCloud = (cloud) => {};
 
-    const makeCloud = (rocket) => {
+    const makeClouds = (rocket) => {
+        let clouds = [];
         //pass
         //use position and velocity and create several clouds that have own position and velocity
+        return clouds;
     };
 
     const draw = (logs, landingState) => {
+        const lastLog = logs.at(-1);
         let animationID;
         let landAnimationEnd = false;
         let landAnimationCount = 0;
         let currentState;
-        let fragments = generateRandomPieces(logs.at(-1));
-        let clouds = makeCloud(logs.at(-1));
+        let explosion = makeLanderExplosion(
+            state,
+            lastLog.position.y < 0 ? lastLog.displayPosition : lastLog.position,
+            lastLog.velocity,
+            lastLog.angle,
+            lastLog.position.y >= 0
+        );
+        let clouds = makeClouds(lastLog);
         const drawFromLogs = () => {
             if(logs.length > 0) currentState = logs.shift();
 
@@ -352,17 +368,17 @@ export const makeLander = (state, setting, animationEnded) => {
             CTX.restore();
 
             //Draw rocket when the game is not ended or the rocket succesfully landed
-            drawRocket(currentState);
-            if(logs.length <= 0 && landAnimationCount < 50){
+            if(logs.length <= 0){
                 if(landingState.land) {
                     drawRocket(currentState);
                     drawLanding(currentState.position);
-                } else drawExploding(landingState.ground, fragments, clouds);
+                } else drawExploding(landingState.ground, explosion, clouds);
                 landAnimationCount++;
-            } else if (landAnimationCount >= 50) landAnimationEnd = true;
-            else {
+            } else {
                 drawRocket(currentState);
             }
+
+            if (landAnimationCount >= LAND_MAX_FRAME) landAnimationEnd = true;
 
             if (currentState.position.y > TRANSITION_TO_SPACE) {
                 drawTrajectory(state, currentState.position, currentState.angle, currentState.velocity, currentState.rotationVelocity);
