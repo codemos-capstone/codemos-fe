@@ -5,7 +5,8 @@ import jSImage from 'assets/images/JS.png';
 
 export default function File({ setSelectedCode }) {
   const [codeFiles, setCodeFiles] = useState([]);
-  const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림 상태 추가
+  const [isFileOpen, setIsFileOpen] = useState(false);
+  const [isProblemsOpen, setIsProblemsOpen] = useState(false);
 
   useEffect(() => {
     const fetchCodeFiles = async () => {
@@ -21,7 +22,6 @@ export default function File({ setSelectedCode }) {
         console.error('Error:', error);
       }
     };
-
     fetchCodeFiles();
   }, []);
 
@@ -29,25 +29,46 @@ export default function File({ setSelectedCode }) {
     setSelectedCode(content);
   };
 
-  const toggleDropdown = () => setIsOpen(!isOpen);  // 드롭다운 상태 토글 함수
-  
+  const toggleFileDropdown = () => {
+    setIsFileOpen(!isFileOpen);
+  };
+
+  const toggleProblemsDropdown = () => {
+    setIsProblemsOpen(!isProblemsOpen);
+  };
+
   return (
     <div className='file'>
-      <button onClick={toggleDropdown} className="dropdown-toggle">
-        {isOpen ? '코드 파일 숨기기' : '코드 파일 보기'}
-      </button>
-      {isOpen && (  // isOpen 상태에 따라 목록을 보여주거나 숨김
-        <ul>
-          {codeFiles.map((codeFile) => (
-            <li key={codeFile.name} onClick={() => handleFileClick(codeFile.content)}>
-              <div className="fileNameDetail"> 
-                <img src={jSImage} alt="JS Logo" style={{width: '14px'}} />
-                <div>{codeFile.problemId ? codeFile.problemId : '0000'}번</div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul>
+        <li>
+          <button onClick={toggleFileDropdown} className={`dropdown-toggle ${isFileOpen ? 'open' : ''}`}>
+            {isFileOpen ? 'File' : 'File'}
+          </button>
+          {isFileOpen && (
+            <ul>
+              {codeFiles.map((codeFile) => (
+                <li key={codeFile.name} onClick={() => handleFileClick(codeFile.content)}>
+                  <div className="fileNameDetail">
+                    <img src={jSImage} alt="JS Logo" style={{width: '14px'}} />
+                    <div>{codeFile.problemId ? codeFile.problemId : '0000'}번</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+        <li>
+          <button onClick={toggleProblemsDropdown} className={`dropdown-toggle ${isProblemsOpen ? 'open' : ''}`}>
+            {isProblemsOpen ? 'Problems' : 'Problems'}
+          </button>
+          {isProblemsOpen && (
+            <ul>
+              <li>Problem 1</li>
+              <li>Problem 2</li>
+            </ul>
+          )}
+        </li>
+      </ul>
     </div>
   );
 }
