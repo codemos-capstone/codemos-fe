@@ -9,6 +9,11 @@ export default function Login({ setForm, setToLogin }) {
     function pageToggle() {
         setForm('register');
     }
+
+    function handleForgotPassword() {
+        setForm('forgot-password');
+    }
+
     const containerStyle = {
         marginTop: '10%',
         maxWidth: '300px',
@@ -34,7 +39,12 @@ export default function Login({ setForm, setToLogin }) {
                 <div className="form-group">
                     <label htmlFor="password" style={labelStyle}>Password</label>
                     <input type="password" id="password" name="password" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} required />
-                    <div style={{float: 'left' ,fontSize:'60%', textDecoration: 'underline'}}>비밀번호를 잊으셨나요?</div>
+                    <div
+                        style={{ float: 'left', fontSize: '60%', textDecoration: 'underline', cursor: 'pointer' }}
+                        onClick={handleForgotPassword}
+                    >
+                        비밀번호를 잊으셨나요?
+                    </div>
                 </div>
               
                 <div className="form-group">

@@ -5,6 +5,7 @@ import Register from "components/Sign/Register";
 import Header from 'components/Header/Header';
 
 import "./LoginPage.css"
+import ForgotPassword from "components/Sign/ForgotPassword";
 
 const btnTexts = require('lang/kor.json').login;
 
@@ -28,6 +29,8 @@ export default function LoginPage({setPage, setIsLogin}){
         form = <Login setForm={setFormStat} setToLogin={setToLogin} />
     } else if (formStat === 'register') {
         form = <Register setForm={setFormStat} initialEmail={emailFromQuery} />
+    } else if (formStat === 'forgot-password') {
+        form = <ForgotPassword />
     }
     
     return(
