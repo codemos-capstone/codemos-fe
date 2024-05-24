@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './ColabHeader.css';
-
+import runImg from 'assets/images/run.png';
 const ColabHeader = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
@@ -55,8 +55,8 @@ const ColabHeader = () => {
         <button className="menu-button">도움말</button>
       </div>
       <div className="actions">
-        <button className="action-button">etc</button>
-        <button className="action-button">etc</button>
+        <img src = {runImg} />
+        <button className="action-button">remove</button>
         <button className="action-button"><span className="action-icon">&#9881;</span></button>
       </div>
     </header>

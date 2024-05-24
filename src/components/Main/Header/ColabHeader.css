@@ -46,3 +46,10 @@
     background-color: #555;
   }
   
+  .actions img{
+    width: 13px;
+    cursor:pointer; 
+  }
+  .actions img:hover{
+    background-color: #333333;
+  }

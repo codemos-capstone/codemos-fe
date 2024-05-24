@@ -12,7 +12,14 @@ export default function Code({ selectedCode }){
 
   return(
     <div className='code'>
-      <div style={{width: '100%',height:'25px', backgroundColor: 'black'}}>
+      <div style={{width: '100%',
+                  height:'25px', 
+                  backgroundColor: 'black', 
+                  display: 'flex', 
+                  justifyContent: 'flex-start'}}>
+        <FileBtn></FileBtn>
+        <FileBtn></FileBtn>
+        <FileBtn></FileBtn>
         <FileBtn></FileBtn>
       </div>
       <AceEditor

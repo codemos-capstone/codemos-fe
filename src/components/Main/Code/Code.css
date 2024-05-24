@@ -1,5 +1,6 @@
 .code{
-    background-color: b;
+    background-color: black;
+    display: flex;
     position:relative;
     width: 100vw;
     max-width: 100vw;
