@@ -1,0 +1,15 @@
+/* Main.css에 추가 */
+.file-container, .code-container {
+    height: 100%; /* 부모 컨테이너의 높이에 맞춤 */
+    overflow-y: auto; /* 세로 스크롤만 허용 */
+  }
+  
+  .space {
+    width: 100vw;
+    height: 70vh; /* 높이 설정, 필요에 따라 조정 */
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+  

@@ -1,31 +1,43 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
-import Login from "components/Login";
-import Register from "components/Register";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import Login from "components/Sign/Login";
+import Register from "components/Sign/Register";
+import Header from 'components/Header/Header';
 
 import "./LoginPage.css"
+import ForgotPassword from "components/Sign/ForgotPassword";
 
 const btnTexts = require('lang/kor.json').login;
 
 export default function LoginPage({setPage, setIsLogin}){
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const oauth = queryParams.get('oauth');
+    const emailFromQuery = queryParams.get('email');
+
     const setToLogin = () => {
         setIsLogin(true)
         setPage('main')
     }
-    const [formStat, setFormStat] = useState('login')
+
+    // 상태에 따라 초기 폼 설정
+    const [formStat, setFormStat] = useState(oauth === 'true' ? 'register' : 'login');
+
     let form;
     if (formStat === 'login'){
         form = <Login setForm={setFormStat} setToLogin={setToLogin} />
     } else if (formStat === 'register') {
-        form = <Register setForm={setFormStat} />
+        form = <Register setForm={setFormStat} initialEmail={emailFromQuery} />
+    } else if (formStat === 'forgot-password') {
+        form = <ForgotPassword />
     }
     
     return(
-        <div className="container" style={{padding: '10px'}}>
+        <div className="container">
+            <Header></Header>
             <div className="success-message" id="successMessage">{btnTexts[0]}</div>
             {form}
-            <Link to={process.env.REACT_APP_GOOGLE_AUTH}><button>구글</button></Link>
             <div className="home">
                 <button btntype='main' className="home-btn" onClick={()=>{navigate("/");}}>{btnTexts[4]}</button>
             </div>

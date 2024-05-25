@@ -7,6 +7,8 @@ import LoginPage from "views/LoginPage"
 import User from "views/User"
 import Leader from "views/Leader"
 import OnLogin from "views/OnLogin"
+import OAuthMiddle from "hooks/auth";
+import ResetPassword from "components/Sign/ResetPassword";
 
 export default function App(){
     const location = useLocation();
@@ -26,6 +28,8 @@ export default function App(){
                 <Route path="/game" element={<Game isLogin={isLogin}/>} />
                 <Route path="/leader" element={<Leader />} />
                 <Route path="/google/callback" element={<OnLogin />} />
+                <Route path="/oauthMiddle" element={<OAuthMiddle />} />
+                <Route path="/auth/reset-password" element={<ResetPassword />} />
             </Routes>
         </div>
     )

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Leader.css"
-import Leaderboard from "components/Leaderboard";
+import Leaderboard from "components/LeaderBoard/Leaderboard";
 
 const btnTexts = require('lang/kor.json').leader;
 

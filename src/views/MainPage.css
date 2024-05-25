@@ -1,5 +1,4 @@
 .main .container {
-    margin: 100px;
     background: #02071e;
     font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
     text-align: center;
@@ -49,14 +48,11 @@
     margin: 0px auto;
 }
 .main .home-login-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
+    cursor: pointer;
     padding: 8px 16px;
     font-size: 12px;
     color: #fff;
     background-color: #0a0a1a;
-    box-shadow: 0 0 10px #4d4dff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -64,14 +60,11 @@
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 .main .home-logout-btn {
-    position: fixed;
-    top: 20px;
-    right: 100px;
+    cursor: pointer;
     padding: 8px 16px;
     font-size: 12px;
     color: #fff;
     background-color: #0a0a1a;
-    box-shadow: 0 0 10px #4d4dff;
     border: none;
     border-radius: 5px;
     cursor: pointer;

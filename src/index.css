@@ -1,4 +1,8 @@
 body {
+    display: flex; /* Flexbox를 사용합니다. */
+    flex-direction: column; /* 자식 요소들을 세로 방향(column)으로 배치합니다. */
+    justify-content: center; /* 수직으로 중앙 정렬합니다. */
+    align-items: center; /* 수평으로 중앙 정렬합니다. */
     margin: 0;
     background: #02071e;
     font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;

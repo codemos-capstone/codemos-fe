@@ -1,0 +1,65 @@
+.file{
+    background-color: gray;
+    width: 250px;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 5px;
+}
+.dropdown-toggle {
+    width: 250px;
+    height: fit-content;
+    font-size: 16px;
+    cursor: pointer;
+    background-color:grey;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-align: left;
+}
+.dropdown-toggle:hover{
+    cursor:pointer;
+    background-color: #643939; /* 마우스 오버시 배경색 */
+}.dropdown-toggle {
+  position: relative;
+  padding-left: 30px; /* 화살표 공간 확보 */
+}
+
+.dropdown-toggle::after {
+  content: '';
+  position: absolute;
+  left: 10px; /* 버튼 오른쪽에서의 위치 */
+  top: 50%; /* 버튼 중앙에 위치 */
+  transform: translateY(-50%) rotate(90deg); /* 중앙 정렬 및 회전 */
+  border: solid transparent;
+  border-width: 4px 0 4px 8px; /* 납작한 부등호 모양 */
+  border-left-color: #000; /* 부등호 색상 */
+  transition: transform 0.3s;
+}
+
+.dropdown-toggle.open::after {
+  transform: translateY(-50%) rotate(-90deg); /* 열려있을 때 화살표 방향 */
+}
+
+
+.fileNameDetail{
+    position:relative;
+    display: flex;
+    width: 250px;
+    list-style-type: none;
+    align-items: center;
+    justify-content: flex-start;
+}
+.fileNameDetail div{
+    margin-left: 10px;
+    color: rgba(255, 255, 98, 0.715);
+    font-size: 14.5px;
+}
+.fileNameDetail img{
+    margin-left: 10px;
+    
+}
+.fileNameDetail:hover{
+    cursor:pointer;
+    background-color: #643939; /* 마우스 오버시 배경색 */
+}
