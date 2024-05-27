@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './Code.css';
 import AceEditor from "react-ace-builds";
 import "react-ace-builds/webpack-resolver-min";
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-ambiance';
 import FileBtn from "../../Buttons/FileBtn";
+import GameCanvas from "components/GameCanvas";
 
-export default function Code({ selectedCode, selectedProblem }) {
+export default function Code({ selectedCode, selectedProblem, codeRun, endGame}) {
   const CodeEditorStyle = {width: '100%', height:'100%', border: '5px solid #3D3D3D', borderTop: '20px solid #3D3D3D'}
 
   return(
@@ -59,6 +60,14 @@ export default function Code({ selectedCode, selectedProblem }) {
           //선택 안하면 아무것도 없음
         )}
       </div>
+      {codeRun &&
+        <GameCanvas
+          size={[600, 800]} 
+          code={selectedCode}
+          problem={selectedProblem}
+          endAnimation={endGame}>
+        </GameCanvas>
+      }
       <AceEditor
         style={CodeEditorStyle}
         id="editor"
