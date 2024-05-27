@@ -22,7 +22,7 @@
     
   }
   .file-container{
-    flex: 2; /* 너비 비율 8 */
+    flex: 1.7; /* 너비 비율 8 */
     overflow-x: hidden;
   }
   .code-container{
