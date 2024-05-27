@@ -36,7 +36,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible }) {
         {selectedProblem ? (
           <>
           <div className="problems">
-            <h3>10003번</h3>
+            <h3>P10003</h3>
             <div>{selectedProblem.description}</div>
             <table>
               <tbody>
