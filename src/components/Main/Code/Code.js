@@ -43,7 +43,6 @@ export default function Code({ selectedCode, selectedProblem, codeRun, endGame})
               </tbody>
             </table>
           
-          
             {selectedProblem.userDefined && <p>This is a user-defined problem.</p>}
             {selectedProblem.restrictedMethods && selectedProblem.restrictedMethods.length > 0 && (
               <div>
