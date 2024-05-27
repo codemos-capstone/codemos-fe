@@ -14,7 +14,6 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
     fetchData('problems', setProblems);
   }, []);
 
-
   async function fetchData(endpoint, setState) {
     try {
       const token = sessionStorage.getItem('accessToken');
@@ -55,7 +54,7 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
                 <li key={codeFile.name} onClick={() => setSelectedCode(codeFile.content)}>
                   <div className="fileNameDetail">
                     <img src={jSImage} alt="JS Logo" style={{width: '14px'}} />
-                    <div>{codeFile.problemId ? codeFile.problemId : '0000'}번</div>
+                    <div>P{codeFile.problemId ? codeFile.problemId : '0000'}</div>
                   </div>
                 </li>
               ))}

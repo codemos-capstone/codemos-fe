@@ -6,4 +6,5 @@ body {
     margin: 0;
     background: #02071e;
     font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: hidden;
 }

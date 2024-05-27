@@ -1,24 +1,25 @@
 import React, { useEffect, useRef } from "react";
-import './Docs.css'
+import './Docs.css';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/monokai.css'; // 하이라이트 스타일 선택
 
-import landing_sample from "assets/images/landing_sample.gif"
-import docs_angle from "assets/images/docs_angle.png"
-import docs_u from "assets/images/docs_u.png"
-import docs_r from "assets/images/docs_r.png"
-import docs_l from "assets/images/docs_l.png"
-
+import landing_sample from "assets/images/landing_sample.gif";
+import docs_angle from "assets/images/docs_angle.png";
+import docs_u from "assets/images/docs_u.png";
+import docs_r from "assets/images/docs_r.png";
+import docs_l from "assets/images/docs_l.png";
 
 const basicForm = `// TODO: 
 newInterval = setInterval(() => {
     // TODO: 
 }, 1); // 1ms loop
-// TODO:`
+// TODO:`;
 
 const wrongEx = `// 잘못된 예시
 
 setInterval(() => {
     // 어쩌구 저쩌구
-}, 1);`
+}, 1);`;
 
 const codeExample = `var targetHeight = 0; // 착륙 고도
 
@@ -39,7 +40,7 @@ newInterval = setInterval(() => { // main loop
         rotateRight();
     }
     engineCtrl();
-}, 1);`
+}, 1);`;
 
 const aboutLogging = `logging()
 
@@ -51,27 +52,26 @@ getVelocityY()        : 27.95145243876781
 getAngle()            : -60.2
 getHeight()           : 239
 getRotationVelocity() : 0.37505750000014804
-*/`
-
-export default function Docs(){
+*/`;
+const Docs = () => {
     const docsRef = useRef(null);
     useEffect(() => {
         if (docsRef.current) {
-            docsRef.current.scrollTo(0, 0); // Reset scroll position to top
-          }
-        const scriptTag = document.createElement('script')
-        scriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js'
-        scriptTag.onload = () => {
-          hljs.initHighlightingOnLoad()
+            docsRef.current.scrollTo(0, 0);
         }
-        document.body.appendChild(scriptTag)
-    }, [])
+        document.querySelectorAll('pre code').forEach((block) => {
+            if (!block.dataset.highlighted) {
+                hljs.highlightBlock(block);
+                block.dataset.highlighted = true;
+            }
+        });
+    }, []);
 
-    return(
-    <div className="docs-container" ref={docsRef}>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/monokai.min.css" />
-        <div className="desc">
-            <h1>CodeMos API Documentation</h1>    
+    return (
+        <div className={`docs-container `} ref={docsRef}>
+            <div>X</div>
+            <div className="desc">
+                <h1>CodeMos API Documentation</h1>  
             <div>
                 CodeMos는 추락하는 우주선을 안전하게 착륙시키는 게임입니다.<br />
                 어떠한 상황에서도 안전하게 착륙하는 알고리즘을 작성해보세요.<br />
@@ -327,3 +327,4 @@ export default function Docs(){
         </div>
     )
 }
+export default Docs;

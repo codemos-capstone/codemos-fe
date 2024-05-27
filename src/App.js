@@ -22,7 +22,7 @@ export default function App(){
         <div className={pageName}>
             <Routes>
                 <Route path="/" element={<MainPage isLogin={isLogin} setIsLogin={setIsLogin} />}/>
-                <Route path="/docs" element={<Docs />} />
+                <Route path="/docs" element={<Docs isVisible={false} />} />
                 <Route path="/login" element={<LoginPage setIsLogin={setIsLogin} />} />
                 <Route path="/userpage" element={<User isLogin={isLogin} />} />
                 <Route path="/game" element={<Game isLogin={isLogin}/>} />

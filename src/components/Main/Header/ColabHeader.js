@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
-const ColabHeader = () => {
+const ColabHeader = ({ toggleDocsVisibility }) => {
+  console.log(typeof toggleDocsVisibility); // "function"이어야 합니다.
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);
@@ -14,7 +15,7 @@ const ColabHeader = () => {
             onMouseOver={() => setDropdownVisible(true)}
             onMouseLeave={() => setDropdownVisible(false)}
           >
-            파일
+            File
             {dropdownVisible && (
               <div className="dropdown-content">
                 <button className="dropdown-item">New JavaScript Space</button>
@@ -29,7 +30,7 @@ const ColabHeader = () => {
           onMouseEnter={() => setEditDropdownVisible(true)}
           onMouseLeave={() => setEditDropdownVisible(false)}
         >
-          수정
+          Edit
           {editDropdownVisible && (
             <div className="dropdown-content">
               <button className="dropdown-item">Undo</button>
@@ -44,19 +45,21 @@ const ColabHeader = () => {
           onMouseEnter={() => setRunDropdownVisible(true)}
           onMouseLeave={() => setRunDropdownVisible(false)}
         >
-          실행
+          Run
           {runDropdownVisible && (
             <div className="dropdown-content">
               <button className="dropdown-item">Run</button>
               <button className="dropdown-item">Debug</button>
             </div>
           )}</button>
-        <button className="menu-button">도구</button>
-        <button className="menu-button">도움말</button>
+        <button className="menu-button">Tools</button>
+        <button className="menu-button">Help</button>
       </div>
       <div className="actions">
         <img src = {runImg} />
         <button className="action-button">remove</button>
+        <button className="action-button" onClick={toggleDocsVisibility}>DOCS</button>
+      {/* 기타 버튼 및 UI 요소 */}
         <button className="action-button"><span className="action-icon">&#9881;</span></button>
       </div>
     </header>
