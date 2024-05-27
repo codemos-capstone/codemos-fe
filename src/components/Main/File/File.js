@@ -30,7 +30,10 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
 
   const handleProblemClick = async (problemNumber) => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/problems/${problemNumber}`);
+      const token = sessionStorage.getItem('accessToken');
+      const response = await axios.get(`http://localhost:8080/api/v1/problems/${problemNumber}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setSelectedProblem(response.data);
     } catch (error) {
       console.error('Error fetching problem details:', error);

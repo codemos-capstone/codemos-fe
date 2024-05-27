@@ -9,6 +9,8 @@ import Leader from "views/Leader"
 import OnLogin from "views/OnLogin"
 import OAuthMiddle from "hooks/auth";
 import ResetPassword from "components/Sign/ResetPassword";
+import ProblemEdit from "components/Problem/ProblemEdit";
+import ProblemList from "components/Problem/ProblemList";
 
 export default function App(){
     const location = useLocation();
@@ -30,6 +32,8 @@ export default function App(){
                 <Route path="/google/callback" element={<OnLogin />} />
                 <Route path="/oauthMiddle" element={<OAuthMiddle />} />
                 <Route path="/auth/reset-password" element={<ResetPassword />} />
+                <Route path="/admin/problem" element={<ProblemList />} />
+                <Route path="/admin/problem/edit/:id?" element={<ProblemEdit />} />
             </Routes>
         </div>
     )

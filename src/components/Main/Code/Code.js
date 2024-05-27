@@ -6,6 +6,7 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-ambiance';
 import FileBtn from "../../Buttons/FileBtn";
 import Docs from "views/Docs";
+import ReactMarkdown from "react-markdown";
 
 export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame }) {
   const CodeEditorStyle = {
@@ -86,6 +87,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
         height="fit-content"
         editorProps={{ $blockScrolling: false }}
       />
+      </div>
       </div>
   );
 }
