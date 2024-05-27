@@ -14,7 +14,8 @@
     "react": "^18.2.0",
     "react-ace-builds": "^7.4.1",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3",
+    "react-markdown": "^9.0.1",
+    "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1"
   },
   "browserslist": {
