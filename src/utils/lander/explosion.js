@@ -27,7 +27,7 @@ export const makeExplosion = (
     );
 
   return {
-    draw: () => smallExplosionChunks.forEach((e) => e.draw()),
+    draw: (deltaTime) => smallExplosionChunks.forEach((e) => e.draw(deltaTime)),
   };
 };
 
@@ -63,7 +63,7 @@ export const makeLanderExplosion = (
 
       // Step 2: adjust this chunk to its own offset position and own axis of
       // rotation. This is the rotation that's updated by the ballistic update
-      CTX.fillStyle = state.get("theme").threeGradient("#EB8C0C", '#6a3b0c', "#401f1a", LANDER_WIDTH, 0, 0.5);
+      CTX.fillStyle = fill;
       CTX.translate(0, -LANDER_HEIGHT / 2 + 4);
       CTX.rotate(rotationAngle);
       CTX.beginPath();
@@ -134,11 +134,11 @@ export const makeLanderExplosion = (
     useTerrain
   );
 
-  const draw = () => {
-    noseCone.draw();
-    chunk1.draw();
-    chunk2.draw();
-    randomPieces.draw();
+  const draw = (deltaTime) => {
+    noseCone.draw(deltaTime);
+    chunk1.draw(deltaTime);
+    chunk2.draw(deltaTime);
+    randomPieces.draw(deltaTime);
   };
 
   return { draw };

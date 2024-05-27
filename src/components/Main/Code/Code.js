@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import './Code.css';
 import AceEditor from "react-ace-builds";
 import "react-ace-builds/webpack-resolver-min";
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-ambiance';
 import FileBtn from "../../Buttons/FileBtn";
-import GameCanvas from "components/GameCanvas";
 import Docs from "views/Docs";
 
 export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame }) {
@@ -20,9 +19,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
     setIsDocsVisible(!isDocsVisible);
   };
 
-  console.log(codeRun);
 
-  
   console.log(isDocsVisible);
   return(
     <div className='code'>
@@ -77,16 +74,6 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
           <div></div>
           //선택 안하면 아무것도 없음
         )}
-
-      </div>
-      {codeRun &&
-        <GameCanvas
-          size={[600, 800]} 
-          code={selectedCode}
-          problem={selectedProblem}
-          endAnimation={endGame}>
-        </GameCanvas>
-      }
       <AceEditor
         style={CodeEditorStyle}
         id="editor"

@@ -8,7 +8,6 @@ export default function Main({isLogin, setIsLogin}){
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedProblem, setSelectedProblem] = useState(null); 
   const [run, setRun] = useState(false);
-  console.log(run);
   const [isDocsVisible, setIsDocsVisible] = useState(false); // DOCS 표시 상태
   const toggleDocsVisibility = () => {
     console.log("Toggling visibility");
@@ -16,8 +15,7 @@ export default function Main({isLogin, setIsLogin}){
   };
   return(
     <div className='contents'>
-      <ColabHeader toggleDocsVisibility={toggleDocsVisibility} setRun={setRun} />
-
+      <ColabHeader toggleDocsVisibility={toggleDocsVisibility} />
       <div className="space">
         <div className="file-container">
           <File setSelectedCode={setSelectedCode} setSelectedProblem={setSelectedProblem}></File>

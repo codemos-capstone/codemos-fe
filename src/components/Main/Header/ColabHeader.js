@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
-const ColabHeader = ({ setRun, toggleDocsVisibility }) => {
-
+const ColabHeader = ({ toggleDocsVisibility }) => {
   console.log(typeof toggleDocsVisibility); // "function"이어야 합니다.
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);
-
-  const runGame = () => {setRun(true)};
-  const stopGame = () => {setRun(false)};
 
   return (
     <header className="colab-header">
@@ -60,7 +56,7 @@ const ColabHeader = ({ setRun, toggleDocsVisibility }) => {
         <button className="menu-button">Help</button>
       </div>
       <div className="actions">
-        <img src = {runImg} onClick={runGame}/>
+        <img src = {runImg} />
         <button className="action-button">remove</button>
         <button className="action-button" onClick={toggleDocsVisibility}>DOCS</button>
       {/* 기타 버튼 및 UI 요소 */}
