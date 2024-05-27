@@ -6,7 +6,7 @@ import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.j
 import { makeLanderExplosion } from "./explosion.js";
 import { makeConfetti } from "./confetti.js";
 
-export const makeLander = (state, setting, animationEnded) => {
+export const makeLander = (state, setting, endAnimation) => {
     const CTX = state.get("CTX");
     const canvasWidth = state.get("canvasWidth");
     const canvasHeight = state.get("canvasHeight");
@@ -405,7 +405,7 @@ export const makeLander = (state, setting, animationEnded) => {
             animationID = window.requestAnimationFrame(drawFromLogs)
             if (logs.length <= 0 && landAnimationEnd) {
                 window.cancelAnimationFrame(animationID);
-                setTimeout(animationEnded, 2000);
+                setTimeout(endAnimation, 2000);
             }
         }
         drawFromLogs();
