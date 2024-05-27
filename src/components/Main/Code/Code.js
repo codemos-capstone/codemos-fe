@@ -1,27 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './Code.css';
 import AceEditor from "react-ace-builds";
 import "react-ace-builds/webpack-resolver-min";
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-ambiance';
 import FileBtn from "../../Buttons/FileBtn";
-import Docs from "views/Docs";
-import ReactMarkdown from "react-markdown";
+import GameCanvas from "components/GameCanvas";
 
-export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame }) {
-  const CodeEditorStyle = {
-    width: '100%',
-    height: '30%',     // 초기 높이를 20%로 설정
-    maxHeight: 'fit-content',  // 최대 높이를 내용에 맞추어 조정
-    border: '5px solid #3D3D3D',
-    borderTop: '20px solid #3D3D3D'
-  };
-  const toggleDocs = () => {
-    setIsDocsVisible(!isDocsVisible);
-  };
+export default function Code({ selectedCode, selectedProblem, codeRun, endGame}) {
+  const CodeEditorStyle = {width: '100%', height:'100%', border: '5px solid #3D3D3D', borderTop: '20px solid #3D3D3D'}
 
-
-  console.log(isDocsVisible);
   return(
     <div className='code'>
       <div style={{width: '100%', height:'25px', backgroundColor: 'black', display: 'flex', justifyContent: 'flex-start'}}>
@@ -30,15 +18,12 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
         <FileBtn />
         <FileBtn />
       </div>
-      <div className="code-container">
-        <div className={`docs ${isDocsVisible ? 'docs-visible' : ''}`}>
-          <Docs />
-        </div>
+      <div className="problems">
         {selectedProblem ? (
           <>
-          <div className="problems">
-            <h3>P10003</h3>
+            <h3>10003번</h3>
             <div>{selectedProblem.description}</div>
+
             <table>
               <tbody>
                 <tr>
@@ -69,12 +54,20 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                 </ul>
               </div>
             )}
-            </div>
           </>
         ) : (
           <div></div>
           //선택 안하면 아무것도 없음
         )}
+      </div>
+      {codeRun &&
+        <GameCanvas
+          size={[600, 800]} 
+          code={selectedCode}
+          problem={selectedProblem}
+          endAnimation={endGame}>
+        </GameCanvas>
+      }
       <AceEditor
         style={CodeEditorStyle}
         id="editor"
@@ -84,10 +77,8 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
         fontSize="14px"
         value={selectedCode}
         showPrintMargin={false}
-        height="fit-content"
-        editorProps={{ $blockScrolling: false }}
+        editorProps={{ $blockScrolling: true }}
       />
-      </div>
-      </div>
+    </div>
   );
 }
