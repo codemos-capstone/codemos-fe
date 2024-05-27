@@ -1,4 +1,4 @@
-.login .container { 
+.container { 
     width: 100vw;
     background: #02071e;
     font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
@@ -6,7 +6,7 @@
     overflow-y: auto;
 }
 
-.login .success-message {
+.success-message {
     display: none;
     position: fixed;
     top: 15px;
@@ -15,8 +15,9 @@
     background-color: #4caf50;
     color: white;
     border-radius: 5px;
-    animation: fadeInOut 2s ease-in-out; /* Customize the animation duration */
+    animation: fadeInOut 2s ease-in-out;
 }
+
 @keyframes fadeInOut {
     0%, 100% {
         opacity: 0;
@@ -26,22 +27,22 @@
     }
 }
 
-.login .form-group {
+.form-group {
     margin-bottom: 20px;
 }
 
-.login label {
+label {
     display: block;
     margin-bottom: 8px;
 }
 
-.login input {
+input {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
 }
 
-.login button {
+button {
     background-color: #4caf50;
     color: white;
     padding: 10px 15px;
@@ -49,12 +50,15 @@
     border-radius: 4px;
     cursor: pointer;
 }
-.login button:hover {
-    background-color: #2b632e; /* Darker shade for hover effect */
+
+button:hover {
+    background-color: #2b632e;
 }
-.login .home {
+
+.home {
     padding: 2%;
 }
-.login .hidden {
+
+.hidden {
     display: none;
 }
