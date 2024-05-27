@@ -1,4 +1,9 @@
 /* Main.css에 추가 */
+.contents{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 .file-container, .code-container {
     height: 100%; /* 부모 컨테이너의 높이에 맞춤 */
     overflow-y: auto; /* 세로 스크롤만 허용 */
@@ -11,5 +16,13 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row;
+    
+  }
+  .file-container {
+    flex: 1; /* 화면의 1/5 차지 */
+  }
+  
+  .code-container {
+    flex: 4; /* 화면의 4/5 차지 */
   }
   

@@ -14,6 +14,7 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
     fetchData('problems', setProblems);
   }, []);
 
+
   async function fetchData(endpoint, setState) {
     try {
       const token = sessionStorage.getItem('accessToken');
@@ -26,6 +27,7 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
       alert(`Failed to load ${endpoint}. Please try again later.`);
     }
   }
+  //하이 안녕
 
   const handleProblemClick = async (problemNumber) => {
     try {
