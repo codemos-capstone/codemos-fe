@@ -9,6 +9,7 @@ export const showStatsAndResetControl = (
   const buttonDelayTime = 1500;
   const canShowShareSheet = navigator.canShare;
   const showStats = () => {
+    if (!document.querySelector("#endGameStats")) return;
     document.querySelector("#endGameStats").classList.add("show");
     document.querySelector("#tryAgain").classList.add("loading");
   };
@@ -53,6 +54,7 @@ ${data.speed}mph | ${data.angle}° | ${data.rotationsFormatted} flip${
   };
 
   const populateStats = (data) => {
+    if (!document.querySelector("#endGameStats")) return;
     document.querySelector("#description").textContent = data.scoreDescription;
     document.querySelector("#score").textContent = data.scoreForDisplay;
     document.querySelector("#type").textContent = data.landed
@@ -102,9 +104,11 @@ ${data.speed}mph | ${data.angle}° | ${data.rotationsFormatted} flip${
   }
 
   const attachEventListeners = () => {
+    if (!document.querySelector("#endGameStats")) return;
     // Delay showing the reset button in case the user is actively tapping
     // in that area for thrust
     setTimeout(() => {
+      if (!document.querySelector("#endGameStats")) return;
       document.querySelector("#tryAgain").classList.remove("loading");
       document.querySelector("#tryAgain").addEventListener("click", tryAgain);
     }, buttonDelayTime);
@@ -129,6 +133,7 @@ ${data.speed}mph | ${data.angle}° | ${data.rotationsFormatted} flip${
   };
 
   const detachEventListeners = () => {
+    if (!document.querySelector("#endGameStats")) return;
     document.querySelector("#tryAgain").removeEventListener("click", tryAgain);
 
     if (canShowShareSheet) {

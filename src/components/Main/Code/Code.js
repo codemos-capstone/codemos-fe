@@ -7,6 +7,7 @@ import 'ace-builds/src-noconflict/theme-ambiance';
 import FileBtn from "../../Buttons/FileBtn";
 import Docs from "views/Docs";
 import ReactMarkdown from "react-markdown";
+import GameCanvas from "components/GameCanvas";
 
 export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame }) {
   const CodeEditorStyle = {
@@ -75,6 +76,14 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
           <div></div>
           //선택 안하면 아무것도 없음
         )}
+      {codeRun &&
+        <GameCanvas
+          size={[600, 800]} 
+          code={selectedCode}
+          problem={selectedProblem}
+          endAnimation={endGame}>
+        </GameCanvas>
+      }
       <AceEditor
         style={CodeEditorStyle}
         id="editor"

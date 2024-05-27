@@ -24,6 +24,10 @@
   position: relative;
   padding-left: 30px; /* 화살표 공간 확보 */
 }
+ul {
+    list-style-type: none; /* Remove default bullets */
+    padding: 0; /* Remove default padding */
+}
 
 .dropdown-toggle::after {
   content: '';
