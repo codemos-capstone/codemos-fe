@@ -5,7 +5,7 @@ import "./ProblemList.css";
 
 const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
 
-function ProblemList() {
+export default function ProblemList() {
     const [problems, setProblems] = useState([]);
 
     useEffect(() => {
@@ -43,4 +43,3 @@ function ProblemList() {
     );
 }
 
-export default ProblemList;
