@@ -109,7 +109,7 @@ export default function ProblemEdit() {
                     </div>
                 </div>
                 <div>
-                    <label>제한 시간(초):</label>
+                    <label>제한 시간(ms):</label>
                     <input type="number" name="timeLimit" step="0.1" value={problem.timeLimit} onChange={handleChange} />
                 </div>
                 <div>

@@ -1,5 +1,8 @@
 .problem-edit {
     color: white;
+    width: 90%;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .problem-edit h2 {
