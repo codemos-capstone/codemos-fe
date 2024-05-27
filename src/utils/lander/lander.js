@@ -1,15 +1,16 @@
 import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPH, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInFeet, percentProgress } from "../helpers/helpers.js";
 import { scoreLanding, scoreCrash } from "../helpers/scoring.js";
-import { CRASH_VELOCITY, CRASH_ANGLE, INTERVAL, TRANSITION_TO_SPACE } from "../helpers/constants.js";
+import { CRASH_VELOCITY, CRASH_ANGLE, LAND_MAX_FRAME, TRANSITION_TO_SPACE } from "../helpers/constants.js";
 import { drawTrajectory } from "./trajectory.js";
 import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.js";
+import { makeLanderExplosion } from "./explosion.js";
+import { makeConfetti } from "./confetti.js";
 
 export const makeLander = (state, setting, animationEnded) => {
     const CTX = state.get("CTX");
     const canvasWidth = state.get("canvasWidth");
     const canvasHeight = state.get("canvasHeight");
     //const audioManager = null;
-    const bonusPointsManager = state.get("bonusPointsManager");
 
     const constants = setting[0];
     const allowed = setting[1]
@@ -104,8 +105,6 @@ export const makeLander = (state, setting, animationEnded) => {
 
     const updateIterator = (code, logs) => {
         const rocket = deepCopy(logs[0]);
-        let end = false;
-        let didLand = false;
         
         // Rocket functions
         const engineOn = () => {
@@ -192,26 +191,34 @@ export const makeLander = (state, setting, animationEnded) => {
         const requestAnimationFrame = () => { throw new TypeError("requestAnimationFrame is not a function") };
         const setImmediate = () => { throw new TypeError("setImmediate is not a function") };
 
-        while(!end){
+        let isEnd = { end: false };
+
+        while(!isEnd.end){
             let err;
             try{eval(code)} catch (e) {
                 err = e;
             };
-            let isend = checkEnd(rocket);
-            //if (logs.length >= 1000) return false;
+            isEnd = checkEnd(rocket);
             if (err){
                 console.log(err);
                 return;
-            } else if (!isend.end){
+            } else if (!isEnd.end){
                 updateRocket(rocket)
-                const newrocket = deepCopy(rocket);
-                logs.push(newrocket);
+                logs.push(deepCopy(rocket));
             } else {
-                end = true;
-                didLand = isend.land;
+                rocket.engineOn = false;
+                rocket.rotatingLeft = false;
+                rocket.rotatingRight = false;
+                logs.push(deepCopy(rocket));
             }
         }
-        return didLand;
+
+        let landingState = {
+            land: isEnd.land,
+            ground: isEnd.ground
+        }
+
+        return landingState;
     };
 
     function deepCopy(obj) {
@@ -227,7 +234,22 @@ export const makeLander = (state, setting, animationEnded) => {
           copy[key] = deepCopy(obj[key]);
         }
         return copy;
-    }
+    };
+
+    const checkEnd = (rocket) => {
+        const landingArea = _landingData.landingSurfaces.find(({ x, width }) => rocket.position.x - constants.ROCKET_WIDTH / 2 >= x && rocket.position.x + constants.ROCKET_WIDTH / 2 <= x + width);
+        const didLand = getVectorVelocity(rocket.velocity) < CRASH_VELOCITY && getAngleDeltaUpright(rocket.angle) < CRASH_ANGLE && landingArea;
+        if (rocket.timeSinceStart > constants.TIMELIMIT){
+            return {end: true, land: false, ground: false}
+        } else if (rocket.position.y + constants.ROCKET_HEIGHT / 2 < _landingData.terrainHeight ||
+        (rocket.position.y + constants.ROCKET_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + constants.ROCKET_HEIGHT / 2) * state.get("scaleFactor")))){
+            return { end: false, land: false, ground: true};
+        } else if (didLand) {
+            return { end: true, land: true, ground: true};
+        } else {
+            return { end: true, land: false, ground: true};
+        }
+    };
 
     const updateRocket = (rocket) => {
         rocket.timeSinceStart = Date.now() - constants.STARTTIME;
@@ -265,11 +287,9 @@ export const makeLander = (state, setting, animationEnded) => {
         // Log new rotations
         const rotations = Math.floor(rocket.angle / (Math.PI * 2));
         if (Math.abs(rocket.angle - rocket.lastRotationAngle) > Math.PI * 2 && (rotations > rocket.lastRotation || rotations < rocket.lastRotation)) {
-            bonusPointsManager.addNamedPoint("newRotation");
             rocket.rotationCount++;
             rocket.lastRotation = rotations;
             rocket.lastRotationAngle = rocket.angle;
-            //_flipConfetti.push(makeConfetti(state, 10, rocket.displayPosition, rocket.position.y > 0 ? rocket.velocity : { x: rocket.velocity.x, y: 0 }));
         }
 
         // Log new max speed and height
@@ -283,33 +303,64 @@ export const makeLander = (state, setting, animationEnded) => {
         // Ints here are pixels / raw values, not MPH or FT
         if (rocket.position.y < rocket.heightMilestone + Math.min(-3500, rocket.heightMilestone * 3)) {
             rocket.heightMilestone = rocket.position.y;
-            bonusPointsManager.addNamedPoint("newHeight");
         }
 
         if (getVectorVelocity(rocket.velocity) > getVectorVelocity(rocket.velocityMilestone) + 10) {
             rocket.velocityMilestone = { ...rocket.velocity };
-            bonusPointsManager.addNamedPoint("newSpeed");
         }
 
         rocket.displayPosition.y = rocket.position.y < TRANSITION_TO_SPACE ? TRANSITION_TO_SPACE : rocket.position.y;
-    }
-
-    const checkEnd = (rocket) => {
-        if (rocket.timeSinceStart > constants.TIMELIMIT){
-            return {end: true, land: false}
-        } else if (rocket.position.y + constants.ROCKET_HEIGHT / 2 < _landingData.terrainHeight ||
-        (rocket.position.y + constants.ROCKET_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + constants.ROCKET_HEIGHT / 2) * state.get("scaleFactor")))){
-            return { end: false, land: false};
-        } else {
-            return { end: true, land: false};
-        }
     };
 
-    const draw = (logs, didLand) => {
+    const drawLanding = (position, confetti) => {
+        //draw and update effects
+        confetti.draw();
+    };
+
+    const drawExploding = (isGround, explosion, clouds) => {
+        //draw and update clouds
+        /*if(isGround) clouds.foreach(cloud => {
+            cloud.position.y = cloud.position.y + cloud.velocity.y;
+            if (cloud.position.x < 0) cloud.position.x = canvasWidth;
+    
+            if (cloud.position.x > canvasWidth) cloud.position.x = 0;
+    
+            cloud.position.x += cloud.velocity.x;
+            cloud.angle += ((Math.PI / 180) * cloud.rotationVelocity);
+            cloud.velocity.y += constants.GRAVITY;
+    
+            cloud.displayPosition.x = cloud.position.x;
+        });*/
+       explosion.draw();
+    };
+
+    const drawCloud = (cloud) => {};
+
+    const makeClouds = (rocket) => {
+        let clouds = [];
+        //pass
+        //use position and velocity and create several clouds that have own position and velocity
+        return clouds;
+    };
+
+    const draw = (logs, landingState) => {
+        const lastLog = logs.at(-1);
         let animationID;
-        let randomConfetti = [];
+        let landAnimationEnd = false;
+        let landAnimationCount = 0;
+        let currentState;
+        let explosion = makeLanderExplosion(
+            state,
+            lastLog.position.y < 0 ? lastLog.displayPosition : lastLog.position,
+            lastLog.velocity,
+            lastLog.angle,
+            lastLog.position.y >= 0
+        );
+        let clouds = makeClouds(lastLog);
+        //const score = scoreLanding(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity));
+        let confetti = makeConfetti(state, Math.round(100)); //amount depends on score
         const drawFromLogs = () => {
-            let currentState = logs.shift();
+            if(logs.length > 0) currentState = logs.shift();
 
             CTX.fillStyle = state.get("theme").backgroundGradient;
             CTX.fillRect(0, 0, canvasWidth, canvasHeight);
@@ -323,22 +374,22 @@ export const makeLander = (state, setting, animationEnded) => {
             state.get("terrain").draw();
             CTX.restore();
 
-
-            bonusPointsManager.draw(currentState.position.y < TRANSITION_TO_SPACE);
-            if (randomConfetti.length > 0) {
-                randomConfetti.forEach((c) => c.draw(deltaTime));
+            //Draw rocket when the game is not ended or the rocket succesfully landed
+            if(logs.length <= 0){
+                if(landingState.land) {
+                    drawRocket(currentState);
+                    drawLanding(currentState.position, confetti);
+                } else drawExploding(landingState.ground, explosion, clouds);
+                landAnimationCount++;
+            } else {
+                drawRocket(currentState);
             }
 
-            drawRocket(currentState); //Draw rocket when the game is not ended or the rocket succesfully landed
+            if (landAnimationCount >= LAND_MAX_FRAME) landAnimationEnd = true;
 
             if (currentState.position.y > TRANSITION_TO_SPACE) {
                 drawTrajectory(state, currentState.position, currentState.angle, currentState.velocity, currentState.rotationVelocity);
             }
-            //if (_flipConfetti.length > 0) _flipConfetti.forEach((c) => c.draw(deltaTime)); //confetties when the rocket flips
-
-            //if (_gameEndConfetti) _gameEndConfetti.draw(deltaTime); //confetties when the rocket lands
-    
-            //if (_gameEndExplosion) _gameEndExplosion.draw(deltaTime); //rocket pieces when the rocket explodes
     
             // Draw speed and angle text beside lander, even after crashing
             if (currentState.position.y > TRANSITION_TO_SPACE) {
@@ -352,7 +403,7 @@ export const makeLander = (state, setting, animationEnded) => {
                 CTX.restore();
             }
             animationID = window.requestAnimationFrame(drawFromLogs)
-            if (logs.length <= 0) {
+            if (logs.length <= 0 && landAnimationEnd) {
                 window.cancelAnimationFrame(animationID);
                 setTimeout(animationEnded, 2000);
             }

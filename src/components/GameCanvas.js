@@ -59,8 +59,8 @@ export default function GameCanvas({ size, code, initState, animationEnded }){
         //terrain.setShowLandingSurfaces();
 
         const logs = [initState[0]]
-        const didLand = lander.updateIterator(code, logs);
-        lander.draw(logs, didLand);
+        const landingEffect = lander.updateIterator(code, logs);
+        lander.draw(logs, landingEffect);
     }, [])
 
     return <canvas ref={ canvasRef } style={{width: `${size[1]}px`, height: `${size[0]}px`}}></canvas>
