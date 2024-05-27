@@ -21,7 +21,6 @@ export const animate = (drawFunc) => {
   let startTime = Date.now();
   let currentFrameTime = Date.now();
   let previousTimestamp = false;
-  let animationID;
 
   const resetStartTime = () => (startTime = Date.now());
 
@@ -35,9 +34,9 @@ export const animate = (drawFunc) => {
     previousTimestamp = timestamp;
   };
 
-  animationID = window.requestAnimationFrame(drawFuncContainer);
+  window.requestAnimationFrame(drawFuncContainer);
 
-  return { resetStartTime, animationID};
+  return { resetStartTime };
 };
 
 export const randomBool = (probability = 0.5) => Math.random() >= probability;

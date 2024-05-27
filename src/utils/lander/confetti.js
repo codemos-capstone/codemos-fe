@@ -12,10 +12,11 @@ export const makeConfetti = (state, amount, passedPosition, passedVelocity) => {
   const CTX = state.get("CTX");
   const canvasWidth = state.get("canvasWidth");
   const canvasHeight = state.get("canvasHeight");
+  //const audio = state.get("audioManager");
   const confettiTypeAmount = Math.round(amount / 2);
   const timeOfInit = Date.now();
-  const visibilityDuration = 5000;
-  let drawLast = 100;
+  const visibilityDuration = 5_000;
+  //let hasPlayedAudio = false;
 
   const _startingPosition = (index) =>
     passedPosition
@@ -35,7 +36,7 @@ export const makeConfetti = (state, amount, passedPosition, passedVelocity) => {
           y: passedVelocity.y - 0.6,
         }
       : {
-          x: index < confettiTypeAmount / 2 ? -0.7 : 0.7,
+          x: index < confettiTypeAmount / 2 ? -0.5 : 0.5,
           y: -1,
         };
 
@@ -81,19 +82,28 @@ export const makeConfetti = (state, amount, passedPosition, passedVelocity) => {
     );
   });
 
-  const draw = () => {
-    CTX.save();
-    const animationProgress = clampedProgress(
-      0,
-      visibilityDuration,
-      drawLast
-    );
-    CTX.globalAlpha = transition(1, 0, animationProgress, easeInExpo);
-    confettiPieces.forEach((e) => e.draw());
-    twirlPieces.forEach((e) => e.draw());
-    CTX.restore();
-
-    drawLast += 10;
+  const draw = (deltaTime) => {
+    if (confettiPieces.length && twirlPieces.length) {
+      if (Date.now() - timeOfInit > visibilityDuration) {
+        twirlPieces.length = 0;
+        confettiPieces.length = 0;
+      } else {
+        /*if (!hasPlayedAudio) {
+          audio.playConfetti();
+          hasPlayedAudio = true;
+        }*/
+        CTX.save();
+        const animationProgress = clampedProgress(
+          0,
+          visibilityDuration,
+          Date.now() - timeOfInit
+        );
+        CTX.globalAlpha = transition(1, 0, animationProgress, easeInExpo);
+        confettiPieces.forEach((e) => e.draw(deltaTime));
+        twirlPieces.forEach((e) => e.draw(deltaTime));
+        CTX.restore();
+      }
+    }
   };
 
   return { draw };

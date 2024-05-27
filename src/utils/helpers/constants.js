@@ -6,4 +6,3 @@ export const CRASH_VELOCITY = 0.6;
 export const VELOCITY_MULTIPLIER = 20;
 export const CRASH_ANGLE = 11;
 export const INTERVAL = Math.floor(1000 / 120);
-export const LAND_MAX_FRAME = 100;
