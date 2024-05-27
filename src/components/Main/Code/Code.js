@@ -7,7 +7,7 @@ import 'ace-builds/src-noconflict/theme-ambiance';
 import FileBtn from "../../Buttons/FileBtn";
 import Docs from "views/Docs";
 
-export default function Code({ selectedCode, selectedProblem, isDocsVisible }) {
+export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame }) {
   const CodeEditorStyle = {
     width: '100%',
     height: '30%',     // 초기 높이를 20%로 설정
@@ -19,7 +19,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible }) {
     setIsDocsVisible(!isDocsVisible);
   };
 
-  
+
   console.log(isDocsVisible);
   return(
     <div className='code'>
@@ -87,6 +87,5 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible }) {
         editorProps={{ $blockScrolling: false }}
       />
       </div>
-    </div>
   );
 }
