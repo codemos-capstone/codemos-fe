@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useEffect, useRef } from "react";
 
 import { makeLander } from "utils/lander/lander.js";
 import { makeStarfield } from "utils/starfield.js";
@@ -10,19 +10,22 @@ import { makeChallengeManager } from "utils/challenge.js";
 import { makeSeededRandom } from "utils/helpers/seededrandom.js";
 import { makeBonusPointsManager } from "utils/bonuspoints.js";
 import { makeTheme } from "utils/theme.js";
+import { makeInitState } from "utils/makeInitstate";
 
-export default function GameCanvas({ size, code, initState, animationEnded }){
+export default function GameCanvas({ size, code, problem, endAnimation }){
     const canvasRef = useRef(null);
-    let scale = window.devicePixelRatio;
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+        const scale = window.devicePixelRatio;
         const canvasElement = canvasRef.current;
         const CTX = canvasElement.getContext('2d');
 
-        canvasElement.width = Math.floor(size[1] * scale);
-        canvasElement.height = Math.floor(size[0] * scale);
+        const { width, height } = canvasElement.getBoundingClientRect();
+        const initState = makeInitState(problem, [height, width]);
+
+        canvasElement.width = Math.floor(width * scale);
+        canvasElement.height = Math.floor(height * scale);
         
-        scale = window.devicePixelRatio;
         const scaleFactor = scale;
         CTX.scale(scale, scale);
 
@@ -33,8 +36,8 @@ export default function GameCanvas({ size, code, initState, animationEnded }){
 
         const appState = new Map()
             .set("CTX", CTX)
-            .set("canvasWidth", size[1])
-            .set("canvasHeight", size[0])
+            .set("canvasWidth", width)
+            .set("canvasHeight", height)
             .set("canvasElement", canvasElement)
             .set("scaleFactor", scaleFactor)
             //.set("audioManager", audioManager)
@@ -52,9 +55,8 @@ export default function GameCanvas({ size, code, initState, animationEnded }){
 
         const stars = makeStarfield(appState);
         appState.set("stars", stars);
-        const lander = makeLander(appState, [initState[1], initState[2]], animationEnded);
+        const lander = makeLander(appState, [initState[1], initState[2]], endAnimation);
 
-        //landerControls.attachEventListeners();
         challengeManager.populateCornerInfo();
         //terrain.setShowLandingSurfaces();
 
@@ -63,5 +65,5 @@ export default function GameCanvas({ size, code, initState, animationEnded }){
         lander.draw(logs, landingEffect);
     }, [])
 
-    return <canvas ref={ canvasRef } style={{width: `${size[1]}px`, height: `${size[0]}px`}}></canvas>
+    return <canvas ref={ canvasRef } style={{width: `70%`, height: `20%`}}></canvas>
 }

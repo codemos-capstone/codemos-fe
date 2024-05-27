@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
-const ColabHeader = () => {
+const ColabHeader = ({ setRun }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);
+
+  const runGame = () => {setRun(true)};
+  const stopGame = () => {setRun(false)};
 
   return (
     <header className="colab-header">
@@ -55,7 +58,7 @@ const ColabHeader = () => {
         <button className="menu-button">Help</button>
       </div>
       <div className="actions">
-        <img src = {runImg} />
+        <img src = {runImg} onClick={runGame}/>
         <button className="action-button">remove</button>
         <button className="action-button"><span className="action-icon">&#9881;</span></button>
       </div>
