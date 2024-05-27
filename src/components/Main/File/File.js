@@ -68,7 +68,7 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
           {dropdownStates.problems && (
             <ul>
               {problems.map((problem) => (
-                <li key={problem.problemNumber} onClick={() => handleProblemClick(problem.problemNumber)}>
+                <li key={problem.id} onClick={() => handleProblemClick(problem.problemNumber)}>
                   <div className="fileNameDetail">
                     <img src={proImage} alt="Problem Icon" style={{width: '14px'}} />
                     <div>{problem.problemNumber}</div>
