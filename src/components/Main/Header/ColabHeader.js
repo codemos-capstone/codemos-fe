@@ -14,7 +14,7 @@ const ColabHeader = () => {
             onMouseOver={() => setDropdownVisible(true)}
             onMouseLeave={() => setDropdownVisible(false)}
           >
-            파일
+            File
             {dropdownVisible && (
               <div className="dropdown-content">
                 <button className="dropdown-item">New JavaScript Space</button>
@@ -29,7 +29,7 @@ const ColabHeader = () => {
           onMouseEnter={() => setEditDropdownVisible(true)}
           onMouseLeave={() => setEditDropdownVisible(false)}
         >
-          수정
+          Edit
           {editDropdownVisible && (
             <div className="dropdown-content">
               <button className="dropdown-item">Undo</button>
@@ -44,15 +44,15 @@ const ColabHeader = () => {
           onMouseEnter={() => setRunDropdownVisible(true)}
           onMouseLeave={() => setRunDropdownVisible(false)}
         >
-          실행
+          Run
           {runDropdownVisible && (
             <div className="dropdown-content">
               <button className="dropdown-item">Run</button>
               <button className="dropdown-item">Debug</button>
             </div>
           )}</button>
-        <button className="menu-button">도구</button>
-        <button className="menu-button">도움말</button>
+        <button className="menu-button">Tools</button>
+        <button className="menu-button">Help</button>
       </div>
       <div className="actions">
         <img src = {runImg} />
