@@ -20,15 +20,28 @@ export default function Code({ selectedCode, selectedProblem }) {
       <div className="problems">
         {selectedProblem ? (
           <>
-            <h3>{selectedProblem.title}</h3>
-            <p>{selectedProblem.description}</p>
-            <ul>
-              <li>Time Limit: {selectedProblem.timeLimit} ms</li>
-              <li>Fuel Limit: {selectedProblem.fuelLimit}</li>
-              <li>Initial Position: ({selectedProblem.initialX}, {selectedProblem.initialY})</li>
-              <li>Initial Velocity: ({selectedProblem.initialVelocityX}, {selectedProblem.initialVelocityY})</li>
-              <li>Initial Angle: {selectedProblem.initialAngle} degrees</li>
-            </ul>
+            <h3>10003번</h3>
+            <div>{selectedProblem.description}</div>
+
+            <table>
+              <tbody>
+                <tr>
+                  <th>Time Limit</th>
+                  <th>Fuel Limit</th>
+                  <th>Initial Position</th>
+                  <th>Initial Velocity</th>
+                  <th>Initial Angle</th>
+                </tr>
+                <tr>
+                  <td> {selectedProblem.timeLimit} ms</td>
+                  <td> {selectedProblem.fuelLimit}</td>
+                  <td> ({selectedProblem.initialX}, {selectedProblem.initialY})</td>
+                  <td> ({selectedProblem.initialVelocityX}, {selectedProblem.initialVelocityY})</td>
+                  <td> {selectedProblem.initialAngle} degrees</td>
+                </tr>
+              </tbody>
+            </table>
+          
             {selectedProblem.userDefined && <p>This is a user-defined problem.</p>}
             {selectedProblem.restrictedMethods && selectedProblem.restrictedMethods.length > 0 && (
               <div>
@@ -42,7 +55,8 @@ export default function Code({ selectedCode, selectedProblem }) {
             )}
           </>
         ) : (
-          <p>No problem selected. Please select a problem to view details.</p>
+          <div></div>
+          //선택 안하면 아무것도 없음
         )}
       </div>
       <AceEditor
@@ -51,6 +65,7 @@ export default function Code({ selectedCode, selectedProblem }) {
         mode="javascript"
         theme="ambiance"
         name="code-editor"
+        fontSize="14px"
         value={selectedCode}
         showPrintMargin={false}
         editorProps={{ $blockScrolling: true }}
