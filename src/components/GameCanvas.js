@@ -14,17 +14,17 @@ import { makeInitState } from "utils/makeInitstate";
 
 export default function GameCanvas({ size, code, problem, endAnimation }){
     const canvasRef = useRef(null);
-    let scale = window.devicePixelRatio;
 
     useLayoutEffect(() => {
+        const scale = window.devicePixelRatio;
         const canvasElement = canvasRef.current;
         const CTX = canvasElement.getContext('2d');
 
         const { width, height } = canvasElement.getBoundingClientRect();
-        const initState = makeInitState(problem, [size[0], size[1]]);
+        const initState = makeInitState(problem, [height, width]);
 
-        canvasElement.width = Math.floor(size[1] * scale);
-        canvasElement.height = Math.floor(size[0] * scale);
+        canvasElement.width = Math.floor(width * scale);
+        canvasElement.height = Math.floor(height * scale);
         
         const scaleFactor = scale;
         CTX.scale(scale, scale);
@@ -36,8 +36,8 @@ export default function GameCanvas({ size, code, problem, endAnimation }){
 
         const appState = new Map()
             .set("CTX", CTX)
-            .set("canvasWidth", size[1])
-            .set("canvasHeight", size[0])
+            .set("canvasWidth", width)
+            .set("canvasHeight", height)
             .set("canvasElement", canvasElement)
             .set("scaleFactor", scaleFactor)
             //.set("audioManager", audioManager)
@@ -65,5 +65,5 @@ export default function GameCanvas({ size, code, problem, endAnimation }){
         lander.draw(logs, landingEffect);
     }, [])
 
-    return <canvas ref={ canvasRef } style={{width: `${size[1]}px`, height: `${size[0]}px`}}></canvas>
+    return <canvas ref={ canvasRef } style={{width: `70%`, height: `20%`}}></canvas>
 }
