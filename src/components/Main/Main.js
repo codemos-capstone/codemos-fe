@@ -25,7 +25,7 @@ export default function Main({isLogin, setIsLogin}){
           <Code selectedCode={selectedCode} selectedProblem={selectedProblem} isDocsVisible={isDocsVisible} />
         </div>
         <div className="right-border">
-          <div className="document">DOCS</div>
+          <div className="document"></div>
         </div>
       </div>
     </div>
