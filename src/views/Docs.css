@@ -1,33 +1,47 @@
+/* Docs.css */
 .docs-container {
-    font-family: Arial, sans-serif;
     background-color: #02071e;
     color: #ffffff;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
     padding: 20px;
     text-align: left;
+    z-index: 1000;
 }
+
+.docs-container.visible {
+    transform: translateX(0); /* 화면으로 들어오도록 설정 */
+}
+
 .docs-container .links a:link, .docs-container .links a:visited {
     color: #4DAF7C; 
 }
+
 .docs-container .links a:hover, .docs-container .links a:active {
     color: #D9853B;
 }
+
 .docs-container .api-function {
     border: 1px solid #444;
     background-color: #0a1f44;
     padding: 15px;
     margin-bottom: 20px;
 }
+
 .docs-container .function-title {
     font-size: 20px;
     color: #FFD700;
 }
+
 .docs-container .function-description, .docs-container .function-example {
     font-size: 16px;
     color: #B0C4DE;
 }
+
 .docs-container::-webkit-scrollbar {
     display: none;
 }
+
 .docs-container .desc {
     text-align: center;
 }

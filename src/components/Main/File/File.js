@@ -14,7 +14,6 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
     fetchData('problems', setProblems);
   }, []);
 
-
   async function fetchData(endpoint, setState) {
     try {
       const token = sessionStorage.getItem('accessToken');

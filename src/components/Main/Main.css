@@ -3,26 +3,42 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+   
 }
 .file-container, .code-container {
-    height: 100%; /* 부모 컨테이너의 높이에 맞춤 */
-    overflow-y: auto; /* 세로 스크롤만 허용 */
-  }
+    transition: flex-basis 0.2s ease-in-out; /* 부드러운 전환 효과 */
+    overflow: auto; /* 내용이 넘치면 스크롤 */
+    min-width: 0; /* 사라질 수 있게 최소 너비 설정 */
+}
   
   .space {
     width: 100vw;
-    height: 70vh; /* 높이 설정, 필요에 따라 조정 */
+    height: 90vh; /* 높이 설정, 필요에 따라 조정 */
+    overflow-y: hidden;
     background-color: white;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     
   }
-  .file-container {
-    flex: 1; /* 화면의 1/5 차지 */
+  .file-container{
+    flex: 1.7; /* 너비 비율 8 */
+    overflow-x: hidden;
+  }
+  .code-container{
+    flex: 8; /* 너비 비율 8 */
+    overflow-x: hidden;
   }
   
-  .code-container {
-    flex: 4; /* 화면의 4/5 차지 */
-  }
-  
+.resizer {
+  width: 5px;
+  max-width: 5px;
+  background-color: black;
+  cursor: col-resize; /* 커서 스타일 */
+}
+.right-border{
+  background-color:#3D3D3D;
+  width: 20px;
+}
+.document{
+}

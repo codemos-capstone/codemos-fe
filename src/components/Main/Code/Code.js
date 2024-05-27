@@ -6,10 +6,23 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-ambiance';
 import FileBtn from "../../Buttons/FileBtn";
 import GameCanvas from "components/GameCanvas";
+import Docs from "views/Docs";
 
-export default function Code({ selectedCode, selectedProblem, codeRun, endGame}) {
-  const CodeEditorStyle = {width: '100%', height:'100%', border: '5px solid #3D3D3D', borderTop: '20px solid #3D3D3D'}
+export default function Code({ selectedCode, selectedProblem, isDocsVisible }) {
+  const CodeEditorStyle = {
+    width: '100%',
+    height: '30%',     // 초기 높이를 20%로 설정
+    maxHeight: 'fit-content',  // 최대 높이를 내용에 맞추어 조정
+    border: '5px solid #3D3D3D',
+    borderTop: '20px solid #3D3D3D'
+  };
+  const toggleDocs = () => {
+    setIsDocsVisible(!isDocsVisible);
+  };
 
+
+  
+  console.log(isDocsVisible);
   return(
     <div className='code'>
       <div style={{width: '100%', height:'25px', backgroundColor: 'black', display: 'flex', justifyContent: 'flex-start'}}>
@@ -18,12 +31,15 @@ export default function Code({ selectedCode, selectedProblem, codeRun, endGame})
         <FileBtn />
         <FileBtn />
       </div>
-      <div className="problems">
+      <div className="code-container">
+        <div className={`docs ${isDocsVisible ? 'docs-visible' : ''}`}>
+          <Docs />
+        </div>
         {selectedProblem ? (
           <>
-            <h3>10003번</h3>
+          <div className="problems">
+            <h3>P10003</h3>
             <div>{selectedProblem.description}</div>
-
             <table>
               <tbody>
                 <tr>
@@ -54,11 +70,13 @@ export default function Code({ selectedCode, selectedProblem, codeRun, endGame})
                 </ul>
               </div>
             )}
+            </div>
           </>
         ) : (
           <div></div>
           //선택 안하면 아무것도 없음
         )}
+
       </div>
       {codeRun &&
         <GameCanvas
@@ -77,8 +95,10 @@ export default function Code({ selectedCode, selectedProblem, codeRun, endGame})
         fontSize="14px"
         value={selectedCode}
         showPrintMargin={false}
-        editorProps={{ $blockScrolling: true }}
+        height="fit-content"
+        editorProps={{ $blockScrolling: false }}
       />
+      </div>
     </div>
   );
 }
