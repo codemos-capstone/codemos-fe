@@ -63,5 +63,10 @@ th, td {
 border: 1px solid rgb(255, 255, 255); /* 테두리 설정 */
 padding: 8px; /* 셀 안의 여백 */
 text-align: left; /* 텍스트 왼쪽 정렬 */
-
+}
+.GameCanvas{
+    position:fixed;
+    z-index: 1000;
+    top: 100px;
+    right: 0%; /* 컴포넌트의 너비를 고려한 조정 필요 */
 }

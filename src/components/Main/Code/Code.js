@@ -10,6 +10,7 @@ import ReactMarkdown from "react-markdown";
 import GameCanvas from "components/GameCanvas";
 
 export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame }) {
+  console.log(selectedCode);
   const CodeEditorStyle = {
     width: '100%',
     height: '30%',     // 초기 높이를 20%로 설정
@@ -76,10 +77,13 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
           <div></div>
           //선택 안하면 아무것도 없음
         )}
-      {codeRun &&
-        <GameCanvas
+              {codeRun &&
+        <GameCanvas className="GameCanvas"
           size={[600, 800]} 
-          code={selectedCode}
+          code={`engineOn();
+          rotateLeft();
+          rotateRight();
+          `}
           problem={selectedProblem}
           endAnimation={endGame}>
         </GameCanvas>
