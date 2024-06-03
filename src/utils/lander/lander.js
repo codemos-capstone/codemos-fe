@@ -193,16 +193,19 @@ export const makeLander = (state, setting, endAnimation) => {
 
         let isEnd = { end: false };
 
+        let _mainloop = "";
+        try{ eval(code) } catch (e) {
+            console.log(e);
+            return;
+        };
+
         while(!isEnd.end){
-            let err;
-            try{eval(code)} catch (e) {
-                err = e;
+            try{ _mainloop } catch (e) {
+                console.log(e);
+                return;
             };
             isEnd = checkEnd(rocket);
-            if (err){
-                console.log(err);
-                return;
-            } else if (!isEnd.end){
+            if (!isEnd.end){
                 updateRocket(rocket)
                 logs.push(deepCopy(rocket));
             } else {
