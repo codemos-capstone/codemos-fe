@@ -193,30 +193,26 @@ export const makeLander = (state, setting, endAnimation) => {
 
         let isEnd = { end: false };
 
-        let _mainloop = "";
-        try{ eval(code) } catch (e) {
+        let _mainloop;
+        try{
+            eval(code);
+            while(!isEnd.end){
+                _mainloop();
+                isEnd = checkEnd(rocket);
+                if (!isEnd.end){
+                    updateRocket(rocket)
+                    logs.push(deepCopy(rocket));
+                } else {
+                    rocket.engineOn = false;
+                    rocket.rotatingLeft = false;
+                    rocket.rotatingRight = false;
+                    logs.push(deepCopy(rocket));
+                }
+            }
+        } catch (e) {
             console.log(e);
             return;
         };
-
-        console.log(_mainloop);
-
-        while(!isEnd.end){
-            try{ eval(_mainloop) } catch (e) {
-                console.log(e);
-                return;
-            };
-            isEnd = checkEnd(rocket);
-            if (!isEnd.end){
-                updateRocket(rocket)
-                logs.push(deepCopy(rocket));
-            } else {
-                rocket.engineOn = false;
-                rocket.rotatingLeft = false;
-                rocket.rotatingRight = false;
-                logs.push(deepCopy(rocket));
-            }
-        }
 
         let landingState = {
             land: isEnd.land,
