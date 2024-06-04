@@ -199,8 +199,10 @@ export const makeLander = (state, setting, endAnimation) => {
             return;
         };
 
+        console.log(_mainloop);
+
         while(!isEnd.end){
-            try{ _mainloop } catch (e) {
+            try{ eval(_mainloop) } catch (e) {
                 console.log(e);
                 return;
             };
