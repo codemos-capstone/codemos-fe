@@ -1,4 +1,4 @@
-import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPH, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInFeet, percentProgress } from "../helpers/helpers.js";
+import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPH, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInMeter, percentProgr, heightInMeteress } from "../helpers/helpers.js";
 import { scoreLanding, scoreCrash } from "../helpers/scoring.js";
 import { CRASH_VELOCITY, CRASH_ANGLE, LAND_MAX_FRAME, TRANSITION_TO_SPACE } from "../helpers/constants.js";
 import { drawTrajectory } from "./trajectory.js";
@@ -36,7 +36,7 @@ export const makeLander = (state, setting, endAnimation) => {
         CTX.fillStyle = angleColor;
         CTX.fillText(`${getAngleDeltaUprightWithSign(rocket.angle).toFixed(1)}°`, xPosBasis, yPosBasis);
         CTX.fillStyle = state.get("theme").infoFontColor;
-        CTX.fillText(`${heightInFeet(rocket.position.y, _groundedHeight)} FT`, xPosBasis, yPosBasis + lineHeight);
+        CTX.fillText(`${heightInMeter(rocket.position.y, _groundedHeight)} METER`, xPosBasis, yPosBasis + lineHeight);
         CTX.restore();
 
         // Draw hud rotation direction arrow
@@ -85,7 +85,7 @@ export const makeLander = (state, setting, endAnimation) => {
 
         CTX.textAlign = "right";
         CTX.font = "800 24px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
-        CTX.fillText(`${heightInFeet(rocket.position.y, _groundedHeight)}`, canvasWidth - xPadding, canvasHeight - yPadding - 24);
+        CTX.fillText(`${heightInMeter(rocket.position.y, _groundedHeight)}`, canvasWidth - xPadding, canvasHeight - yPadding - 24);
         CTX.letterSpacing = "1px";
         CTX.font = "400 16px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
         CTX.fillText("FT", canvasWidth - xPadding, canvasHeight - yPadding);
@@ -123,14 +123,14 @@ export const makeLander = (state, setting, endAnimation) => {
         };
         const getVelocityX = () => {
             if(allowed.getVelocityX)
-                return rocket.velocity.x;
+                return velocityInMPH(rocket.velocity.x);
             else {
                 throw new TypeError("getVelocityX is not a function")
             }
         };
         const getVelocityY = () => {
             if(allowed.getVelocityY)
-                return rocket.velocity.y;
+                return velocityInMPH(rocket.velocity.y);
             else {
                 throw new TypeError("getVelocityY is not a function")
             }
@@ -144,14 +144,14 @@ export const makeLander = (state, setting, endAnimation) => {
         };
         const getHeight = () => {
             if(allowed.getHeight)
-                return heightInFeet(rocket.position.y, _groundedHeight);
+                return heightInMeter(rocket.position.y, _groundedHeight);
             else {
                 throw new TypeError("getHeight is not a function")
             }
         };
         const getRotationVelocity = () => {
             if(allowed.getRotationVelocity)
-                return rocket.rotationVelocity;
+                return velocityInMPH(rocket.rotationVelocity);
             else {
                 throw new TypeError("getRotationVelocity is not a function")
             }
@@ -369,7 +369,7 @@ export const makeLander = (state, setting, endAnimation) => {
             CTX.fillRect(0, 0, canvasWidth, canvasHeight);
 
             // Move stars in parallax as lander flies high
-            state.get("stars").draw(currentState.velocity);
+            state.get("stars").draw(logs.length > 0? currentState.velocity: {x: 0, y: 0});
 
             // Move terrain as lander flies high
             CTX.save();

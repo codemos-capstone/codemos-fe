@@ -71,8 +71,8 @@ export const velocityInMPH = (velocity) =>
     (getVectorVelocity(velocity) * VELOCITY_MULTIPLIER).toFixed(1)
   );
 
-export const heightInFeet = (yPos, groundedHeight) =>
-  Intl.NumberFormat().format(-1 * Math.round((yPos - groundedHeight) / 3.5));
+export const heightInMeter = (yPos, groundedHeight) =>
+  Intl.NumberFormat().format(-1 * ((yPos - groundedHeight) / 12)).toFixed(1);
 
 export const progress = (start, end, current) =>
   (current - start) / (end - start);
