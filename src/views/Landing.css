@@ -1,0 +1,36 @@
+.container{
+    display: flex;
+    width:100%;
+    flex-direction: column;
+}
+.content {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    color:rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+.footer{
+    bottom:0;
+    width: 100vw;
+    height: 300px;
+    background-color: burlywood;
+    z-index: 100;
+}
+.content img{
+    width: 60%;
+    z-index: 1000;
+    margin-bottom: 10px;
+}
+.title{
+    width:60%;
+    text-align: left;
+    margin-bottom: 6%;
+    margin-top: 5%;
+    font-family:"Hoefler Text";
+    font-size:170%;
+}

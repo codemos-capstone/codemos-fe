@@ -5,6 +5,7 @@
     justify-content: space-between;
 }
 .left{
+    margin-left: 20%;
     display: flex; /* Flexbox를 사용합니다. */
     flex-direction: row; /* 자식 요소들을 세로 방향(column)으로 배치합니다. */
     justify-content: center; /* 수직으로 중앙 정렬합니다. */
@@ -16,4 +17,11 @@
     flex-direction: row; /* 자식 요소들을 세로 방향(column)으로 배치합니다. */
     justify-content: space-between; /* 수직으로 중앙 정렬합니다. */
     align-items: center; /* 수평으로 중앙 정렬합니다. */
+}
+.pro{
+    padding: 0;
+    margin: 0;
+    margin-left: 12%;
+    color: white;
+    font-size: small;
 }

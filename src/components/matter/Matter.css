@@ -1,0 +1,9 @@
+.prob{
+    background-color: #F1F9FF;
+    z-index: 30;
+    width: 60%;
+    height: 154px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}

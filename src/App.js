@@ -10,18 +10,23 @@ import OAuthMiddle from "hooks/auth";
 import ResetPassword from "components/Sign/ResetPassword";
 import ProblemEdit from "components/Problem/ProblemEdit";
 import ProblemList from "components/Problem/ProblemList";
+import Landing from "views/Landing";
+import StarField from "./components/StarField"; 
 
 export default function App(){
     const location = useLocation();
     let pageName = location.pathname.split('/')[1];
-    if (pageName == ""){pageName = 'main'}
+    if (pageName === "") { pageName = 'main' }
     const [isLogin, setIsLogin] = useState(false);
-    useEffect(()=>{
+    useEffect(() => {
         if (sessionStorage.getItem('jwtToken')) setIsLogin(true);
-    }, [])
+    }, []);
+
     return(
         <div className={pageName}>
+            <StarField /> {/* 전체 앱에 StarField 배경을 추가합니다. */}
             <Routes>
+                <Route path="/landing" element={<Landing/>}/>
                 <Route path="/" element={<MainPage isLogin={isLogin} setIsLogin={setIsLogin} />}/>
                 <Route path="/docs" element={<Docs isVisible={false} />} />
                 <Route path="/login" element={<LoginPage setIsLogin={setIsLogin} />} />
@@ -35,5 +40,4 @@ export default function App(){
             </Routes>
         </div>
     )
-
 }
