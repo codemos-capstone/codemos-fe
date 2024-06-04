@@ -80,10 +80,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
               {codeRun &&
         <GameCanvas className="GameCanvas"
           size={[600, 800]} 
-          code={`engineOn();
-          rotateLeft();
-          rotateRight();
-          `}
+          code={selectedCode}
           problem={selectedProblem}
           endAnimation={endGame}>
         </GameCanvas>

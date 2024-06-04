@@ -12,7 +12,7 @@ import { makeBonusPointsManager } from "utils/bonuspoints.js";
 import { makeTheme } from "utils/theme.js";
 import { makeInitState } from "utils/makeInitstate";
 
-export default function GameCanvas({ size, code, problem, endAnimation }){
+export default function GameCanvas({ code, problem, endAnimation }){
     const canvasRef = useRef(null);
 
     useLayoutEffect(() => {
@@ -62,7 +62,7 @@ export default function GameCanvas({ size, code, problem, endAnimation }){
 
         const logs = [initState[0]]
         const landingEffect = lander.updateIterator(code, logs);
-        lander.draw(logs, landingEffect);
+        if (landingEffect) lander.draw(logs, landingEffect);
     }, [])
 
     return <canvas ref={ canvasRef } style={{width: `70%`, height: `20%`}}></canvas>

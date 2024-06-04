@@ -1,8 +1,6 @@
 import { json } from "react-router-dom";
 
 export function makeInitState(problem, canvasSize){
-    console.log(problem);
-    //const preset = JSON.parse(problem);
     const initRocket = {
         position: { x: canvasSize[1] / 2, y: canvasSize[0] / 2 },
         displayPosition: { x: canvasSize[1] / 2, y: canvasSize[0] / 2 },
@@ -45,7 +43,6 @@ export function makeInitState(problem, canvasSize){
         stopRightRotation : true
     }
 
-    console.log(problem);
     if(problem){
         constants.TIMELIMIT = problem.timeLimit;
         constants.FUELLIMIT = problem.fuelLimit;
