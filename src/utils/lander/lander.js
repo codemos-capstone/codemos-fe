@@ -3,7 +3,7 @@ import { scoreLanding, scoreCrash } from "../helpers/scoring.js";
 import { CRASH_VELOCITY, CRASH_ANGLE, LAND_MAX_FRAME, TRANSITION_TO_SPACE } from "../helpers/constants.js";
 import { drawTrajectory } from "./trajectory.js";
 import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.js";
-import { makeLanderExplosion } from "./explosion.js";
+import { makeImageExplosion, makeLanderExplosion } from "./explosion.js";
 import { makeConfetti } from "./confetti.js";
 
 export const makeLander = (state, setting, endAnimation) => {
@@ -357,6 +357,14 @@ export const makeLander = (state, setting, endAnimation) => {
             lastLog.angle,
             lastLog.position.y >= 0
         );
+        let imgExplosion = makeImageExplosion(
+            state,
+            lastLog.position.y < 0 ? lastLog.displayPosition : lastLog.position,
+            lastLog.velocity,
+            lastLog.angle,
+            img,
+            lastLog.position.y >= 0
+        );
         let clouds = makeClouds(lastLog);
         //const score = scoreLanding(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity));
         let confetti = makeConfetti(state, Math.round(100)); //amount depends on score
@@ -382,8 +390,7 @@ export const makeLander = (state, setting, endAnimation) => {
                     else drawRocket(currentState)
                     drawLanding(currentState.position, confetti);
                 } else {
-                    if(img) drawExplodingImg(landingState.ground, explosion, clouds, img);
-                    else drawExploding(landingState.ground, explosion, clouds);
+                    drawExploding(landingState.ground, img? imgExplosion: explosion, clouds);
                     landAnimationCount++;
                 }
             } else {
@@ -532,19 +539,10 @@ export const makeLander = (state, setting, endAnimation) => {
 
     const drawRocketImg = (rocket, img) => {
         CTX.save();
-
-        // The lander positions is handled differently in two "altitude zones"
-        // Zone 1:
-        //   The lander is close to the ground - the viewport is static, and the
-        //   terrain is visible. The _position is the same as the display position
-        // Zone 2:
-        //   The lander has transitioned to space, and over the course of two
-        //   viewport heights, it's moved linearly to the center of the screen
-
-        // Zone 1 positioning
+        // Near ground positioning
         CTX.translate(rocket.position.x, rocket.position.y < TRANSITION_TO_SPACE ? TRANSITION_TO_SPACE : rocket.position.y);
 
-        // Zone 2 positioning
+        // Higher positioning
         if (rocket.position.y > 0) {
             const yPosTransition = transition(0, canvasHeight / 2 - TRANSITION_TO_SPACE, clampedProgress(0, -canvasHeight * 2, rocket.position.y), easeInOutSine);
 
