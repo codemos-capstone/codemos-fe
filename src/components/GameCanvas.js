@@ -11,9 +11,13 @@ import { makeSeededRandom } from "utils/helpers/seededrandom.js";
 import { makeBonusPointsManager } from "utils/bonuspoints.js";
 import { makeTheme } from "utils/theme.js";
 import { makeInitState } from "utils/makeInitstate";
+//import rocketImg from "assets/images/rocket.png";
 
 export default function GameCanvas({ code, problem, endAnimation }){
     const canvasRef = useRef(null);
+
+    const img = new Image();
+    //img.src = rocketImg;
 
     useLayoutEffect(() => {
         const scale = window.devicePixelRatio;
