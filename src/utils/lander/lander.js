@@ -240,7 +240,7 @@ export const makeLander = (state, setting, endAnimation) => {
     const checkEnd = (rocket) => {
         const landingArea = _landingData.landingSurfaces.find(({ x, width }) => rocket.position.x - constants.ROCKET_WIDTH / 2 >= x && rocket.position.x + constants.ROCKET_WIDTH / 2 <= x + width);
         const didLand = getVectorVelocity(rocket.velocity) < CRASH_VELOCITY && getAngleDeltaUpright(rocket.angle) < CRASH_ANGLE && landingArea;
-        if (rocket.timeSinceStart > constants.TIMELIMIT){
+        if (rocket.timeSinceStart > constants.TIMELIMIT && constants.TIMELIMIT != -1){
             return {end: true, land: false, ground: false}
         } else if (rocket.position.y + constants.ROCKET_HEIGHT / 2 < _landingData.terrainHeight ||
         (rocket.position.y + constants.ROCKET_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + constants.ROCKET_HEIGHT / 2) * state.get("scaleFactor")))){
@@ -259,11 +259,11 @@ export const makeLander = (state, setting, endAnimation) => {
         rocket.position.y = rocket.position.y + deltaTimeMultiplier * rocket.velocity.y;
         // Update ballistic properties
         // xxx : #3
-        if (rocket.rotatingRight && rocket.usedfuel < constants.FUELLIMIT) { // xxx : #4
+        if (rocket.rotatingRight && rocket.usedfuel < constants.FUELLIMIT && constants.FUELLIMIT != -1) { // xxx : #4
             rocket.rotationVelocity += deltaTimeMultiplier * constants.RTHRUST;
             rocket.usedfuel += deltaTimeMultiplier * constants.RTHRUST * 2; // xxx : #4
         }
-        if (rocket.rotatingLeft && rocket.usedfuel < constants.FUELLIMIT) { // xxx : #4
+        if (rocket.rotatingLeft && rocket.usedfuel < constants.FUELLIMIT && constants.FUELLIMIT != -1) { // xxx : #4
             rocket.rotationVelocity -= deltaTimeMultiplier * constants.RTHRUST;
             rocket.usedfuel += deltaTimeMultiplier * constants.RTHRUST * 2; // xxx : #4
         }
@@ -277,7 +277,7 @@ export const makeLander = (state, setting, endAnimation) => {
 
         rocket.displayPosition.x = rocket.position.x;
 
-        if (rocket.engineOn && rocket.usedfuel < constants.FUELLIMIT) { // xxx : #4
+        if (rocket.engineOn && rocket.usedfuel < constants.FUELLIMIT && constants.FUELLIMIT != -1) { // xxx : #4
             rocket.velocity.x += deltaTimeMultiplier * (constants.THRUST * Math.sin(rocket.angle));
             rocket.velocity.y -= deltaTimeMultiplier * (constants.THRUST * Math.cos(rocket.angle));
             rocket.usedfuel += deltaTimeMultiplier * constants.THRUST * 20; // xxx : #4
@@ -496,7 +496,7 @@ export const makeLander = (state, setting, endAnimation) => {
         // Translate to the top-left corner of the lander so engine and booster
         // flames can be drawn from 0, 0
         CTX.translate(-constants.ROCKET_WIDTH / 2, -constants.ROCKET_HEIGHT / 2);
-        if (rocket.usedfuel < constants.FUELLIMIT) {
+        if (rocket.usedfuel < constants.FUELLIMIT && constants.FUELLIMIT != -1) {
             if (rocket.engineOn || rocket.rotatingLeft || rocket.rotatingRight) {
                 CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
             }
@@ -557,7 +557,7 @@ export const makeLander = (state, setting, endAnimation) => {
         // Translate to the top-left corner of the lander so engine and booster
         // flames can be drawn from 0, 0
         CTX.translate( - constants.ROCKET_WIDTH / 2,  - constants.ROCKET_HEIGHT / 2);
-        if (rocket.usedfuel < constants.FUELLIMIT) {
+        if (rocket.usedfuel < constants.FUELLIMIT && constants.FUELLIMIT != -1) {
             if (rocket.engineOn || rocket.rotatingLeft || rocket.rotatingRight) {
                 CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
             }
