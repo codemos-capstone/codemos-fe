@@ -1,11 +1,12 @@
 .footer {
     width: 90%;
+    height: fit-content;
     margin-top: 10%;
+    margin-bottom: 20px;
     background-color: #4E6579;
     color: white;
     padding: 50px;
     font-family: Arial, sans-serif;
-    z-index: 1000000;
     font-size: 66%;
 }
 
@@ -62,13 +63,4 @@
 
 .address-section p {
     margin: 5px 0;
-}
-
-.footer-bottom {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.footer-bottom p {
-    font-size: 0.75em;
 }

@@ -17,7 +17,7 @@ export default function Footer(){
                         <a href="#contact">Contact</a>
                         <a href="#terms">Terms & Conditions</a>
                     </div>
-                    </div>
+                </div>
                 <div class="social-media">
                     <a href="#github">GitHub</a>
                     <a href="#notion">Notion</a>
