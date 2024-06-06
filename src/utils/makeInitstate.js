@@ -44,13 +44,16 @@ export function makeInitState(problem, canvasSize){
     }
 
     if(problem){
-        constants.TIMELIMIT = problem.timeLimit;
-        constants.FUELLIMIT = problem.fuelLimit;
-        initRocket.position.x = problem.initialX;
-        initRocket.position.y = problem.initialY;
-        initRocket.angle = problem.initialAngle;
-        initRocket.velocity.x = problem.initialVelocityX;
-        initRocket.velocity.y = problem.initialVelocityY;
+        constants.TIMELIMIT = problem.timeLimit === null ? -1: problem.timeLimit;
+        constants.FUELLIMIT = problem.fuelLimit === null ? -1: problem.fuelLimit;
+        initRocket.position.x = problem.initialX === null ? 0: problem.initialX * canvasSize[1];
+        initRocket.position.y = problem.initialY === null ? 0: problem.initialY * canvasSize[0];
+        initRocket.angle = problem.initialAngle === null ? 0: problem.initialAngle;
+        initRocket.velocity.x = problem.initialVelocityX === null ? 0: problem.initialVelocityX;
+        initRocket.velocity.y = problem.initialVelocityY === null ? 0: problem.initialVelocityY;
+        initRocket.rotationVelocity = problem.rotationVelocity === null ? 0: problem.rotationVelocity;
+
+        if(problem.restrictedMethods){}
     }
 
     const initState = [initRocket, constants, allowed]
