@@ -91,13 +91,50 @@ export const makeLander = (state, setting, endAnimation) => {
         CTX.fillText("Meter", canvasWidth - xPadding, canvasHeight - yPadding);
 
         if (secondsUntilTerrain < 15) {
-            CTX.fillStyle = "rgb(255, 0, 0)";
-            CTX.textAlign = "center";
-            CTX.font = "800 24px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
-            CTX.fillText(Intl.NumberFormat().format(secondsUntilTerrain), canvasWidth / 2, canvasHeight - yPadding - 24);
-            CTX.letterSpacing = "1px";
-            CTX.font = "400 16px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
-            CTX.fillText("SECONDS UNTIL TERRAIN", canvasWidth / 2, canvasHeight - yPadding);
+            // CTX.fillStyle = "rgb(255, 0, 0)";
+            // CTX.textAlign = "center";
+            // CTX.font = "800 24px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
+            // CTX.fillText(Intl.NumberFormat().format(secondsUntilTerrain), canvasWidth / 2, canvasHeight - yPadding);
+            // CTX.letterSpacing = "1px";
+            // CTX.font = "400 16px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
+            // CTX.fillText("SECONDS UNTIL TERRAIN", canvasWidth / 2, canvasHeight - yPadding + 24);
+        }
+
+        CTX.restore();
+    };
+
+
+    const drawTopHUD = (rocket) => {
+        const yPadding = constants.ROCKET_HEIGHT;
+        const xPadding = constants.ROCKET_HEIGHT;
+
+        const secondsUntilTerrain = rocket.velocity.y > 0 ? Math.abs(Math.round((rocket.position.y - canvasHeight + (canvasHeight - _landingData.terrainAvgHeight)) / rocket.velocity.y / 100)) : 99;
+
+        CTX.save();
+
+        CTX.fillStyle = state.get("theme").infoFontColor;
+        CTX.font = "800 24px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
+        CTX.textAlign = "left";
+        CTX.fillText(`${rocket.timeSinceStart}`, xPadding, yPadding + 24);
+        CTX.letterSpacing = "1px";
+        CTX.font = "400 16px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
+        CTX.fillText("Time(ms)", xPadding, yPadding);
+
+        CTX.textAlign = "right";
+        CTX.font = "800 24px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
+        CTX.fillText(`${rocket.usedfuel.toFixed(1)}`, canvasWidth - xPadding, yPadding + 24);
+        CTX.letterSpacing = "1px";
+        CTX.font = "400 16px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
+        CTX.fillText("Fuel(L)", canvasWidth - xPadding, yPadding);
+
+        if (secondsUntilTerrain < 15) {
+            // CTX.fillStyle = "rgb(255, 0, 0)";
+            // CTX.textAlign = "center";
+            // CTX.font = "800 24px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
+            // CTX.fillText(Intl.NumberFormat().format(secondsUntilTerrain), canvasWidth / 2, canvasHeight - yPadding);
+            // CTX.letterSpacing = "1px";
+            // CTX.font = "400 16px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
+            // CTX.fillText("SECONDS UNTIL TERRAIN", canvasWidth / 2, canvasHeight - yPadding + 24);
         }
 
         CTX.restore();
@@ -420,16 +457,17 @@ export const makeLander = (state, setting, endAnimation) => {
             }
     
             // Draw speed and angle text beside lander, even after crashing
-            if (currentState.position.y > TRANSITION_TO_SPACE) {
-                drawHUD(currentState);
-            } else {
-                CTX.save();
-                const animateHUDProgress = clampedProgress(constants.ROCKET_HEIGHT, -constants.ROCKET_HEIGHT, currentState.position.y);
-                CTX.globalAlpha = transition(0, 1, animateHUDProgress, easeInOutSine);
-                CTX.translate(0, transition(16, 0, animateHUDProgress, easeInOutSine));
-                drawBottomHUD(currentState);
-                CTX.restore();
-            }
+            // if (currentState.position.y > TRANSITION_TO_SPACE) {
+            drawHUD(currentState);
+            // } else {
+            // CTX.save();
+            // const animateHUDProgress = clampedProgress(constants.ROCKET_HEIGHT, -constants.ROCKET_HEIGHT, currentState.position.y);
+            // CTX.globalAlpha = transition(0, 1, animateHUDProgress, easeInOutSine);
+            // CTX.translate(0, transition(16, 0, animateHUDProgress, easeInOutSine));
+            drawBottomHUD(currentState);
+            drawTopHUD(currentState);
+            CTX.restore();
+            // }
             animationID = window.requestAnimationFrame(drawFromLogs)
             if (logs.length <= 0 && landAnimationEnd) {
                 window.cancelAnimationFrame(animationID);
