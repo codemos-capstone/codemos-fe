@@ -46,8 +46,8 @@ export function makeInitState(problem, canvasSize){
     if(problem){
         constants.TIMELIMIT = problem.timeLimit;
         constants.FUELLIMIT = problem.fuelLimit;
-        initRocket.position.x = 400;
-        initRocket.position.y = 40;
+        initRocket.position.x = problem.initialX;
+        initRocket.position.y = problem.initialY;
         initRocket.angle = problem.initialAngle;
         initRocket.velocity.x = problem.initialVelocityX;
         initRocket.velocity.y = problem.initialVelocityY;

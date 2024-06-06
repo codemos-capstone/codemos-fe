@@ -37,6 +37,7 @@ export default function Main({ isLogin, setIsLogin }) {
             isDocsVisible={isDocsVisible}
             codeRun={run}
             endGame={() => setRun(false)}
+            setSelectedCode={setSelectedCode}
           />
         </div>
         <div className="right-border">

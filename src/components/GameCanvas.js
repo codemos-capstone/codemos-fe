@@ -15,7 +15,6 @@ import { makeInitState } from "utils/makeInitstate";
 
 export default function GameCanvas({ code, problem, endAnimation }){
     const canvasRef = useRef(null);
-
     const img = new Image();
     //img.src = rocketImg;
 
