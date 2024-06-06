@@ -20,7 +20,7 @@ export default function Main({isLogin, setIsLogin}){
         <div className="file-container">
           <File setSelectedCode={setSelectedCode} setSelectedProblem={setSelectedProblem}></File>
         </div>
-        <div class="resizer"></div> 
+        <div className="resizer"></div> 
         <div className="code-container">
           <Code selectedCode={selectedCode} selectedProblem={selectedProblem} isDocsVisible={isDocsVisible} codeRun = {run} endGame={()=>{setRun(false)}}/>
         </div>
