@@ -83,7 +83,6 @@
 .prob_right button{ 
     padding: 6%;
     margin-top: 10%;
-    pointer-events: none;
     width: 50%;
     font-size: xx-small;
     color: #FFFFFF;

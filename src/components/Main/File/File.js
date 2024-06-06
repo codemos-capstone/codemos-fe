@@ -18,7 +18,7 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
   async function fetchData(endpoint, setState) {
     try {
       const token = sessionStorage.getItem('accessToken');
-      const response = await axios.get(`http://${serverAddress}/api/v1/${endpoint}`, {
+      const response = await axios.get(`${serverAddress}/api/v1/${endpoint}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setState(response.data);
@@ -32,7 +32,7 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
   const handleProblemClick = async (problemNumber) => {
     try {
       const token = sessionStorage.getItem('accessToken');
-      const response = await axios.get(`http://${serverAddress}/api/v1/problems/${problemNumber}`, {
+      const response = await axios.get(`${serverAddress}/api/v1/problems/${problemNumber}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSelectedProblem(response.data);
