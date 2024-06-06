@@ -415,7 +415,7 @@ export const makeLander = (state, setting, endAnimation) => {
             lastLog.position.y >= 0
         );
         let clouds = makeClouds(lastLog);
-        //const score = scoreLanding(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity));
+        const score = landingState.land? scoreLanding(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity)).toFixed(1): scoreCrash(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity)).toFixed(1);
         let confetti = makeConfetti(state, Math.round(100)); //amount depends on score
         const drawFromLogs = () => {
             if(logs.length > 0) currentState = logs.shift();
@@ -472,6 +472,7 @@ export const makeLander = (state, setting, endAnimation) => {
             }
         }
         drawFromLogs();
+        return score;
     };
 
     const drawRocket = (rocket) => {

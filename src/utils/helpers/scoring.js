@@ -111,16 +111,13 @@ export const scoreLanding = (angle, speed) => {
 };
 
 export const scoreCrash = (angle, speed) => {
-  const bestPossibleCombo = 900;
-  const worstPossibleCombo = Math.min(
-    CRASH_VELOCITY * VELOCITY_MULTIPLIER,
-    CRASH_ANGLE
-  );
+  const bestPossibleCombo = 100;
+  const worstPossibleCombo = 15;
   return (
     progress(
       worstPossibleCombo,
       bestPossibleCombo,
       angle + speed * VELOCITY_MULTIPLIER
-    ) * 100
+    ) * -100
   );
 };

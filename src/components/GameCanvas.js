@@ -13,10 +13,11 @@ import { makeTheme } from "utils/theme.js";
 import { makeInitState } from "utils/makeInitstate";
 //import rocketImg from "assets/images/rocket.png";
 
-export default function GameCanvas({ code, problem, endAnimation }){
+export default function GameCanvas({ code, problem, endAnimation, setScore }){
     const canvasRef = useRef(null);
     const img = new Image();
     //img.src = rocketImg;
+    let score;
 
     useLayoutEffect(() => {
         const scale = window.devicePixelRatio;
@@ -65,7 +66,10 @@ export default function GameCanvas({ code, problem, endAnimation }){
 
         const logs = [initState[0]]
         const landingEffect = lander.updateIterator(code, logs);
-        if (landingEffect) lander.draw(logs, landingEffect);
+        if (landingEffect) {
+            score = lander.draw(logs, landingEffect);
+            setScore(score);
+        };
     }, [])
 
     return <canvas ref={ canvasRef } style={{width: `70%`, height: `20%`}}></canvas>
