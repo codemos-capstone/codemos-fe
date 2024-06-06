@@ -5,6 +5,7 @@ import jSImage from 'assets/images/JS.png';
 import proImage from 'assets/images/FILE.png';
 
 export default function File({ setSelectedCode, setSelectedProblem }) {
+  const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [codeFiles, setCodeFiles] = useState([]);
   const [problems, setProblems] = useState([]);
   const [dropdownStates, setDropdownStates] = useState({ files: false, problems: false });
@@ -17,7 +18,7 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
   async function fetchData(endpoint, setState) {
     try {
       const token = sessionStorage.getItem('accessToken');
-      const response = await axios.get(`http://localhost:8080/api/v1/${endpoint}`, {
+      const response = await axios.get(`http://${serverAddress}/api/v1/${endpoint}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setState(response.data);
@@ -31,7 +32,7 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
   const handleProblemClick = async (problemNumber) => {
     try {
       const token = sessionStorage.getItem('accessToken');
-      const response = await axios.get(`http://localhost:8080/api/v1/problems/${problemNumber}`, {
+      const response = await axios.get(`http://${serverAddress}/api/v1/problems/${problemNumber}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSelectedProblem(response.data);
