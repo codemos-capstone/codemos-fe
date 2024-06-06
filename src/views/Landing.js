@@ -12,6 +12,13 @@ export default function Landing(){
                 <div className='title'>Problems</div>
                 <img src={Problems}/>
                 <Matter></Matter>
+                <Matter></Matter>
+                <Matter></Matter>
+                <Matter></Matter>
+                <Matter></Matter>
+                <Matter></Matter>
+                <Matter></Matter>
+                
             </div>     
         </div>
     )
