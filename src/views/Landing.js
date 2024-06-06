@@ -16,9 +16,9 @@ export default function Landing(){
                 <Matter></Matter>
                 <Matter></Matter>
                 <Matter></Matter>
-                <Matter></Matter><Footer></Footer>
+                <Matter></Matter>
+                <Footer></Footer>
             </div>     
-        
         </div>
     )
 }
