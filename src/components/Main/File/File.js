@@ -23,7 +23,7 @@ export default function File({ setSelectedCode, setSelectedProblem }) {
       setState(response.data);
     } catch (error) {
       console.error(`Error fetching ${endpoint}:`, error);
-      alert(`Failed to load ${endpoint}. Please try again later.`);
+      console.log(`Failed to load ${endpoint}. Please try again later.`);
     }
   }
   //하이 안녕
