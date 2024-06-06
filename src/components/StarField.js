@@ -5,7 +5,7 @@ class Star {
     this.x = Math.random() * window.innerWidth;
     this.y = Math.random() * window.innerHeight;
     this.size = Math.floor(Math.random() * 2) + 1; // 1x1, 2x2 크기 선택
-    this.speed = (Math.random() * 0.05) + 0.8;
+    this.speed = (Math.random() * 0.7) + 0.8;
   }
 
   move(ctx) {
