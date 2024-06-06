@@ -4,6 +4,7 @@ import Header from "components/Header/Header";
 import "./Landing.css";
 import Matter from "components/matter/Matter.js";
 import { useNavigate } from "react-router-dom";
+import Footer from 'components/footer/footer';
 
 export default function Landing() {
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
@@ -36,11 +37,15 @@ export default function Landing() {
         <div className="container">
             <Header></Header>
             <div className="content">
+
                 <div className="title">Problems</div>
                 {problems.map((problem) => (
                     <Matter key={problem.id} problem={problem} onTryProblem={handleTryProblem} />
                 ))}
+                
+                <Footer></Footer>
             </div>
+
         </div>
     );
 }

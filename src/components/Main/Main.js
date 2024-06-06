@@ -29,7 +29,7 @@ export default function Main({ isLogin, setIsLogin }) {
         <div className="file-container">
           <File setSelectedCode={setSelectedCode} setSelectedProblem={setSelectedProblem}></File>
         </div>
-        <div className="resizer"></div>
+        <div className="resizer"></div> 
         <div className="code-container">
           <Code
             selectedCode={selectedCode}
