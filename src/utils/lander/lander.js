@@ -380,11 +380,8 @@ export const makeLander = (state, setting, endAnimation) => {
         let clouds = makeClouds(lastLog);
         //const score = scoreLanding(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity));
         let confetti = makeConfetti(state, Math.round(100)); //amount depends on score
-        const displayPosition = {x: logs[0].position.x, y: logs[0].position.y};
         const drawFromLogs = () => {
             if(logs.length > 0) currentState = logs.shift();
-            displayPosition.x = currentState.position.x;
-            displayPosition.y = currentState.position.y < TRANSITION_TO_SPACE ? TRANSITION_TO_SPACE : currentState.position.y;
 
             CTX.fillStyle = state.get("theme").backgroundGradient;
             CTX.fillRect(0, 0, canvasWidth, canvasHeight);
@@ -405,9 +402,9 @@ export const makeLander = (state, setting, endAnimation) => {
                     else drawRocket(currentState)
                     drawLanding(currentState.position, confetti);
                 } else {
-                    drawExploding(landingState.ground, img? imgExplosion: explosion, clouds);
-                    landAnimationCount++;
+                    drawExploding(landingState.ground, img? imgExplosion: explosion, clouds);                    
                 }
+                landAnimationCount++;
             } else {
                 if(img) drawRocketImg(currentState, img);
                 else drawRocket(currentState)
