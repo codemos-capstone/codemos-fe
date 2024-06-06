@@ -1,4 +1,4 @@
-import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPH, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInMeter, percentProgr, heightInMeteress } from "../helpers/helpers.js";
+import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPS, velocityInMPS_s, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInMeter, percentProgr, heightInMeteress } from "../helpers/helpers.js";
 import { scoreLanding, scoreCrash } from "../helpers/scoring.js";
 import { CRASH_VELOCITY, CRASH_ANGLE, LAND_MAX_FRAME, TRANSITION_TO_SPACE } from "../helpers/constants.js";
 import { drawTrajectory } from "./trajectory.js";
@@ -20,7 +20,7 @@ export const makeLander = (state, setting, endAnimation) => {
     const _groundedHeight = _landingData.terrainAvgHeight - constants.ROCKET_HEIGHT / 2;    
 
     const drawHUD = (rocket) => {
-        const textWidth = CTX.measureText("100.0 MPH").width + 2;
+        const textWidth = CTX.measureText("100.0 m/s").width + 2;
         const xPosBasis = Math.abs(rocket.velocity.x) > 6 ? canvasWidth / 2 - textWidth / 2 : Math.min(rocket.position.x + constants.ROCKET_WIDTH * 2, canvasWidth - textWidth);
         const yPosBasis = Math.max(rocket.position.y, TRANSITION_TO_SPACE);
         const lineHeight = 14;
@@ -32,11 +32,11 @@ export const makeLander = (state, setting, endAnimation) => {
         CTX.save();
         CTX.font = "400 10px -apple-system, BlinkMacSystemFont, sans-serif";
         CTX.fillStyle = speedColor;
-        CTX.fillText(`${velocityInMPH(rocket.velocity)} MPH`, xPosBasis, yPosBasis - lineHeight);
+        CTX.fillText(`${velocityInMPS(rocket.velocity)} m/s`, xPosBasis, yPosBasis - lineHeight);
         CTX.fillStyle = angleColor;
         CTX.fillText(`${getAngleDeltaUprightWithSign(rocket.angle).toFixed(1)}°`, xPosBasis, yPosBasis);
         CTX.fillStyle = state.get("theme").infoFontColor;
-        CTX.fillText(`${heightInMeter(rocket.position.y, _groundedHeight)} METER`, xPosBasis, yPosBasis + lineHeight);
+        CTX.fillText(`${heightInMeter(rocket.position.y, _groundedHeight)} Meter`, xPosBasis, yPosBasis + lineHeight);
         CTX.restore();
 
         // Draw hud rotation direction arrow
@@ -78,17 +78,17 @@ export const makeLander = (state, setting, endAnimation) => {
         CTX.fillStyle = state.get("theme").infoFontColor;
         CTX.font = "800 24px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
         CTX.textAlign = "left";
-        CTX.fillText(`${velocityInMPH(rocket.velocity)}`, xPadding, canvasHeight - yPadding - 24);
+        CTX.fillText(`${velocityInMPS(rocket.velocity)}`, xPadding, canvasHeight - yPadding - 24);
         CTX.letterSpacing = "1px";
         CTX.font = "400 16px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
-        CTX.fillText("MPH", xPadding, canvasHeight - yPadding);
+        CTX.fillText("m/s", xPadding, canvasHeight - yPadding);
 
         CTX.textAlign = "right";
         CTX.font = "800 24px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
         CTX.fillText(`${heightInMeter(rocket.position.y, _groundedHeight)}`, canvasWidth - xPadding, canvasHeight - yPadding - 24);
         CTX.letterSpacing = "1px";
         CTX.font = "400 16px/1.5 -apple-system, BlinkMacSystemFont, sans-serif";
-        CTX.fillText("METER", canvasWidth - xPadding, canvasHeight - yPadding);
+        CTX.fillText("Meter", canvasWidth - xPadding, canvasHeight - yPadding);
 
         if (secondsUntilTerrain < 15) {
             CTX.fillStyle = "rgb(255, 0, 0)";
@@ -122,15 +122,15 @@ export const makeLander = (state, setting, endAnimation) => {
             }
         };
         const getVelocityX = () => {
-            if(allowed.getVelocityX)
-                return velocityInMPH(rocket.velocity.x);
+            if(allowed.getVelocityX) {
+                return velocityInMPS_s(rocket.velocity.x);}
             else {
                 throw new TypeError("getVelocityX is not a function")
             }
         };
         const getVelocityY = () => {
             if(allowed.getVelocityY)
-                return velocityInMPH(rocket.velocity.y);
+                return velocityInMPS_s(rocket.velocity.y);
             else {
                 throw new TypeError("getVelocityY is not a function")
             }
@@ -151,7 +151,7 @@ export const makeLander = (state, setting, endAnimation) => {
         };
         const getRotationVelocity = () => {
             if(allowed.getRotationVelocity)
-                return velocityInMPH(rocket.rotationVelocity);
+                return velocityInMPS(rocket.rotationVelocity);
             else {
                 throw new TypeError("getRotationVelocity is not a function")
             }
@@ -184,6 +184,21 @@ export const makeLander = (state, setting, endAnimation) => {
                 throw new TypeError("stopRightRotation is not a function")
             }
         };
+
+        const logging = () => {
+            console.log(
+                "getVelocityX()        : " +
+                    getVelocityX() +
+                    "\ngetVelocityY()        : " +
+                    getVelocityY() +
+                    "\ngetAngle()            : " +
+                    getAngle() +
+                    "\ngetHeight()           : " +
+                    getHeight() +
+                    "\ngetRotationVelocity() : " +
+                    getRotationVelocity()
+            );
+        }
 
         // prohibited functions
         const setInterval = () => { throw new TypeError("setInterval is not a function") };
@@ -253,9 +268,7 @@ export const makeLander = (state, setting, endAnimation) => {
     };
 
     const updateRocket = (rocket) => {
-        rocket.timeSinceStart = Date.now() - constants.STARTTIME;
         const deltaTimeMultiplier = 1;// deltaTime / INTERVAL;
-
         rocket.position.y = rocket.position.y + deltaTimeMultiplier * rocket.velocity.y;
         // Update ballistic properties
         // xxx : #3
@@ -299,9 +312,7 @@ export const makeLander = (state, setting, endAnimation) => {
         if (getVectorVelocity(rocket.velocity) > getVectorVelocity(rocket.maxVelocity)) {
             rocket.maxVelocity = { ...rocket.velocity };
         }
-
-        // Record bonus points for increments of height and speed
-        // Ints here are pixels / raw values, not MPH or FT
+    
         if (rocket.position.y < rocket.heightMilestone + Math.min(-3500, rocket.heightMilestone * 3)) {
             rocket.heightMilestone = rocket.position.y;
         }
@@ -311,6 +322,7 @@ export const makeLander = (state, setting, endAnimation) => {
         }
 
         rocket.displayPosition.y = rocket.position.y < TRANSITION_TO_SPACE ? TRANSITION_TO_SPACE : rocket.position.y;
+        rocket.timeSinceStart += 8;
     };
 
     const drawLanding = (position, confetti) => {
