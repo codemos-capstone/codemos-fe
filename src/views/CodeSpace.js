@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import './MainPage.css'
+import './CodeSpace.css'
 import Leaderboard from "components/LeaderBoard/Leaderboard";
 import MainBtn from 'components/Buttons/MainBtn'
 import Header from 'components/Header/Header';
 import Main from 'components/Main/Main';
 
-export default function MainPage({ isLogin, setIsLogin }) {
+export default function CodeSpace({ isLogin, setIsLogin }) {
     useEffect(() => {
         // sessionStorage에서 accessToken을 가져옵니다.
         const accessToken = sessionStorage.getItem('accessToken');
