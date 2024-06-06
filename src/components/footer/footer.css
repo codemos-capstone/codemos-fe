@@ -1,11 +1,12 @@
 .footer {
-    width: 100vw;
+    width: 90%;
     margin-top: 10%;
     background-color: #4E6579;
     color: white;
     padding: 50px;
     font-family: Arial, sans-serif;
     z-index: 1000000;
+    font-size: 66%;
 }
 
 .footer-content {
@@ -14,12 +15,23 @@
 }
 
 .logo-section img {
-    width: 80px; /* Adjust based on your logo size */
+    width: 100px;
+    border-radius: 10px;
+    margin:0;
+}
+.logo-section {
+    padding-left: 2%;
+}
+.logo-section p {
+    margin: 0;
+    padding:0;
+    padding-bottom: 20%;
 }
 
 .links-section, .subscribe-section, .address-section {
     display: flex;
     flex-direction: column;
+    padding-right: 5%;
 }
 
 .footer-links a, .social-media a {

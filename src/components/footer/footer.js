@@ -9,6 +9,7 @@ export default function Footer(){
             <div class="footer-content">
                 <div class="logo-section">
                     <img src={companyLogo} alt="CodeMos Logo" class="logo"/>
+                    <p>© CodeMosTeam 2024</p>
                 </div>
                 <div class="links-section">
                     <div class="footer-links">
@@ -30,13 +31,10 @@ export default function Footer(){
                     </form>
                 </div>
                 <div class="address-section">
-                    <p>Mirae-Hall,<br></br> 232, Gongneung-ro, Nowon-gu, Seoul, Republic of Korea</p>
-                    <p>+82 010 6368 9651</p>
+                    <p>Mirae-Hall, 232, Gongneung-ro,<br></br> Nowon-gu, Seoul, Republic of Korea</p>
+                    <p>+82 010 1234 5678</p>
                     <p>codemosdevteam@gmail.com</p>
                 </div>
-            </div>
-            <div class="footer-bottom">
-                <p>© CodeMosTeam 2024</p>
             </div>
         </div>
     );
