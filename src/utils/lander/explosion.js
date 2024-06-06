@@ -31,6 +31,109 @@ export const makeExplosion = (
   };
 };
 
+export const makeImageExplosion = (
+  state,
+  position,
+  velocity,
+  angle,
+  img,
+  useTerrain = true
+) => {
+  const gradient = state.get("theme").landerGradient;
+
+  const noseCone = makeParticle(
+    state,
+    position,
+    jitterCoordinate(velocity),
+    LANDER_WIDTH,
+    LANDER_HEIGHT / 2,
+    gradient,
+    (CTX, position, _, rotationAngle) => {
+      CTX.translate(position.x, position.y);
+      CTX.rotate(angle);
+
+      // Step 2: adjust this chunk to its own offset position and own axis of
+      // rotation. This is the rotation that's updated by the ballistic update
+      CTX.translate(0, -LANDER_HEIGHT / 2 + 4);
+      CTX.rotate(rotationAngle);
+      CTX.drawImage(img, 0, 0, img.width, img.height / 3, 0, 0, 2 * LANDER_WIDTH, LANDER_HEIGHT / 2);
+    },
+    useTerrain
+  );
+
+  const chunk1 = makeParticle(
+    state,
+    position,
+    jitterCoordinate(velocity),
+    LANDER_WIDTH,
+    LANDER_HEIGHT / 2,
+    gradient,
+    (CTX, position, _, rotationAngle) => {
+      CTX.translate(position.x, position.y);
+      CTX.rotate(angle);
+      CTX.translate(-LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
+      CTX.rotate(rotationAngle);
+
+      CTX.save();
+      CTX.beginPath();
+      CTX.lineTo(LANDER_WIDTH, 0);
+      CTX.lineTo(LANDER_WIDTH, 3 * LANDER_HEIGHT / 5);
+      CTX.lineTo(0, LANDER_HEIGHT / 3);
+      CTX.clip();
+
+      CTX.drawImage(img, 0, img.height / 3, img.width, img.height * 2 / 3, 0, 0, LANDER_WIDTH, LANDER_HEIGHT);
+      CTX.restore();
+    },
+    useTerrain
+  );
+
+  const chunk2 = makeParticle(
+    state,
+    position,
+    jitterCoordinate(velocity),
+    LANDER_WIDTH,
+    LANDER_HEIGHT / 2,
+    gradient,
+    (CTX, position, _, rotationAngle) => {
+      CTX.translate(position.x, position.y);
+      CTX.rotate(angle);
+      CTX.translate(-LANDER_WIDTH / 2, -LANDER_HEIGHT / 2);
+      CTX.rotate(rotationAngle);
+
+      CTX.save();
+      CTX.beginPath();
+      CTX.moveTo(0, LANDER_HEIGHT / 3);
+      CTX.lineTo(LANDER_WIDTH, 3 * LANDER_HEIGHT / 5);
+      CTX.lineTo(LANDER_WIDTH, LANDER_HEIGHT);
+      CTX.lineTo(0, LANDER_HEIGHT);
+      CTX.clip();
+
+      CTX.drawImage(img, 0, img.height / 3, img.width, img.height * 2 / 3, 0, 0, LANDER_WIDTH, LANDER_HEIGHT);
+      CTX.restore();
+    },
+    useTerrain
+  );
+
+  const randomPieces = makeExplosion(
+    state,
+    position,
+    velocity,
+    gradient,
+    randomBetween(2, 20),
+    32,
+    useTerrain
+  );
+
+  const draw = () => {
+    randomPieces.draw();
+    noseCone.draw();
+    chunk1.draw();
+    chunk2.draw();
+  };
+
+  return { draw };
+};
+
 export const makeLanderExplosion = (
   state,
   position,
