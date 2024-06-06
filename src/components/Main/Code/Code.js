@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./Code.css";
 import AceEditor from "react-ace-builds";
 import "react-ace-builds/webpack-resolver-min";
@@ -21,6 +21,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
     const toggleDocs = () => {
         setIsDocsVisible(!isDocsVisible);
     };
+    const [score, setScore] = useState(null);
 
     console.log(isDocsVisible);
     return (
@@ -95,7 +96,8 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                     height="fit-content"
                     editorProps={{ $blockScrolling: false }}
                 />
-                {codeRun && <GameCanvas className="GameCanvas" size={[600, 800]} code={selectedCode} problem={selectedProblem} endAnimation={endGame}></GameCanvas>}
+                <div style={{color: "white"}}>&nbsp;&nbsp;Score: {score}</div>
+                {codeRun && <GameCanvas className="GameCanvas" size={[600, 800]} code={selectedCode} problem={selectedProblem} endAnimation={endGame} setScore={setScore}></GameCanvas>}
             </div>
         </div>
     );
