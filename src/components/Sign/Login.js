@@ -5,6 +5,7 @@ const btnTexts = require('lang/kor.json').login;
 
 export default function Login({ setForm, setToLogin }) {
     const { email, setEmail, password, setPassword, handleLogin } = useLogin(setToLogin);
+    const googleOAuth = process.env.REACT_APP_GOOGLE_OAUTH_ADDRESS;
 
     function pageToggle() {
         setForm('register');
@@ -48,7 +49,7 @@ export default function Login({ setForm, setToLogin }) {
                 </div>
               
                 <div className="form-group">
-                    <a href="https://accounts.google.com/o/oauth2/auth?client_id=958887972790-87mtrd085sjkf1vk6bq27316ikeco4hp.apps.googleusercontent.com&redirect_uri=http://localhost:8080/login/oauth2/code/google&response_type=code&scope=email">
+                    <a href={googleOAuth}>
                         <img src={googleLoginImage} alt="Continue with Google" style={{ width: '50%', cursor: 'pointer', marginTop:'10px'}} />
                     </a>
                 </div>
