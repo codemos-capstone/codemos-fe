@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import symbol from 'assets/images/main-symbol.png'
 import logo from 'assets/images/main-logo.png'
@@ -8,7 +8,13 @@ import LBBtn from "../Buttons/LBBtn";
 const btnTexts = require('lang/kor.json').btns.problems;
 
 
-export default function Header({isLogin, setIsLogin}){
+export default function Header(){
+    const [isLogin, setIsLogin] = useState(false);
+    useEffect(() => {
+        const token = sessionStorage.getItem("accessToken");
+        if(token) setIsLogin(true);
+        else setIsLogin(false);
+    }, []);
 
     return(
         <div className="header">

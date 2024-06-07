@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useLogin(setToLogin) {
+export default function useLogin() {
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
