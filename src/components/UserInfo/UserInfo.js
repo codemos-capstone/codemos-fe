@@ -1,3 +1,4 @@
+import React from "react"
 import profile from "assets/images/profile.jpeg"
 
 export default function UserInfo({ user }){
