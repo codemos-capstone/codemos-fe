@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import "./Code.css";
 import AceEditor from "react-ace-builds";
 import "react-ace-builds/webpack-resolver-min";
@@ -8,6 +8,7 @@ import FileBtn from "../../Buttons/FileBtn";
 import Docs from "views/Docs";
 import ReactMarkdown from "react-markdown";
 import GameCanvas from "components/GameCanvas";
+import axios from "axios";
 
 export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame, setSelectedCode }) {
     console.log(selectedCode);
@@ -22,6 +23,46 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
         setIsDocsVisible(!isDocsVisible);
     };
     const [score, setScore] = useState(null);
+    const [isJudging, setIsJudging] = useState(false);
+    const [judgeResult, setJudgeResult] = useState(null);
+    const [judgeProgress, setJudgeProgress] = useState(0);
+    const [judgeMessage, setJudgeMessage] = useState("");
+    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+    useEffect(() => {
+        if (codeRun && selectedProblem) {
+            setJudgeProgress(0);
+            const judgeCode = async () => {
+                setIsJudging(true);
+                setJudgeMessage("Connecting to Judging server...");
+                await new Promise((resolve) => setTimeout(resolve, 300));
+
+                const judgeAnimation = async () => {
+                    let progress = 0;
+                    while (progress < 100) {
+                        const increment = Math.floor(Math.random() * 15) + 1;
+                        progress = Math.min(progress + increment, 100);
+                        setJudgeMessage(`Judging...(${progress}%)`);
+                        setJudgeProgress(progress);
+                        await new Promise((resolve) => setTimeout(resolve, 50));
+                    }
+                };
+
+                await judgeAnimation();
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
+                try {
+                    const token = sessionStorage.getItem("accessToken");
+                    const response = await axios.post(`${serverAddress}/api/v1/judge/problem/${selectedProblem.problemNumber}/score`, { code: selectedCode }, { headers: { Authorization: `Bearer ${token}` } });
+                    setJudgeResult(response.data);
+                    setScore(response.data.score);
+                } catch (error) {
+                    console.error("Error judging:", error);
+                }
+                setIsJudging(false);
+            };
+            judgeCode();
+        }
+    }, [codeRun, selectedProblem, selectedCode]);
 
     console.log(isDocsVisible);
     return (
@@ -39,16 +80,18 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                 {selectedProblem ? (
                     <>
                         <div className="problems">
-                            <h3>P10003</h3>
-                            <div>{selectedProblem.description}</div>
+                            <h2>
+                                {selectedProblem.problemNumber} : {selectedProblem.title}
+                            </h2>
                             <table>
                                 <tbody>
                                     <tr>
                                         <th>Time Limit</th>
                                         <th>Fuel Limit</th>
-                                        <th>Initial Position</th>
-                                        <th>Initial Velocity</th>
-                                        <th>Initial Angle</th>
+                                        <th>Initial Position(x, y)</th>
+                                        <th>Initial Velocity(x, y)</th>
+                                        <th>Initial Rotation Velocity</th>
+                                        <th>Initial Angle(deg)</th>
                                     </tr>
                                     <tr>
                                         <td> {selectedProblem.timeLimit} ms</td>
@@ -61,11 +104,13 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                                             {" "}
                                             ({selectedProblem.initialVelocityX}, {selectedProblem.initialVelocityY})
                                         </td>
-                                        <td> {selectedProblem.initialAngle} degrees</td>
+                                        <td> {selectedProblem.rotationVelocity}</td>
+                                        <td> {selectedProblem.initialAngle}</td>
                                     </tr>
                                 </tbody>
                             </table>
-
+                            <br></br>
+                            <div>{selectedProblem.description}</div>
                             {selectedProblem.userDefined && <p>This is a user-defined problem.</p>}
                             {selectedProblem.restrictedMethods && selectedProblem.restrictedMethods.length > 0 && (
                                 <div>
@@ -96,7 +141,30 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                     height="fit-content"
                     editorProps={{ $blockScrolling: false }}
                 />
-                <div style={{color: "white"}}>&nbsp;&nbsp;Score: {score}</div>
+                <div style={{ color: "white" }}>
+                    {isJudging ? (
+                        <div>
+                            <div>{judgeMessage}</div>
+                            <progress value={judgeProgress} max="100" />
+                        </div>
+                    ) : (
+                        <>
+                            <span>Score(local): {score}</span>
+                            {judgeResult && (
+                                <div>
+                                    <div>[Judge Result]</div>
+                                    <div>Score: {judgeResult.score}</div>
+                                    <div>Time: {judgeResult.time}ms</div>
+                                    <div>Fuel: {judgeResult.fuel}L</div>
+                                    <div>Bytes: {judgeResult.bytes}Bytes</div>
+                                    <div>Angle: {judgeResult.angle}°</div>
+                                    <div>Velocity X: {judgeResult.velX}</div>
+                                    <div>Velocity Y: {judgeResult.velY}</div>
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
                 {codeRun && <GameCanvas className="GameCanvas" size={[600, 800]} code={selectedCode} problem={selectedProblem} endAnimation={endGame} setScore={setScore}></GameCanvas>}
             </div>
         </div>
