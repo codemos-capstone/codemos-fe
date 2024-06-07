@@ -52,7 +52,7 @@ export default function UserInfo(){
                 </div>
                 <h3 className="user-name" style={{color: "#2f664e", marginTop: "10px", marginBottom: "0"}}>{user ? user.nickname : ""}</h3>
                 {/*<div className="user-email" style={{fontSize: "70%"}}>{user.email}</div>*/}
-                <div className="solved-ctn" style={{fontSize: "70%"}}>{`Solved: `}{user ? user.solvedProblems.length : ""}</div>
+                <div className="solved-ctn" style={{fontSize: "70%"}}>{`Solved: `}{user.solvedProblems ? user.solvedProblems.length : ""}</div>
             </div>
             <div className="solved-list" style={{margin: "0 20px", width: "40%"}}>
                 {user.solvedProblems ? user.solvedProblems.map((n) => <button key={n}
