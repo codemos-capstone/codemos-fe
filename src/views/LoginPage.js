@@ -9,24 +9,19 @@ import ForgotPassword from "components/Sign/ForgotPassword";
 
 const btnTexts = require('lang/kor.json').login;
 
-export default function LoginPage({setPage, setIsLogin}){
+export default function LoginPage(){
     const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const oauth = queryParams.get('oauth');
     const emailFromQuery = queryParams.get('email');
 
-    const setToLogin = () => {
-        setIsLogin(true)
-        setPage('main')
-    }
-
     // 상태에 따라 초기 폼 설정
     const [formStat, setFormStat] = useState(oauth === 'true' ? 'register' : 'login');
 
     let form;
     if (formStat === 'login'){
-        form = <Login setForm={setFormStat} setToLogin={setToLogin} />
+        form = <Login setForm={setFormStat} />
     } else if (formStat === 'register') {
         form = <Register setForm={setFormStat} initialEmail={emailFromQuery} />
     } else if (formStat === 'forgot-password') {

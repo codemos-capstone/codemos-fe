@@ -13,7 +13,7 @@ function ProfileBtn(){
     )
 }
 
-export default function LoginBtn({isLogin, setIsLogin}){
+export default function LoginBtn({ isLogin, setIsLogin }){
     const navigate = useNavigate();
     function logout(){
         alert('로그아웃 하시겠습니까?');

@@ -20,10 +20,6 @@ export default function App(){
     const location = useLocation();
     let pageName = location.pathname.split('/')[1];
     if (pageName === "") { pageName = 'main' }
-    const [isLogin, setIsLogin] = useState(false);
-    useEffect(() => {
-        if (sessionStorage.getItem('jwtToken')) setIsLogin(true);
-    }, []);
 
     return(
         <div className={pageName}>
@@ -31,11 +27,11 @@ export default function App(){
             <Routes>
                 <Route path="/" element={<MainView/>}/>
                 <Route path="/landing" element={<Landing/>}/>
-                {/* <Route path="/" element={<MainPage isLogin={isLogin} setIsLogin={setIsLogin} />}/> */}
-                <Route path="/codespace" element={<CodeSpace isLogin={isLogin} setIsLogin={setIsLogin} />}/>
+                {/* <Route path="/" element={<MainPage/>}/> */}
+                <Route path="/codespace" element={<CodeSpace/>}/>
                 <Route path="/docs" element={<Docs isVisible={false} />} />
-                <Route path="/login" element={<LoginPage setIsLogin={setIsLogin} />} />
-                {/*<Route path="/userpage" element={<User isLogin={isLogin} />} />*/}
+                <Route path="/login" element={<LoginPage/>} />
+                {/*<Route path="/userpage" element={<User/>} />*/}
                 <Route path="/leader" element={<Leader />} />
                 <Route path="/google/callback" element={<OnLogin />} />
                 <Route path="/oauthMiddle" element={<OAuthMiddle />} />

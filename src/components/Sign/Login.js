@@ -3,8 +3,8 @@ import useLogin from './useLogin'; // Import the custom hook
 import googleLoginImage from 'assets/images/continueGoogle.png';
 const btnTexts = require('lang/kor.json').login;
 
-export default function Login({ setForm, setToLogin }) {
-    const { email, setEmail, password, setPassword, handleLogin } = useLogin(setToLogin);
+export default function Login({ setForm }) {
+    const { email, setEmail, password, setPassword, handleLogin } = useLogin();
     const googleOAuth = process.env.REACT_APP_GOOGLE_OAUTH_ADDRESS;
 
     function pageToggle() {

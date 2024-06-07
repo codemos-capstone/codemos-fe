@@ -4,7 +4,7 @@ import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";
 
-export default function Main({ isLogin, setIsLogin }) {
+export default function Main() {
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [run, setRun] = useState(false);
