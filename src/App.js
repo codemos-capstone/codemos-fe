@@ -13,6 +13,7 @@ import ProblemList from "components/Problem/ProblemList";
 import Landing from "views/Landing";
 import StarField from "./components/StarField"; 
 import CodeSpace from "./views/CodeSpace"; 
+import UserPage from "views/UserPage";
 
 export default function App(){
     const location = useLocation();
@@ -32,13 +33,14 @@ export default function App(){
                 <Route path="/codespace" element={<CodeSpace isLogin={isLogin} setIsLogin={setIsLogin} />}/>
                 <Route path="/docs" element={<Docs isVisible={false} />} />
                 <Route path="/login" element={<LoginPage setIsLogin={setIsLogin} />} />
-                <Route path="/userpage" element={<User isLogin={isLogin} />} />
+                {/*<Route path="/userpage" element={<User isLogin={isLogin} />} />*/}
                 <Route path="/leader" element={<Leader />} />
                 <Route path="/google/callback" element={<OnLogin />} />
                 <Route path="/oauthMiddle" element={<OAuthMiddle />} />
                 <Route path="/auth/reset-password" element={<ResetPassword />} />
                 <Route path="/admin/problem" element={<ProblemList />} />
                 <Route path="/admin/problem/edit/:id?" element={<ProblemEdit />} />
+                <Route path="/userpage" element={<UserPage />} />
             </Routes>
         </div>
     )
