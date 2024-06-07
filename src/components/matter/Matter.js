@@ -4,25 +4,27 @@ import "./Matter.css";
 import Profile from "assets/images/profile.jpeg";
 import OfficialProfile from "assets/favicon-540x540.png";
 
-export default function Matter({ problem, onTryProblem }) {
+export default function Matter({ problem, onTryProblem, solvedProblems }) {
     const { problemNumber, title, description, difficulty, isUserDefined, userId, tags } = problem;
 
     const handleTryProblem = async () => {
-      try {
-          const token = sessionStorage.getItem("accessToken");
-          const response = await axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/api/v1/problems/${problemNumber}`, {
-              headers: { Authorization: `Bearer ${token}` },
-          });
-          const detailedProblem = response.data;
-          onTryProblem(detailedProblem);
-      } catch (error) {
-          console.error("페치페일:", error);
-      }
-  };
+        try {
+            const token = sessionStorage.getItem("accessToken");
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/api/v1/problems/${problemNumber}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const detailedProblem = response.data;
+            onTryProblem(detailedProblem);
+        } catch (error) {
+            console.error("페치페일:", error);
+        }
+    };
 
+    const isSolved = solvedProblems.includes(String(problemNumber));
+    console.log(solvedProblems, problemNumber);
     return (
         <div className="prob">
-            <div></div>
+            <div style={{ backgroundColor: isSolved ? "#4CAF50" : "#A64044" }}></div>
             <div>
                 {title && <p>{title}</p>}
                 {problemNumber && <p>{problemNumber}</p>}

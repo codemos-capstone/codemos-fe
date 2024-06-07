@@ -1,7 +1,29 @@
-import React from "react"
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import profile from "assets/images/profile.jpeg"
 
-export default function UserInfo({ user }){
+export default function UserInfo(){
+
+    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        const fetchMe = async () => {
+            try {
+                const token = sessionStorage.getItem("accessToken");
+                const response = await axios.get(`${serverAddress}/user/me`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                setUser(response.data);
+                console.log(response.data)
+            } catch (error) {
+                console.error("페치페일:", error);
+            }
+        };
+
+        fetchMe();
+    }, []);
+
     const optionBtnStyle = {
         display: "block",
         margin: "5px",
@@ -9,6 +31,7 @@ export default function UserInfo({ user }){
         borderRadius: "4px",
         cursor: "pointer",
     }
+
     return (
         <div className="information"
             style={{
@@ -25,14 +48,14 @@ export default function UserInfo({ user }){
         >
             <div className="profile" style={{display: "block"}}>
                 <div className="image-container" style={{width: "100px", height: "100px"}}>
-                    <img src={profile} style={{width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover"}} />
+                    {user ? <img src={user.profilePicUrl} style={{width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover"}} /> : ""}
                 </div>
-                <h3 className="user-name" style={{color: "#2f664e", marginTop: "10px", marginBottom: "0"}}>{user.username}</h3>
+                <h3 className="user-name" style={{color: "#2f664e", marginTop: "10px", marginBottom: "0"}}>{user ? user.nickname : ""}</h3>
                 {/*<div className="user-email" style={{fontSize: "70%"}}>{user.email}</div>*/}
-                <div className="solved-ctn" style={{fontSize: "70%"}}>{`Solved: `}{user.solvedCtn}</div>
+                <div className="solved-ctn" style={{fontSize: "70%"}}>{`Solved: `}{user ? user.solvedProblems.length : ""}</div>
             </div>
             <div className="solved-list" style={{margin: "0 20px", width: "40%"}}>
-                {user.solved.map((n) => <button key={n}
+                {user.solvedProblems ? user.solvedProblems.map((n) => <button key={n}
                 style={{
                     margin: "5px",
                     padding: "5px 10px",
@@ -40,7 +63,7 @@ export default function UserInfo({ user }){
                     backgroundColor: "white",
                     border: "1px solid #2196f3",
                     borderRadius: "4px"
-                }}>{n}</button>)}
+                }}>{n}</button>) : ""}
             </div>
             <div className="btns" style={{margin: "0", width: "fit-content"}}>
                 <button style={{...optionBtnStyle, borderColor: "#2196f3", color: "#2196f3"}}>Change Info</button>

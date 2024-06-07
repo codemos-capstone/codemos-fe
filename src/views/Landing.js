@@ -9,6 +9,7 @@ import Footer from 'components/footer/footer';
 export default function Landing() {
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     const [problems, setProblems] = useState([]);
+    const [solvedProblems, setSolvedProblems] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,7 +25,20 @@ export default function Landing() {
             }
         };
 
+        const fetchMe = async () => {
+            try {
+                const token = sessionStorage.getItem("accessToken");
+                const response = await axios.get(`${serverAddress}/user/me`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                setSolvedProblems(response.data.solvedProblems);
+            } catch (error) {
+                console.error("페치페일:", error);
+            }
+        };
+
         fetchProblems();
+        fetchMe();
     }, []);
 
     const handleTryProblem = (_problem) => {
@@ -40,7 +54,7 @@ export default function Landing() {
 
                 <div className="title">Problems</div>
                 {problems.map((problem) => (
-                    <Matter key={problem.id} problem={problem} onTryProblem={handleTryProblem} />
+                    <Matter key={problem.id} problem={problem} onTryProblem={handleTryProblem} solvedProblems={solvedProblems}/>
                 ))}
                 
                 <Footer></Footer>
