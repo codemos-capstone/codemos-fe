@@ -28,7 +28,7 @@ export default function UserInfo({ user }){
                     <img src={profile} style={{width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover"}} />
                 </div>
                 <h3 className="user-name" style={{color: "#2f664e", marginTop: "10px", marginBottom: "0"}}>{user.username}</h3>
-                <div className="user-email" style={{fontSize: "70%"}}>{user.email}</div>
+                {/*<div className="user-email" style={{fontSize: "70%"}}>{user.email}</div>*/}
                 <div className="solved-ctn" style={{fontSize: "70%"}}>{`Solved: `}{user.solvedCtn}</div>
             </div>
             <div className="solved-list" style={{margin: "0 20px", width: "40%"}}>
