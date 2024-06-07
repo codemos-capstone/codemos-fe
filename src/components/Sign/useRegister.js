@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 export default function useRegister() {
-    const serverAddress = process.env.SERVER_ADDRESS;
+    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
 
     return useCallback((email, username, password) => {
         fetch(`${serverAddress}/auth/sign`, {

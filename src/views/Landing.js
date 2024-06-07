@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from 'components/footer/footer';
 
 export default function Landing() {
-    const serverAddress = process.env.SERVER_ADDRESS;
+    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     const [problems, setProblems] = useState([]);
     const [solvedProblems, setSolvedProblems] = useState([]);
     const navigate = useNavigate();
@@ -53,9 +53,9 @@ export default function Landing() {
             <div className="content">
 
                 <div className="title">Problems</div>
-                {problems.map((problem) => (
+                {problems? problems.map((problem) => (
                     <Matter key={problem.id} problem={problem} onTryProblem={handleTryProblem} solvedProblems={solvedProblems}/>
-                ))}
+                )) : ""}
                 
                 <Footer></Footer>
             </div>

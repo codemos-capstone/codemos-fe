@@ -27,7 +27,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
     const [judgeMessage, setJudgeMessage] = useState("");
-    const serverAddress = process.env.SERVER_ADDRESS;
+    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     useEffect(() => {
         if (codeRun && selectedProblem) {
             setJudgeProgress(0);

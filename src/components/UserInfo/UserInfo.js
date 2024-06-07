@@ -4,7 +4,7 @@ import profile from "assets/images/profile.jpeg"
 
 export default function UserInfo(){
 
-    const serverAddress = process.env.SERVER_ADDRESS;
+    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     const [user, setUser] = useState({});
 
     useEffect(() => {
