@@ -10,7 +10,7 @@ export default function Matter({ problem, onTryProblem, solvedProblems }) {
     const handleTryProblem = async () => {
         try {
             const token = sessionStorage.getItem("accessToken");
-            const response = await axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/api/v1/problems/${problemNumber}`, {
+            const response = await axios.get(`${process.env.SERVER_ADDRESS}/api/v1/problems/${problemNumber}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const detailedProblem = response.data;

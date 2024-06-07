@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const btnTexts = require('lang/kor.json').leader;
-const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+const serverAddress = process.env.SERVER_ADDRESS;
 
 // Set <tbody> with given data.
 // Add toggle menu to show detail codes(set onClick event to <td> that uses getBoard())

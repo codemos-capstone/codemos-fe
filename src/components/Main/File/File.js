@@ -5,7 +5,7 @@ import jSImage from 'assets/images/JS.png';
 import proImage from 'assets/images/FILE.png';
 
 export default function File({ setSelectedCode, setSelectedProblem }) {
-  const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+  const serverAddress = process.env.SERVER_ADDRESS;
   const [codeFiles, setCodeFiles] = useState([]);
   const [problems, setProblems] = useState([]);
   const [dropdownStates, setDropdownStates] = useState({ files: false, problems: false });

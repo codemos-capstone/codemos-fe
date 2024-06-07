@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./ProblemList.css";
 
-const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+const serverAddress = process.env.SERVER_ADDRESS;
 
 export default function ProblemList() {
     const [problems, setProblems] = useState([]);
