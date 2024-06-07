@@ -31,7 +31,6 @@ export default function LoginPage(){
     return(
         <div className="container">
             <Header></Header>
-            <div className="success-message" id="successMessage">{btnTexts[0]}</div>
             {form}
             <div className="home">
                 <button btntype='main' className="home-btn" onClick={()=>{navigate("/");}}>{btnTexts[4]}</button>
