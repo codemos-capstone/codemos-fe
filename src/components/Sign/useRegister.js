@@ -21,12 +21,12 @@ export default function useRegister() {
                 }
             });
         })
-        .then(data => {
-            if (!data.message) {
-                throw new Error('Failed to register. Please try again.');
-            }
-            alert(data.message);
-        })
+        // .then(data => {
+        //     if (!data.message) {
+        //         throw new Error('Failed to register. Please try again.');
+        //     }
+        //     alert(data.message);
+        // })
         .catch(err => {
             alert(err.message);
         });
