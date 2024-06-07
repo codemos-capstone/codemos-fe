@@ -11,11 +11,10 @@
     text-decoration: none;
     text-align: center;
     width: 250px;
-    box-shadow: 0 0 10px #2e9cca;
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.button:hover, .home-login-btn:hover, .home-logout-btn:hover {
+.button:hover, .login-btn:hover, .logout-btn:hover {
     background-color: #2e9cca;
     box-shadow: 0 0 20px #2e9cca;
 }
