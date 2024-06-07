@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function ForgotPassword() {
-    const serverAddress = process.env.SERVER_ADDRESS;
+    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     const [email, setEmail] = useState("");
 
     const handleSubmit = async (e) => {

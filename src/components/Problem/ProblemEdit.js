@@ -4,7 +4,7 @@ import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import "./ProblemEdit.css";
 
-const serverAddress = process.env.SERVER_ADDRESS;
+const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
 
 export default function ProblemEdit() {
     const navigate = useNavigate();

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import "./User.css"
 
 const btnTexts = require('lang/kor.json').user;
-const serverAddress = process.env.SERVER_ADDRESS;
+const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
 
 import symbol from 'assets/images/main-symbol.png'
 

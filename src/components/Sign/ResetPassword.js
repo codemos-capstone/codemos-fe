@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function ResetPassword() {
-    const serverAddress = process.env.SERVER_ADDRESS;
+    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     const location = useLocation();
     const [newPassword, setNewPassword] = useState("");
     const navigate = useNavigate();

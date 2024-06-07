@@ -5,7 +5,7 @@ const btnTexts = require('lang/kor.json').login;
 
 export default function Login({ setForm }) {
     const { email, setEmail, password, setPassword, handleLogin } = useLogin();
-    const googleOAuth = process.env.GOOGLE_OAUTH_ADDRESS;
+    const googleOAuth = process.env.REACT_APP_GOOGLE_OAUTH_ADDRESS;
 
     function pageToggle() {
         setForm('register');
