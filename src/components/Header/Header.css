@@ -4,6 +4,7 @@
     display: flex;
     justify-content: space-between;
 }
+
 .left{
     margin-left: 20%;
     display: flex; /* Flexbox를 사용합니다. */
@@ -21,7 +22,9 @@
 .pro{
     padding: 0;
     margin: 0;
-    margin-left: 12%;
+    margin-left: 20%;
     color: white;
     font-size: small;
 }
+
+

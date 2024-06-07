@@ -1,0 +1,21 @@
+.button {
+    background-color: #0a0f1c;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 20px;
+    border: 2px solid #2e9cca;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    margin: 30px auto 20px auto;
+    text-decoration: none;
+    text-align: center;
+    width: 250px;
+    box-shadow: 0 0 10px #2e9cca;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.button:hover, .home-login-btn:hover, .home-logout-btn:hover {
+    background-color: #2e9cca;
+    box-shadow: 0 0 20px #2e9cca;
+}

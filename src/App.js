@@ -13,6 +13,7 @@ import ProblemList from "components/Problem/ProblemList";
 import Landing from "views/Landing";
 import StarField from "./components/StarField"; 
 import CodeSpace from "./views/CodeSpace"; 
+import MainView from "./views/MainView"; 
 
 export default function App(){
     const location = useLocation();
@@ -27,6 +28,7 @@ export default function App(){
         <div className={pageName}>
             <StarField /> {/* 전체 앱에 StarField 배경을 추가합니다. */}
             <Routes>
+                <Route path="/" element={<MainView/>}/>
                 <Route path="/landing" element={<Landing/>}/>
                 {/* <Route path="/" element={<MainPage isLogin={isLogin} setIsLogin={setIsLogin} />}/> */}
                 <Route path="/codespace" element={<CodeSpace isLogin={isLogin} setIsLogin={setIsLogin} />}/>

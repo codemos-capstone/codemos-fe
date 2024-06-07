@@ -1,6 +1,4 @@
 import React from 'react';
-
-
 export default function FileBtn(){
     return <button style={{
         width: '100px',
