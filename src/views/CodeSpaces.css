@@ -1,44 +1,44 @@
 
-.codespace .container {
+.codespaces .container {
     background: #02071e;
     font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
     text-align: center;
     overflow-y: auto;
 }
 
-.codespace .menus {
+.codespaces .menus {
     display: flex;
     flex-wrap: nowrap;
 }
 
 @media screen and (max-width: 1080px) {
-    .codespace .menus {
+    .codespaces .menus {
         display: flex;
         flex-wrap: wrap;
     }
 }
 
-.codespace .iframe-container {
+.codespaces .iframe-container {
     display: flex;
 }
 
-.codespace .iframe-container iframe {
+.codespaces .iframe-container iframe {
     width: 50%;
     border: none;
 }
 
-.codespace .iframe-container iframe {
+.codespaces .iframe-container iframe {
     height: 400px;
     border-radius: 10px;
 }
 
-.codespace .profile-image {
+.codespaces .profile-image {
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid #4d4dff;
     box-shadow: 0 0 10px #4d4dff;
 }
-.codespace .profile {
+.codespaces .profile {
     object-fit: cover;
     width: 40px;
     height: 30px;

@@ -1,4 +1,4 @@
-/* Main.css에 추가 */
+/* Main.css에서 추가 */
 .contents{
     display: flex;
     flex-direction: column;
@@ -39,6 +39,4 @@
 .right-border{
   background-color:#3D3D3D;
   width: 20px;
-}
-.document{
 }
