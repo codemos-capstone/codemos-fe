@@ -18,7 +18,11 @@ export default function LoginBtn({ isLogin, setIsLogin }){
         padding: "8px 16px",
         fontSize: "12px",
         border: "none",
-        borderRadius: "5px"
+        borderRadius: "5px",
+        cursor: "pointer",
+        backgroundColor: "#0a0f1c",
+        color:"white",
+        transition: "background-color 0.3s, box-shadow 0.3s"
     }
     const navigate = useNavigate();
     function logout(){
@@ -30,12 +34,12 @@ export default function LoginBtn({ isLogin, setIsLogin }){
     if (isLogin) {
         return(
             <div>
-                <button className="logout-btn"  style = {{...btnStyle, backgroundColor: "#0a0f1c", color:"white"}} onClick={logout}>{btnTexts[1]}</button>
+                <button className="logout-btn"  style = {btnStyle} onClick={logout}>{btnTexts[1]}</button>
             </div>
         )
     } else {
         return(
-            <button btntype="login" className="login-btn" onClick={()=>{navigate("/login");}} style = {{...btnStyle, backgroundColor: "#0a0f1c", color:"white"}}>{btnTexts[0]}</button>
+            <button btntype="login" className="login-btn" onClick={()=>{navigate("/login");}} style = {btnStyle}>{btnTexts[0]}</button>
         )
     }
 }
