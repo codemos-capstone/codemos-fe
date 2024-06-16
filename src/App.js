@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Routes, Route, useLocation } from 'react-router-dom';
-//import MainPage from "views/MainPage"
 import Docs from "views/Docs"
 import LoginPage from "views/LoginPage"
-import User from "views/User"
 import Leader from "views/Leader"
 import OnLogin from "views/OnLogin"
 import OAuthMiddle from "hooks/auth";
@@ -12,7 +10,7 @@ import ProblemEdit from "components/Problem/ProblemEdit";
 import ProblemList from "components/Problem/ProblemList";
 import Landing from "views/Landing";
 import StarField from "./components/StarField"; 
-import CodeSpace from "./views/CodeSpace"; 
+import CodeSpaces from "./views/CodeSpaces"; 
 import MainView from "./views/MainView"; 
 import UserPage from "views/UserPage";
 
@@ -28,7 +26,7 @@ export default function App(){
                 <Route path="/" element={<MainView/>}/>
                 <Route path="/landing" element={<Landing/>}/>
                 {/* <Route path="/" element={<MainPage/>}/> */}
-                <Route path="/codespace" element={<CodeSpace/>}/>
+                <Route path="/codespaces" element={<CodeSpaces/>}/>
                 <Route path="/docs" element={<Docs isVisible={false} />} />
                 <Route path="/login" element={<LoginPage/>} />
                 {/*<Route path="/userpage" element={<User/>} />*/}

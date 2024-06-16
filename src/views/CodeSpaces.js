@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import './CodeSpace.css'
-import Leaderboard from "components/LeaderBoard/Leaderboard";
+import React from "react";
+import './CodeSpaces.css'
 import Header from 'components/Header/Header';
 import Main from 'components/Main/Main';
 
-export default function CodeSpace() {
+export default function CodeSpaces() {
 
     return (
         <div className='container'>

@@ -44,7 +44,7 @@ export default function Landing() {
     const handleTryProblem = (_problem) => {
         sessionStorage.setItem("selectedProblem", JSON.stringify(_problem));
         console.log(_problem)
-        navigate("/codespace");
+        navigate("/codespaces");
     };
 
     return (
