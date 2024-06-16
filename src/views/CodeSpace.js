@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './CodeSpace.css'
 import Leaderboard from "components/LeaderBoard/Leaderboard";
-import MainBtn from 'components/Buttons/MainBtn'
 import Header from 'components/Header/Header';
 import Main from 'components/Main/Main';
 
