@@ -1,7 +1,7 @@
 import React from "react";
 import './CodeSpaces.css'
 import Header from 'components/Header/Header';
-import Main from 'components/Main/Main';
+import CodeSpace from 'components/CodeSpace/CodeSpace';
 
 export default function CodeSpaces() {
 
@@ -9,8 +9,8 @@ export default function CodeSpaces() {
         <div className='container'>
             {/* Header 컴포넌트 */}
             <Header />
-            {/* Main 컴포넌트 */}
-            <Main></Main>
+            {/* CodeSpace 컴포넌트 */}
+            <CodeSpace></CodeSpace>
         </div>
     );
 }

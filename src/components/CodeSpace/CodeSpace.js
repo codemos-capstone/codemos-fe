@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import './Main.css';
+import './CodeSpace.css';
 import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";
 
-export default function Main() {
+export default function CodeSpace() {
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [run, setRun] = useState(false);
