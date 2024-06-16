@@ -5,5 +5,5 @@ const btnTexts = require('lang/kor.json').btns;
 
 export default function LBBtn({}){
     const navigate = useNavigate();
-    return <button btntype="leader" className="leader-btn" onClick={()=>{navigate("/leader");}}>리더보드</button>
+    return <button btntype="leader" className="leader-btn" onClick={()=>{navigate("/leader");}}>{btnTexts.leader}</button>
 }
