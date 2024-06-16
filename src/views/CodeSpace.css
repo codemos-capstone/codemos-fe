@@ -1,87 +1,44 @@
 
-.main .container {
+.codespace .container {
     background: #02071e;
     font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
     text-align: center;
     overflow-y: auto;
 }
 
-.main .menus {
+.codespace .menus {
     display: flex;
     flex-wrap: nowrap;
 }
 
 @media screen and (max-width: 1080px) {
-    .main .menus {
+    .codespace .menus {
         display: flex;
         flex-wrap: wrap;
     }
 }
 
-.main .buttons {
-    width: 40%;
-    margin: 0px 30px;
-}
-
-.main .mainpage {
-    margin: 0px auto;
-}
-.main .login-btn {
-    cursor: pointer;
-    padding: 8px 16px;
-    font-size: 12px;
-    color: #fff;
-    background-color: #0a0a1a;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration-line: none;
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-.main .logout-btn {
-    cursor: pointer;
-    padding: 8px 16px;
-    font-size: 12px;
-    color: #fff;
-    background-color: #0a0a1a;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-.main .home-mypage-btn {
-    position: fixed;
-    top: 8px;
-    right: 10px;
-    padding: 10px 20px;
-    color: #fff;
-    background-color: #02071e;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.main .iframe-container {
+.codespace .iframe-container {
     display: flex;
 }
 
-.main .iframe-container iframe {
+.codespace .iframe-container iframe {
     width: 50%;
     border: none;
 }
 
-.main .iframe-container iframe {
+.codespace .iframe-container iframe {
     height: 400px;
     border-radius: 10px;
 }
 
-.main .profile-image {
+.codespace .profile-image {
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid #4d4dff;
     box-shadow: 0 0 10px #4d4dff;
 }
-.main .profile {
+.codespace .profile {
     object-fit: cover;
     width: 40px;
     height: 30px;

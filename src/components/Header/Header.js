@@ -5,7 +5,6 @@ import logo from 'assets/images/main-logo.png'
 import LoginBtn from 'components/Buttons/LoginBtn'
 import './Header.css';
 import LBBtn from "../Buttons/LBBtn";
-const btnTexts = require('lang/kor.json').btns.problems;
 
 
 export default function Header(){
