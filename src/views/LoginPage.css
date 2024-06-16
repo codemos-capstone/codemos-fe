@@ -40,7 +40,7 @@
     box-sizing: border-box;
 }
 
-.login button {
+.login form button, .login .home-btn {
     background-color: #4caf50;
     color: white;
     padding: 10px 15px;
@@ -48,7 +48,7 @@
     border-radius: 4px;
     cursor: pointer;
 }
-.login button:hover {
+.login form button:hover, .login .home-btn:hover {
     background-color: #2b632e; /* Darker shade for hover effect */
 }
 .login .home {
