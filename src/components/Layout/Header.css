@@ -1,30 +1,31 @@
-
 .header{
+    box-sizing: border-box;
+    width: 100%;
     padding: 1%;
     display: flex;
     justify-content: space-between;
 }
 
-.left{
+.header .left{
     margin-left: 5%;
     display: flex; /* Flexbox를 사용합니다. */
     flex-direction: row; /* 자식 요소들을 세로 방향(column)으로 배치합니다. */
     justify-content: center; /* 수직으로 중앙 정렬합니다. */
     align-items: center; /* 수평으로 중앙 정렬합니다. */
 }
-.left a {
+.header .left a {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
-.right{
+.header .right{
     width: 160px;
     display: flex; /* Flexbox를 사용합니다. */
     flex-direction: row; /* 자식 요소들을 세로 방향(column)으로 배치합니다. */
     justify-content: space-between; /* 수직으로 중앙 정렬합니다. */
     align-items: center; /* 수평으로 중앙 정렬합니다. */
 }
-.pro{
+.header .pro{
     padding: 0;
     margin: 0;
     margin-left: 20%;
