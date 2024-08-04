@@ -13,6 +13,7 @@ import CodeSpaces from "./views/CodeSpaces";
 import MainView from "./views/MainView"; 
 import UserPage from "views/UserPage";
 import Layout from "components/Layout/Layout";
+import NotFound from "views/NotFound";
 
 export default function App(){
     const location = useLocation();
@@ -20,7 +21,7 @@ export default function App(){
     if (pageName === "") { pageName = 'main' }
 
     return(
-        <div className={pageName} style={{ height: "100%" }}>
+        <div className={pageName} style={{ height: "100%", display: "flex"}}>
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<MainView />} />
@@ -37,6 +38,7 @@ export default function App(){
                         <Route path="problem/edit/:id?" element={<ProblemEdit />} />
                     </Route>
                     <Route path="/userpage" element={<UserPage />} />
+                    <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
         </div>
