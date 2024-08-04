@@ -2,7 +2,7 @@
     height: fit-content;
     background-color: #4E6579;
     color: white;
-    padding: 50px;
+    padding: 3.5% 3%;
     font-family: Arial, sans-serif;
     font-size: 66%;
 }
@@ -10,6 +10,7 @@
 .footer-content {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .logo-section img {
@@ -18,12 +19,15 @@
     margin:0;
 }
 .logo-section {
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
     padding-left: 2%;
+    align-items: center;
 }
 .logo-section p {
     margin: 0;
     padding:0;
-    padding-bottom: 20%;
 }
 
 .links-section, .subscribe-section, .address-section {

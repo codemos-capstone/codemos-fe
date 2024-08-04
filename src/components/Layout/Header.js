@@ -18,14 +18,20 @@ export default function Header(){
     return(
         <div className="header">
             <div className="left">
-                <Link to ="/">
-                    <img src ={symbol} style={{width: '20px', height: '20px', marginRight: '10px'}}></img>
-                    <img src ={logo} style={{width: '120px'}}></img>
-                </Link>
-                <Link to ="/landing">
-                    <div className="pro">Problems</div>
-                </Link>
-                <div className="pro">Report</div>
+                <div className="nav-logo">
+                    <Link to ="/">
+                        <img src ={symbol} style={{width: '20px', height: '20px', marginRight: '10px'}}></img>
+                        <img src ={logo} style={{width: '120px'}}></img>
+                    </Link>
+                </div>
+                <div className="nav-menu">
+                    <Link to ="/landing">
+                        <div className="pro">Problems</div>
+                    </Link>
+                    <Link>
+                        <div className="pro">Report</div>
+                    </Link>
+                </div>
             </div>
             <div className="right">
                 <LBBtn></LBBtn>
