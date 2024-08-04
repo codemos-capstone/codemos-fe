@@ -20,7 +20,7 @@ export default function App(){
     if (pageName === "") { pageName = 'main' }
 
     return(
-        <div className={pageName}>
+        <div className={pageName} style={{ height: "100%" }}>
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<MainView />} />

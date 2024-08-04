@@ -1,20 +1,21 @@
 .leader .container {
     margin: 0;
-    background: #02071e;
+    margin-bottom: 10%;
+    width: 100%;
     user-select: none;
     -webkit-user-select: none;
     overflow: hidden;
     font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
     color: #fff;
-    padding: 10px;
     overflow-y: auto;
 }
 .leader  #board table{
     border-collapse: collapse;
     color: #fff;
-    margin: 10px 0;
+    margin: 0;
+    margin-bottom: 5%;
 }
-.leader  button {
+.leader .page-move-btn, .leader .load-btn {
     margin: 1px 3px;
     padding: 10px 20px;
     background-color: #007bff;
@@ -23,11 +24,12 @@
     border-radius: 5px;
     cursor: pointer;
 }
-.leader  button:hover {
+.leader .page-move-btn:hover {
     background-color: #0056b3;
 }
 .leader .load-btn{
-    background-color: #124b89;
+    color: #ffffff;
+    background-color: #0089be;
 }
 .leader .load-btn:hover{
     background-color: #396798;

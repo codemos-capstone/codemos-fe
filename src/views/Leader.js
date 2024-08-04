@@ -20,8 +20,8 @@ export default function Leader(){
             </div>
             <div id="board" style={{width: "50%", margin: "auto"}}><Leaderboard page={page} /></div>
             <div className="btns">
-                <button className="page-lbtn" onClick={() => {handlePage(-1);}}>&lt;&lt;</button>
-                <button className="page-rbtn" onClick={() => {handlePage(1);}}>&gt;&gt;</button>
+                <button className="page-move-btn" onClick={() => {handlePage(-1);}}>&lt;&lt;</button>
+                <button className="page-move-btn" onClick={() => {handlePage(1);}}>&gt;&gt;</button>
             </div>
             <div className="btns load" style={{margin: "30px 2px"}}>
                 <div><button className="load-btn" onClick={() => {handlePage(0);}}>{btnTexts.btns[1]}</button></div>
