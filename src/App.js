@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Docs from "views/Docs"
 import LoginPage from "views/LoginPage"
@@ -9,7 +9,6 @@ import ResetPassword from "components/Sign/ResetPassword";
 import ProblemEdit from "components/Problem/ProblemEdit";
 import ProblemList from "components/Problem/ProblemList";
 import Landing from "views/Landing";
-import StarField from "./components/StarField"; 
 import CodeSpaces from "./views/CodeSpaces"; 
 import MainView from "./views/MainView"; 
 import UserPage from "views/UserPage";
@@ -22,9 +21,8 @@ export default function App(){
 
     return(
         <div className={pageName}>
-            <StarField /> {/* 전체 앱에 StarField 배경을 추가합니다. */}
             <Routes>
-                <Route path="/" element={<Layout/>}>
+                <Route path="/" element={<Layout />}>
                     <Route index element={<MainView />} />
                     <Route path="/landing" element={<Landing/>}/>
                     {/* <Route path="/" element={<MainPage/>}/> */}
