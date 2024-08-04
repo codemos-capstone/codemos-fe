@@ -35,6 +35,9 @@
     flex-direction: column;
     padding-right: 5%;
 }
+.links-section, .social-media {
+    width: 8%;
+}
 
 .footer-links a, .social-media a {
     display: block;
@@ -64,4 +67,23 @@
 
 .address-section p {
     margin: 5px 0;
+}
+
+
+@media only screen and (max-width: 950px){
+    .subscribe-section{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 600px){
+    .footer-content{
+        flex-direction: column;
+    }
+    .logo-section, .links-section, .social-media, .address-section{
+        width: 100%;
+        text-align: center;
+        padding: 0;
+        margin: 3% 0;
+    }
 }
