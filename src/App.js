@@ -25,11 +25,9 @@ export default function App(){
                 <Route path="/" element={<Layout />}>
                     <Route index element={<MainView />} />
                     <Route path="/landing" element={<Landing/>}/>
-                    {/* <Route path="/" element={<MainPage/>}/> */}
                     <Route path="/codespaces" element={<CodeSpaces/>}/>
                     <Route path="/docs" element={<Docs isVisible={false} />} />
                     <Route path="/login" element={<LoginPage/>} />
-                    {/*<Route path="/userpage" element={<User/>} />*/}
                     <Route path="/leader" element={<Leader />} />
                     <Route path="/google/callback" element={<OnLogin />} />
                     <Route path="/oauthMiddle" element={<OAuthMiddle />} />
