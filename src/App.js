@@ -34,8 +34,10 @@ export default function App(){
                 <Route path="/google/callback" element={<OnLogin />} />
                 <Route path="/oauthMiddle" element={<OAuthMiddle />} />
                 <Route path="/auth/reset-password" element={<ResetPassword />} />
-                <Route path="/admin/problem" element={<ProblemList />} />
-                <Route path="/admin/problem/edit/:id?" element={<ProblemEdit />} />
+                <Route path="/admin">
+                    <Route path="problem" element={<ProblemList />} />
+                    <Route path="problem/edit/:id?" element={<ProblemEdit />} />
+                </Route>
                 <Route path="/userpage" element={<UserPage />} />
             </Routes>
         </div>
