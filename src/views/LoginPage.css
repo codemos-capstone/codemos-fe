@@ -1,5 +1,5 @@
 .login .container { 
-    width: 100vw;
+    width: 100%;
     font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
     text-align: center;
     overflow-y: auto;

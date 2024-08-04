@@ -2,7 +2,7 @@
     background-color: #3D3D3D;
     display: flex;
     position: relative;
-    max-width: 100vw;
+    max-width: 100%;
     width:100%;
     height: 300vh;
     justify-content: center;  /* 자식 요소들을 수직 중앙 정렬 */

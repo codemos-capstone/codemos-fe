@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Login from "components/Sign/Login";
 import Register from "components/Sign/Register";
-import Header from 'components/Header/Header';
 
 import "./LoginPage.css"
 import ForgotPassword from "components/Sign/ForgotPassword";
@@ -30,7 +29,6 @@ export default function LoginPage(){
     
     return(
         <div className="container">
-            <Header></Header>
             {form}
             <div className="home">
                 <button btntype='main' className="home-btn" onClick={()=>{navigate("/");}}>{btnTexts[4]}</button>
