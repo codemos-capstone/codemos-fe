@@ -6,11 +6,16 @@
 }
 
 .left{
-    margin-left: 20%;
+    margin-left: 5%;
     display: flex; /* Flexbox를 사용합니다. */
     flex-direction: row; /* 자식 요소들을 세로 방향(column)으로 배치합니다. */
     justify-content: center; /* 수직으로 중앙 정렬합니다. */
     align-items: center; /* 수평으로 중앙 정렬합니다. */
+}
+.left a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 .right{
     width: 160px;
