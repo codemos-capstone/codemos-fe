@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './File.css';
 import axios from 'axios';
 import jSImage from 'assets/images/JS.png';
 import proImage from 'assets/images/FILE.png';
+
 export default function File({ setSelectedCode, setSelectedProblem, reloadFiles, showInput, selectedProblem, setShowInput }) {
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [codeFiles, setCodeFiles] = useState([]);
@@ -11,6 +12,9 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
   const [newFileName, setNewFileName] = useState('');
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, fileId: null });
   const [selectedFileId, setSelectedFileId] = useState(null);
+  const [fileWidth, setFileWidth] = useState(200); // Initial width
+  const fileRef = useRef(null);
+  const resizerRef = useRef(null);
 
   useEffect(() => {
     fetchData('code-file', setCodeFiles);
@@ -48,11 +52,9 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
 
   const handleNewFileNameChange = (e) => {
     const fileName = e.target.value;
-
     if (/[\u3131-\uD79D]/ugi.test(fileName)) {
       return;
     }
-
     setNewFileName(fileName);
   };
 
@@ -79,27 +81,22 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
 
   const handleFileClick = (codeFile) => {
     setSelectedCode(codeFile.content);
-    setSelectedFileId(codeFile.id);  // 선택된 파일의 ID를 저장
+    setSelectedFileId(codeFile.id);
   };
 
   const handleContextMenu = (e, fileId) => {
     e.preventDefault();
-
-    // 상위 컴포넌트에 있는 헤더의 높이를 가져옴
     const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
     const colabHeader = document.querySelector('.colab-header')?.offsetHeight || 0;
-
-    const offsetX = e.clientX; // 클릭한 위치의 X 좌표
-    const offsetY = e.clientY - headerHeight-colabHeader; // 헤더 높이를 뺀 Y 좌표
-
+    const offsetX = e.clientX;
+    const offsetY = e.clientY - headerHeight - colabHeader;
     setContextMenu({
       visible: true,
       x: offsetX, 
       y: offsetY, 
       fileId: fileId
     });
-};
-
+  };
 
   const handleDeleteFile = async () => {
     if (contextMenu.fileId) {
@@ -120,77 +117,96 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
     setContextMenu({ visible: false, x: 0, y: 0, fileId: null });
   };
 
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = (e) => {
+    const newWidth = e.clientX - fileRef.current.getBoundingClientRect().left;
+    setFileWidth(Math.max(150, newWidth)); // Minimum width of 100px
+  };
+
+  const handleMouseUp = () => {
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
   return (
-    <div className='file' onClick={closeContextMenu}>
-      <ul>
-        <li>
-          <button onClick={() => toggleDropdown('files')} className={`dropdown-toggle ${dropdownStates.files ? 'open' : ''}`}>
-            {dropdownStates.files ? 'File' : 'File'}
-          </button>
-          {dropdownStates.files && (
-            <ul>
-              {codeFiles.map((codeFile) => (
-                <li
-                  key={codeFile.id}
-                  onClick={() => handleFileClick(codeFile)}
-                  onContextMenu={(e) => handleContextMenu(e, codeFile.id)}
-                  className={codeFile.id === selectedFileId ? 'selected' : ''} // 선택된 파일에 클래스 추가
-                >
-                  <div className="fileNameDetail">
-                    <img src={jSImage} alt="JS Logo" style={{ width: '14px' }} />
-                    <div>P{codeFile.problemId ? codeFile.problemId : '0000'}
-                      -{codeFile.name ? codeFile.name : "undefined"}
+    <div className='file-container' ref={fileRef} style={{ width: `${fileWidth}px` }}>
+      <div className='file' onClick={closeContextMenu}>
+        <ul>
+          <li>
+            <button onClick={() => toggleDropdown('files')} className={`dropdown-toggle ${dropdownStates.files ? 'open' : ''}`}>
+              {dropdownStates.files ? '▼ File' : '▶ File'}
+            </button>
+            {dropdownStates.files && (
+              <ul>
+                {codeFiles.map((codeFile) => (
+                  <li
+                    key={codeFile.id}
+                    onClick={() => handleFileClick(codeFile)}
+                    onContextMenu={(e) => handleContextMenu(e, codeFile.id)}
+                    className={codeFile.id === selectedFileId ? 'selected' : ''}
+                  >
+                    <div className="fileNameDetail">
+                      <img src={jSImage} alt="JS Logo" style={{ width: '14px' }} />
+                      <div>P{codeFile.problemId ? codeFile.problemId : '0000'}
+                        -{codeFile.name ? codeFile.name : "undefined"}
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-              {showInput && (
-                <li>
-                  <div className='fileNameDetail'>
-                    <img src={jSImage} alt="JS Logo" style={{ width: '14px' }} />
-                    <input
-                      type="text"
-                      value={newFileName}
-                      onChange={handleNewFileNameChange}
-                      onKeyDown={handleCreateFile}
-                      placeholder="Enter new file name"
-                    />
-                  </div>
-                </li>
-              )}
-            </ul>
-          )}
-        </li>
-        <li>
-          <button onClick={() => toggleDropdown('problems')} className={`dropdown-toggle ${dropdownStates.problems ? 'open' : ''}`}>
-            {dropdownStates.problems ? 'Problems' : 'Problems'}
-          </button>
-          {dropdownStates.problems && (
-            <ul>
-              {problems.map((problem) => (
-                <li
-                  key={problem.id}
-                  onClick={() => handleProblemClick(problem.problemNumber)}
-                  className={selectedProblem && selectedProblem.problemNumber === problem.problemNumber ? 'selected' : ''} // 선택된 문제에 클래스 추가
-                >
-                  <div className="fileNameDetail">
-                    <img src={proImage} alt="Problem Icon" style={{ width: '14px' }} />
-                    <div>{problem.problemNumber}</div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </li>
-      </ul>
-      {contextMenu.visible && (
-        <div
-          className="context-menu"
-          style={{ top: contextMenu.y, left: contextMenu.x, position: 'absolute', zIndex: 1000 }}
-        >
-          <button onClick={handleDeleteFile}>Delete</button>
-        </div>
-      )}
+                  </li>
+                ))}
+                {showInput && (
+                  <li>
+                    <div className='fileNameDetail'>
+                      <img src={jSImage} alt="JS Logo" style={{ width: '14px' }} />
+                      <input
+                        type="text"
+                        value={newFileName}
+                        onChange={handleNewFileNameChange}
+                        onKeyDown={handleCreateFile}
+                        placeholder="Enter new file name"
+                      />
+                    </div>
+                  </li>
+                )}
+              </ul>
+            )}
+          </li>
+          <li>
+            <button onClick={() => toggleDropdown('problems')} className={`dropdown-toggle ${dropdownStates.problems ? 'open' : ''}`}>
+              {dropdownStates.problems ? '▼ Problems' : '▶ Problems'}
+            </button>
+            {dropdownStates.problems && (
+              <ul>
+                {problems.map((problem) => (
+                  <li
+                    key={problem.id}
+                    onClick={() => handleProblemClick(problem.problemNumber)}
+                    className={selectedProblem && selectedProblem.problemNumber === problem.problemNumber ? 'selected' : ''}
+                  >
+                    <div className="fileNameDetail">
+                      <img src={proImage} alt="Problem Icon" style={{ width: '14px' }} />
+                      <div>{problem.problemNumber}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        </ul>
+        {contextMenu.visible && (
+          <div
+            className="context-menu"
+            style={{ top: contextMenu.y, left: contextMenu.x, position: 'absolute', zIndex: 1000 }}
+          >
+            <button onClick={handleDeleteFile}>Delete</button>
+          </div>
+        )}
+      </div>
+      <div className="resizer" ref={resizerRef} onMouseDown={handleMouseDown}></div>
     </div>
   );
 }

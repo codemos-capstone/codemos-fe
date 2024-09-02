@@ -15,6 +15,8 @@ export default function CodeSpace() {
   const [docsWidth, setDocsWidth] = useState(400);
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
+  const [fileWidth, setFileWidth] = useState(200); // Initial file width
+
 
   useEffect(() => {
     const problem = JSON.parse(sessionStorage.getItem('selectedProblem'));
@@ -58,7 +60,6 @@ export default function CodeSpace() {
         setShowInput={setShowInput} // showInput 상태 전달
       />
       <div className="space">
-        <div className="file-container">
           <File 
             setSelectedCode={setSelectedCode} 
             setSelectedProblem={setSelectedProblem} 
@@ -67,7 +68,6 @@ export default function CodeSpace() {
             setShowInput={setShowInput} // 필요하면 setShowInput 전달
             selectedProblem={selectedProblem} // 선택된 문제 전달
           />
-        </div>
         <div className="resizer"></div>
         <div className="code-container">
           <Code
