@@ -26,7 +26,7 @@ const ColabHeader = ({ toggleDocsVisibility, setRun, onFileCreationSuccess, setS
               >
                 새로운 JavaScript 블럭
               </button>
-              <button className="dropdown-item">New Block Space</button>
+              <button className="dropdown-item">새로운 블럭 스페이스</button>
               <button className="dropdown-item">Open</button>
               <button className="dropdown-item">Save</button>
             </div>
