@@ -88,3 +88,37 @@
     color: rgb(255, 255, 255); /* 선택된 항목의 텍스트 색상 */
   }
   
+  .context-menu {
+    position: absolute;
+    z-index: 1000;
+    background-color: #444; /* 컨텍스트 메뉴 배경색 */
+    padding: 5px; /* padding을 줄여서 더 컴팩트하게 */
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
+    color: white; /* 텍스트 색상 */
+}
+
+.context-menu button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.context-menu button:hover {
+    background-color: #555; /* 버튼에 마우스를 올렸을 때 배경색 */
+}
+
+
+.context-menu button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.context-menu button:hover {
+    background-color: #555; /* 버튼에 마우스를 올렸을 때 배경색 */
+}

@@ -67,7 +67,6 @@ export default function CodeSpace() {
             setShowInput={setShowInput} // 필요하면 setShowInput 전달
             selectedProblem={selectedProblem} // 선택된 문제 전달
           />
-          <File setSelectedCode={setSelectedCode} setSelectedProblem={setSelectedProblem} />
         </div>
         <div className="resizer"></div>
         <div className="code-container">

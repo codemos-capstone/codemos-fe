@@ -84,13 +84,22 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
 
   const handleContextMenu = (e, fileId) => {
     e.preventDefault();
+
+    // 상위 컴포넌트에 있는 헤더의 높이를 가져옴
+    const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
+    const colabHeader = document.querySelector('.colab-header')?.offsetHeight || 0;
+
+    const offsetX = e.clientX; // 클릭한 위치의 X 좌표
+    const offsetY = e.clientY - headerHeight-colabHeader; // 헤더 높이를 뺀 Y 좌표
+
     setContextMenu({
       visible: true,
-      x: e.pageX,
-      y: e.pageY,
+      x: offsetX, 
+      y: offsetY, 
       fileId: fileId
     });
-  };
+};
+
 
   const handleDeleteFile = async () => {
     if (contextMenu.fileId) {
