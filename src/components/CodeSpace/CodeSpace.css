@@ -1,42 +1,76 @@
-/* Main.css에서 추가 */
-.contents{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-   
-}
-.file-container, .code-container {
-    transition: flex-basis 0.2s ease-in-out; /* 부드러운 전환 효과 */
-    overflow: auto; /* 내용이 넘치면 스크롤 */
-    min-width: 0; /* 사라질 수 있게 최소 너비 설정 */
-}
-  
-.space {
+.contents {
   width: 100%;
-  height: 90vh; /* 높이 설정, 필요에 따라 조정 */
-  overflow-y: hidden;
-  background-color: white;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.space {
   display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  
+  position: relative;
+  height: calc(100vh - 25px); /* Adjust based on your header height */
+  overflow: hidden;
 }
-.file-container{
-  flex: 1.7; /* 너비 비율 8 */
+
+.file-container {
+  width: 200px; /* Adjust as needed */
+  overflow-y: auto;
+}
+
+.code-container {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.docs-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #f0f0f0;
+  transition: width 0.3s ease-in-out;
+  z-index: 10;
+  overflow-y: auto;
   overflow-x: hidden;
 }
-.code-container{
-  flex: 8; /* 너비 비율 8 */
-  overflow-x: hidden;
+
+.docs-panel.visible {
+  width: 400px; /* This will be overridden by inline style */
 }
-  
+
+.toggle-docs {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #2196f3;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 11;
+}
+
 .resizer {
   width: 5px;
-  max-width: 5px;
-  background-color: black;
-  cursor: col-resize; /* 커서 스타일 */
+  background-color: #ddd;
+  cursor: ew-resize;
+  user-select: none;
 }
-.right-border{
-  background-color:#3D3D3D;
-  width: 20px;
+
+.docs-panel .resizer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+}
+
+/* Remove transition for immediate response */
+.docs-panel {
+  transition: none;
+}
+
+/* Ensure smooth rendering */
+.docs-panel, .file-container, .code-container {
+  will-change: transform;
+  transform: translateZ(0);
 }
