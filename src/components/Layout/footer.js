@@ -19,20 +19,20 @@ export default function Footer(){
                     </div>
                 </div>
                 <div className="social-media">
-                    <a href="#github">GitHub</a>
+                    <a href="https://github.com/codemos-capstone">GitHub</a>
                     <a href="#notion">Notion</a>
-                    <a href="#seoultech">Seoultech</a>
+                    <a href="https://www.seoultech.ac.kr">Seoultech</a>
                 </div>
                 
                 <div className="subscribe-section">
-                    <form action="submit_email.php">
+                    <form action="">
                         <input type="email" placeholder="Email Address" required/>
                         <button type="submit">OK</button>
                     </form>
                 </div>
                 <div className="address-section">
                     <p>Mirae-Hall, 232, Gongneung-ro,<br></br> Nowon-gu, Seoul, Republic of Korea</p>
-                    <p>+82 010 1234 5678</p>
+                    <p>+82 010 6368 9651</p>
                     <p>codemosdevteam@gmail.com</p>
                 </div>
             </div>

@@ -1,69 +1,90 @@
-.file{
+.file {
     background-color: rgb(26, 26, 26);
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: flex-start;
     padding-top: 5px;
-}
-.dropdown-toggle {
+  }
+  
+  .dropdown-toggle {
     width: 250px;
     height: fit-content;
     font-size: 16px;
     cursor: pointer;
-    background-color:rgb(56, 56, 56);
+    background-color: rgb(56, 56, 56);
     color: white;
     border: none;
     border-radius: 4px;
     text-align: left;
-}
-.dropdown-toggle:hover{
-    cursor:pointer;
+  }
+  
+  .dropdown-toggle:hover {
+    cursor: pointer;
     background-color: #643939; /* 마우스 오버시 배경색 */
-}.dropdown-toggle {
-  position: relative;
-  padding-left: 30px; /* 화살표 공간 확보 */
-}
-ul {
+  }
+  
+  .dropdown-toggle {
+    position: relative;
+    padding-left: 30px; /* 화살표 공간 확보 */
+  }
+  
+  ul {
     list-style-type: none; /* Remove default bullets */
     padding: 0; /* Remove default padding */
-}
-
-.dropdown-toggle::after {
-  content: '';
-  position: absolute;
-  left: 10px; /* 버튼 오른쪽에서의 위치 */
-  top: 50%; /* 버튼 중앙에 위치 */
-  transform: translateY(-50%) rotate(90deg); /* 중앙 정렬 및 회전 */
-  border: solid transparent;
-  border-width: 4px 0 4px 8px; /* 납작한 부등호 모양 */
-  border-left-color: #000; /* 부등호 색상 */
-  transition: transform 0.3s;
-}
-
-.dropdown-toggle.open::after {
-  transform: translateY(-50%) rotate(-90deg); /* 열려있을 때 화살표 방향 */
-}
-
-
-.fileNameDetail{
-    position:relative;
+  }
+  
+  .dropdown-toggle::after {
+    content: '';
+    position: absolute;
+    left: 10px; /* 버튼 오른쪽에서의 위치 */
+    top: 50%; /* 버튼 중앙에 위치 */
+    transform: translateY(-50%) rotate(90deg); /* 중앙 정렬 및 회전 */
+    border: solid transparent;
+    border-width: 4px 0 4px 8px; /* 납작한 부등호 모양 */
+    border-left-color: #000; /* 부등호 색상 */
+    transition: transform 0.3s;
+  }
+  
+  .dropdown-toggle.open::after {
+    transform: translateY(-50%) rotate(-90deg); /* 열려있을 때 화살표 방향 */
+  }
+  
+  .fileNameDetail {
+    position: relative;
     display: flex;
     width: 250px;
     list-style-type: none;
     align-items: center;
     justify-content: flex-start;
-}
-.fileNameDetail div{
+  }
+  
+  .fileNameDetail input {
+    background-color: rgba(0, 0, 0, 0); /* 투명한 배경 */
+    border: none; /* 테두리 없음 */
+    color: white; /* 텍스트 색상 */
+    outline: none; /* 클릭 시 기본 외곽선 제거 */
+    box-shadow: none; /* 클릭 시 그림자 효과 제거 */
+    margin-left: 10px;
+  }
+  
+  .fileNameDetail div {
     margin-left: 10px;
     color: rgb(255, 190, 125);
     font-size: 14px;
-}
-.fileNameDetail img{
+  }
+  
+  .fileNameDetail img {
     margin-left: 10px;
-    
-}
-.fileNameDetail:hover{
-    cursor:pointer;
+  }
+  
+  .fileNameDetail:hover {
+    cursor: pointer;
     background-color: #643939; /* 마우스 오버시 배경색 */
-}
+  }
+  
+  .selected {
+    background-color: #323232; /* 선택된 파일/문제의 배경색 */
+    color: rgb(255, 255, 255); /* 선택된 항목의 텍스트 색상 */
+  }
+  

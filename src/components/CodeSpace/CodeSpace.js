@@ -10,6 +10,8 @@ export default function CodeSpace() {
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [run, setRun] = useState(false);
   const [isDocsVisible, setIsDocsVisible] = useState(false);
+  const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
+  const [showInput, setShowInput] = useState(false); // 입력 필드 표시 여부
   const [docsWidth, setDocsWidth] = useState(400);
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
@@ -25,6 +27,9 @@ export default function CodeSpace() {
     setIsDocsVisible(!isDocsVisible);
   };
 
+  const handleFileCreationSuccess = () => {
+    setReloadFiles(prev => !prev); // 파일이 생성되었을 때 리로드 트리거
+    setShowInput(false); // 파일 생성 후 입력 필드 숨기기
   const handleMouseDown = (e) => {
     e.preventDefault();
     window.addEventListener('mousemove', handleMouseMove);
@@ -45,9 +50,22 @@ export default function CodeSpace() {
 
   return (
     <div className='contents'>
-      <ColabHeader toggleDocsVisibility={toggleDocsVisibility} setRun={setRun} />
+      <ColabHeader 
+        toggleDocsVisibility={toggleDocsVisibility} 
+        setRun={setRun} 
+        onFileCreationSuccess={handleFileCreationSuccess} 
+        setShowInput={setShowInput} // showInput 상태 전달
+      />
       <div className="space">
         <div className="file-container">
+          <File 
+            setSelectedCode={setSelectedCode} 
+            setSelectedProblem={setSelectedProblem} 
+            reloadFiles={reloadFiles} 
+            showInput={showInput} // showInput 상태 전달
+            setShowInput={setShowInput} // 필요하면 setShowInput 전달
+            selectedProblem={selectedProblem} // 선택된 문제 전달
+          />
           <File setSelectedCode={setSelectedCode} setSelectedProblem={setSelectedProblem} />
         </div>
         <div className="resizer"></div>

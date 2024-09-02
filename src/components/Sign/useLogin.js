@@ -24,11 +24,11 @@ export default function useLogin() {
             console.log('Login successful!');
             sessionStorage.setItem('accessToken', token.accessToken);
             alert("로그인 성공");
-            window.location.href = "/"; // 루트 패스로 이동
+            window.location.href = "/";
         })
         .catch(err => {
             console.error("Login failed:", err.message);
-            alert(err.message);
+            alert("아이디 혹은 비밀번호를 확인하세요.");
         });
     };
 
