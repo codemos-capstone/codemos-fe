@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './CodeSpace.css';
 import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";
+import Docs from "views/Docs";
 
 export default function CodeSpace() {
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [run, setRun] = useState(false);
   const [isDocsVisible, setIsDocsVisible] = useState(false);
+  const [docsWidth, setDocsWidth] = useState(400);
+  const docsRef = useRef(null);
+  const resizerRef = useRef(null);
 
   useEffect(() => {
     const problem = JSON.parse(sessionStorage.getItem('selectedProblem'));
@@ -18,8 +22,25 @@ export default function CodeSpace() {
   }, []);
 
   const toggleDocsVisibility = () => {
-    console.log("Toggling visibility");
     setIsDocsVisible(!isDocsVisible);
+  };
+
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = (e) => {
+    if (docsRef.current) {
+      const newWidth = docsRef.current.getBoundingClientRect().right - e.clientX;
+      setDocsWidth(Math.max(200, Math.min(newWidth, window.innerWidth * 0.8)));
+    }
+  };
+
+  const handleMouseUp = () => {
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
   };
 
   return (
@@ -27,9 +48,9 @@ export default function CodeSpace() {
       <ColabHeader toggleDocsVisibility={toggleDocsVisibility} setRun={setRun} />
       <div className="space">
         <div className="file-container">
-          <File setSelectedCode={setSelectedCode} setSelectedProblem={setSelectedProblem}></File>
+          <File setSelectedCode={setSelectedCode} setSelectedProblem={setSelectedProblem} />
         </div>
-        <div className="resizer"></div> 
+        <div className="resizer"></div>
         <div className="code-container">
           <Code
             selectedCode={selectedCode}
@@ -40,8 +61,16 @@ export default function CodeSpace() {
             setSelectedCode={setSelectedCode}
           />
         </div>
-        <div className="right-border">
-          <div className="document"></div>
+        <div 
+          className={`docs-panel ${isDocsVisible ? 'visible' : ''}`} 
+          ref={docsRef} 
+          style={{ width: isDocsVisible ? `${docsWidth}px` : '0' }}
+        >
+          <div className="resizer" ref={resizerRef} onMouseDown={handleMouseDown}></div>
+          <Docs />
+        </div>
+        <div className="toggle-docs" onClick={toggleDocsVisibility}>
+          {isDocsVisible ? '▶' : '◀'}
         </div>
       </div>
     </div>
