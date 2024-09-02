@@ -30,6 +30,7 @@ export default function CodeSpace() {
   const handleFileCreationSuccess = () => {
     setReloadFiles(prev => !prev); // 파일이 생성되었을 때 리로드 트리거
     setShowInput(false); // 파일 생성 후 입력 필드 숨기기
+  }
   const handleMouseDown = (e) => {
     e.preventDefault();
     window.addEventListener('mousemove', handleMouseMove);
