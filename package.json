@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.7.2",
-    "blockly": "^11.1.1",
+    "blockly": "^10.0.0",
     "highlight.js": "^11.9.0",
     "react": "^18.2.0",
     "react-ace-builds": "^7.4.1",
