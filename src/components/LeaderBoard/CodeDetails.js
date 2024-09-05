@@ -8,8 +8,8 @@ import "ace-builds/src-noconflict/theme-ambiance";
 Modal.setAppElement('#root');
 
 const CodeEditorStyle = {
-    width: "95%",
-    height: "auto",
+    width:"100%",
+    height: "100%",
     maxHeight: "fit-content",
     border: "5px solid #3D3D3D",
     borderTop: "20px solid #3D3D3D",
