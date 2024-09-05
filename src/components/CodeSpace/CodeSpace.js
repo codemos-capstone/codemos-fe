@@ -14,7 +14,7 @@ export default function CodeSpace() {
   const [run, setRun] = useState(false);
   const [isDocsVisible, setIsDocsVisible] = useState(false);
   const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
-  const [showInput, setShowInput] = useState(false); // 입력 필드 표시 여부
+  const [showNewFile, setShowNewFile] = useState(false); // 입력 필드 표시 여부
   const [docsWidth, setDocsWidth] = useState(600);
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
@@ -34,7 +34,7 @@ export default function CodeSpace() {
 
   const handleFileCreationSuccess = () => {
     setReloadFiles(prev => !prev);
-    setShowInput(false); 
+    setShowNewFile(false); 
   };
 
   const handleSaveCode = async () => {
@@ -65,7 +65,7 @@ export default function CodeSpace() {
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleSaveKeyDown = (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
       handleSaveCode();
@@ -73,9 +73,9 @@ export default function CodeSpace() {
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleSaveKeyDown);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", handleSaveKeyDown);
     };
   }, [selectedCode, selectedCodeId]);
 
@@ -103,7 +103,7 @@ export default function CodeSpace() {
         toggleDocsVisibility={toggleDocsVisibility} 
         setRun={setRun} 
         onFileCreationSuccess={handleFileCreationSuccess} 
-        setShowInput={setShowInput} // showInput 상태 전달
+        setShowNewFile={setShowNewFile} // showInput 상태 전달
       />
       <div className="space">
           <File 
@@ -112,8 +112,8 @@ export default function CodeSpace() {
             setSelectedFileName={setSelectedFileName} 
             setSelectedCodeId={setSelectedCodeId}
             reloadFiles={reloadFiles} 
-            showInput={showInput} 
-            setShowInput={setShowInput} 
+            showNewFile={showNewFile} 
+            setShowNewFile={setShowNewFile} 
             selectedProblem={selectedProblem} 
           />
         <div className="resizer"></div>
