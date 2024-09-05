@@ -1,19 +1,51 @@
-import React, { useState, useEffect, useRef } from "react";
-import './CodeSpace.css';
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { CodeSpaceContext } from "common/CodeSpaceContext";
 import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";
 import axios from 'axios';
 import Docs from "views/Docs";
 
-export default function CodeSpace() {
-  const [selectedCode, setSelectedCode] = useState('');
+import './CodeSpace.css';
+
+function ContextProvider ({ children }){
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedCodeId, setSelectedCodeId] = useState('');  // 관리할 상태 추가
   const [selectedFileName, setSelectedFileName] = useState(null); 
   const [run, setRun] = useState(false);
   const [showNewFile, setShowNewFile] = useState(false); // 입력 필드 표시 여부
+
+  return(
+    <CodeSpaceContext.Provider value={{
+      selectedProblem, setSelectedProblem,
+      selectedCode, setSelectedCode,
+      selectedCodeId, setSelectedCodeId,
+      selectedFileName, setSelectedFileName,
+      run, setRun,
+      showNewFile, setShowNewFile
+    }}>
+      {children}
+    </CodeSpaceContext.Provider>
+  )
+}
+
+export default function CodeSpace () {
+  return(
+    <ContextProvider>
+      <CodeSpaceInner />
+    </ContextProvider>
+  )
+}
+
+function CodeSpaceInner() {
+  const {
+    selectedProblem, setSelectedProblem,
+    selectedCode, setSelectedCode,
+    selectedCodeId, setSelectedCodeId,
+    selectedFileName, setSelectedFileName,
+    run, setRun,
+    showNewFile, setShowNewFile} = useContext(CodeSpaceContext);
   const [isDocsVisible, setIsDocsVisible] = useState(false);
   const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
   const [docsWidth, setDocsWidth] = useState(600);
