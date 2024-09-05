@@ -188,7 +188,7 @@ export const makeLander = (state, setting, endAnimation) => {
         };
         const getRotationVelocity = () => {
             if(allowed.getRotationVelocity)
-                return velocityInMPS(rocket.rotationVelocity);
+                return velocityInMPS_s(rocket.rotationVelocity);
             else {
                 throw new TypeError("getRotationVelocity is not a function")
             }
