@@ -40,7 +40,7 @@ _mainloop = function() { // main loop
         rotateRight();
     }
     engineCtrl();
-}, 1);`;
+};`;
 
 const aboutLogging = `logging()
 
@@ -197,7 +197,7 @@ const Docs = () => {
     이 함수는 우주선의 현재 고도(m, 미터)를 정수형으로 반환합니다.<br />
     착륙지점의 고도는 0m 입니다.<br />
             </p>
-            <div className="function-example">s
+            <div className="function-example">
                 <pre><code className="language-javascript">
     getHeight()
                 </code></pre>
