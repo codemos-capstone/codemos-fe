@@ -14,7 +14,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 
 export default function Code() {
-    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun } = useContext(CodeSpaceContext);
+    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun, judgeMessage,setJudgeMessage } = useContext(CodeSpaceContext);
     const CodeEditorStyle = {
         width: "95%",
         height: "10%",
@@ -23,7 +23,6 @@ export default function Code() {
         borderTop: "20px solid #3D3D3D",
     };
 
-    const endGame = () => { setRun(false) };
 
     const toggleDocs = () => {
         setIsDocsVisible(!isDocsVisible);
@@ -46,21 +45,34 @@ export default function Code() {
     const [isJudging, setIsJudging] = useState(false);
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
-    const [judgeMessage, setJudgeMessage] = useState("");
     const [isBlockCoding, setIsBlockCoding] = useState(false)
     const [docsWidth, setDocsWidth] = useState(50);
     const resizeRef = useRef(null);
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+    const [animationRunning, setAnimationRunning] = useState(false); // 애니메이션 상태 관리
+
+    const endGame = () => {
+        setRun(false) 
+    };
 
     
     useEffect(() => {
-        if (run && selectedProblem) {
+        if (run) {
+           
+            
+            setAnimationRunning(false);  // 먼저 애니메이션을 false로 설정하고
+    
+            setTimeout(() => {
+                setAnimationRunning(true);  // 약간의 지연 후에 true로 다시 설정
+            }, 0);  // 지연을 0ms로 주어 순서 보장
+    
             setJudgeProgress(0);
+    
             const judgeCode = async () => {
                 setIsJudging(true);
                 setJudgeMessage("Connecting to Judging server...");
                 await new Promise((resolve) => setTimeout(resolve, 300));
-
+    
                 const judgeAnimation = async () => {
                     let progress = 0;
                     while (progress < 100) {
@@ -71,23 +83,28 @@ export default function Code() {
                         await new Promise((resolve) => setTimeout(resolve, 50));
                     }
                 };
-
+    
                 await judgeAnimation();
                 await new Promise((resolve) => setTimeout(resolve, 100));
-
+    
                 try {
                     const token = sessionStorage.getItem("accessToken");
                     const response = await axios.post(`${serverAddress}/api/v1/judge/problem/${selectedProblem.problemNumber}/score`, { code: selectedCode }, { headers: { Authorization: `Bearer ${token}` } });
                     setJudgeResult(response.data);
-                    setScore(response.data.score);
+                    setJudgeMessage("Judging completed!");
                 } catch (error) {
                     console.error("Error judging:", error);
+                    setJudgeMessage("Error during judging.");
                 }
                 setIsJudging(false);
+                setTimeout(() => {
+                    setJudgeMessage('');
+                }, 5000);
             };
             judgeCode();
         }
-    }, [run, selectedProblem, selectedCode]);
+    }, [run, selectedProblem, selectedCode, setJudgeMessage]);
+
 
     return (
         <div className="code">
@@ -152,7 +169,7 @@ export default function Code() {
                     theme="ambiance"
                     name="code-editor"
                     fontSize="14px"
-                    value={selectedCode}
+                    value={selectedCode || "_mainloop = function(){\n\n}"} // selectedCode 없으면 기본값
                     onChange={(value) => setSelectedCode(value)}
                     showPrintMargin={false}
                     height="fit-content"
@@ -166,23 +183,62 @@ export default function Code() {
                         </div>
                     ) : (
                         <>
-                            <span>Score(local): {score}</span>
+                            
                             {judgeResult && (
                                 <div>
-                                    <div>[Judge Result]</div>
-                                    <div>Score: {judgeResult.score}</div>
-                                    <div>Time: {judgeResult.time}ms</div>
-                                    <div>Fuel: {judgeResult.fuel}L</div>
-                                    <div>Bytes: {judgeResult.bytes}Bytes</div>
-                                    <div>Angle: {judgeResult.angle}°</div>
-                                    <div>Velocity X: {judgeResult.velX}</div>
-                                    <div>Velocity Y: {judgeResult.velY}</div>
+                                    <table style={{width:"30%", float:"right"}}>
+                                    <tbody>
+                                        <tr>
+                                            <td colSpan="2">Judge Result</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Score(local)</td>
+                                            <td> {score}</td>
+                                        </tr>
+                                        <tr>
+                                        <td>Score</td>
+                                        <td>{judgeResult.score}</td>
+                                        </tr>
+                                        <tr>
+                                        <td>Time</td>
+                                        <td>{judgeResult.time}ms</td>
+                                        </tr>
+                                        <tr>
+                                        <td>Fuel</td>
+                                        <td>{judgeResult.fuel}L</td>
+                                        </tr>
+                                        <tr>
+                                        <td>Bytes</td>
+                                        <td>{judgeResult.bytes}Bytes</td>
+                                        </tr>
+                                        <tr>
+                                        <td>Angle</td>
+                                        <td>{judgeResult.angle}°</td>
+                                        </tr>
+                                        <tr>
+                                        <td>Velocity X</td>
+                                        <td>{judgeResult.velX}</td>
+                                        </tr>
+                                        <tr>
+                                        <td>Velocity Y</td>
+                                        <td>{judgeResult.velY}</td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
                                 </div>
-                            )}
+                                )}
                         </>
                     )}
                 </div>
-                {run && <GameCanvas className="GameCanvas" size={[600, 800]} code={selectedCode} problem={selectedProblem} endAnimation={endGame} setScore={setScore}></GameCanvas>}
+                {animationRunning && <GameCanvas 
+                                        className="GameCanvas" 
+                                        size={[600, 800]} 
+                                        code={selectedCode} 
+                                        problem={selectedProblem} 
+                                        endAnimation={endGame} 
+                                        setScore={setScore}
+                                          />}
+
             </div>
         </div>
     );

@@ -15,15 +15,35 @@ export default function File({ reloadFiles }) {
   const [newFileName, setNewFileName] = useState('');
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, fileId: null });
   const [selectedFileId, setSelectedFileId] = useState(null);
-  const [fileWidth, setFileWidth] = useState(200); // Initial width
+  const [fileWidth, setFileWidth] = useState(200);
   const fileRef = useRef(null);
   const resizerRef = useRef(null);
+  const inputRef = useRef(null); //인풋 포커싱 줄라고
 
   useEffect(() => {
     fetchData('code-file', setCodeFiles);
     fetchData('problems', setProblems);
-  }, [reloadFiles]);
+  }, [reloadFiles]); // reloadFiles 값이 변경되면 파일 목록 다시 불러오기
 
+  
+  useEffect(() => {
+    if (showNewFile && inputRef.current) {
+      inputRef.current.focus(); // showNewFile이 true가 되면 input에 포커스
+    }
+    const handleClickOutside = (e) => {
+      if (inputRef.current && !inputRef.current.contains(e.target)) {
+        setShowNewFile(false); // input 영역 외를 클릭하면 showNewFile 상태를 off
+      }
+    };
+
+    // 전역 클릭 이벤트 리스너 추가
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      // 컴포넌트 언마운트 시 이벤트 리스너 제거
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showNewFile]);
   async function fetchData(endpoint, setState) {
     try {
       const token = sessionStorage.getItem('accessToken');
@@ -169,7 +189,8 @@ export default function File({ reloadFiles }) {
                       <img src={showNewFile == 'js' ? jsImage : blockImage} alt={`${showNewFile ? 'JS' : 'Block'} Logo`} style={{ width: '14px' }} />
                       <input
                         type="text"
-                        value={newFileName}
+                        ref={inputRef}
+                        value={newFileName} 
                         onChange={handleNewFileNameChange}
                         onKeyDown={handleCreateFile}
                         placeholder="Enter new file name"
