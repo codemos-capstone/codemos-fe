@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { CodeSpaceContext } from 'common/CodeSpaceContext';
 import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
 
-const ColabHeader = ({ toggleDocsVisibility, setRun, onFileCreationSuccess, setShowInput }) => {
+const ColabHeader = ({ toggleDocsVisibility }) => {
+  const { setRun, setShowNewFile } = useContext(CodeSpaceContext);
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);
 
   const runGame = () => { setRun(true) };
+
+  const handleNewJs = () => {
+    setShowNewFile(true);
+    setDropdownVisible(false);
+  }
+  const handleNewBlock = () => {
+    setShowNewFile(true);
+    setDropdownVisible(false);
+  }
 
   return (
     <header className="colab-header">
@@ -22,11 +33,11 @@ const ColabHeader = ({ toggleDocsVisibility, setRun, onFileCreationSuccess, setS
             <div className="dropdown-content">
               <button 
                 className="dropdown-item" 
-                onClick={() => setShowInput(true)} // showInput 상태를 true로 설정
+                onClick={handleNewJs}
               >
                 새로운 JavaScript 블럭
               </button>
-              <button className="dropdown-item">새로운 블럭 스페이스</button>
+              <button className="dropdown-item" onClick={handleNewBlock}>새로운 블럭 스페이스</button>
               <button className="dropdown-item">Open</button>
               <button className="dropdown-item">Save</button>
             </div>

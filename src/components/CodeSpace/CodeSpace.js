@@ -1,25 +1,51 @@
-import React, { useState, useEffect, useRef } from "react";
-import './CodeSpace.css';
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { CodeSpaceContext } from "common/CodeSpaceContext";
 import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";
 import axios from 'axios';
 import Docs from "views/Docs";
 
-export default function CodeSpace() {
-  const [selectedCode, setSelectedCode] = useState('');
+import './CodeSpace.css';
+
+function ContextProvider ({ children }){
   const [selectedProblem, setSelectedProblem] = useState(null);
-  const [selectedFileName, setSelectedFileName] = useState(null); 
+  const [selectedCode, setSelectedCode] = useState('');
   const [selectedCodeId, setSelectedCodeId] = useState('');  // 관리할 상태 추가
+  const [selectedFileName, setSelectedFileName] = useState(null); 
   const [run, setRun] = useState(false);
+  const [showNewFile, setShowNewFile] = useState(false); // 입력 필드 표시 여부
+
+  return(
+    <CodeSpaceContext.Provider value={{
+      selectedProblem, setSelectedProblem,
+      selectedCode, setSelectedCode,
+      selectedCodeId, setSelectedCodeId,
+      selectedFileName, setSelectedFileName,
+      run, setRun,
+      showNewFile, setShowNewFile
+    }}>
+      {children}
+    </CodeSpaceContext.Provider>
+  )
+}
+
+export default function CodeSpace () {
+  return(
+    <ContextProvider>
+      <CodeSpaceInner />
+    </ContextProvider>
+  )
+}
+
+function CodeSpaceInner() {
+  const { selectedProblem, setSelectedProblem, selectedCode, selectedCodeId, selectedFileName } = useContext(CodeSpaceContext);
   const [isDocsVisible, setIsDocsVisible] = useState(false);
   const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
-  const [showInput, setShowInput] = useState(false); // 입력 필드 표시 여부
   const [docsWidth, setDocsWidth] = useState(600);
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
   const [fileWidth, setFileWidth] = useState(200); // Initial file width
-
 
   useEffect(() => {
     const problem = JSON.parse(sessionStorage.getItem('selectedProblem'));
@@ -30,11 +56,6 @@ export default function CodeSpace() {
 
   const toggleDocsVisibility = () => {
     setIsDocsVisible(!isDocsVisible);
-  };
-
-  const handleFileCreationSuccess = () => {
-    setReloadFiles(prev => !prev);
-    setShowInput(false); 
   };
 
   const handleSaveCode = async () => {
@@ -65,7 +86,7 @@ export default function CodeSpace() {
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleSaveKeyDown = (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
       handleSaveCode();
@@ -73,9 +94,9 @@ export default function CodeSpace() {
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleSaveKeyDown);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", handleSaveKeyDown);
     };
   }, [selectedCode, selectedCodeId]);
 
@@ -101,31 +122,12 @@ export default function CodeSpace() {
     <div className='contents'>
       <ColabHeader 
         toggleDocsVisibility={toggleDocsVisibility} 
-        setRun={setRun} 
-        onFileCreationSuccess={handleFileCreationSuccess} 
-        setShowInput={setShowInput} // showInput 상태 전달
       />
       <div className="space">
-          <File 
-            setSelectedCode={setSelectedCode} 
-            setSelectedProblem={setSelectedProblem} 
-            setSelectedFileName={setSelectedFileName} 
-            setSelectedCodeId={setSelectedCodeId}
-            reloadFiles={reloadFiles} 
-            showInput={showInput} 
-            setShowInput={setShowInput} 
-            selectedProblem={selectedProblem} 
-          />
+          <File reloadFiles={reloadFiles} />
         <div className="resizer"></div>
         <div className="code-container">
-          <Code
-            selectedCode={selectedCode}
-            selectedProblem={selectedProblem}
-            isDocsVisible={isDocsVisible}
-            codeRun={run}
-            endGame={() => setRun(false)}
-            setSelectedCode={setSelectedCode}
-          />
+          <Code />
         </div>
         <div 
           className={`docs-panel ${isDocsVisible ? 'visible' : ''}`} 
