@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
 
-const ColabHeader = ({ toggleDocsVisibility, setRun, onFileCreationSuccess, setShowNewFile }) => {
+const ColabHeader = ({ toggleDocsVisibility, setRun, setShowNewFile }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);
@@ -31,7 +31,7 @@ const ColabHeader = ({ toggleDocsVisibility, setRun, onFileCreationSuccess, setS
             <div className="dropdown-content">
               <button 
                 className="dropdown-item" 
-                onClick={handleNewJs} // showInput 상태를 true로 설정
+                onClick={handleNewJs}
               >
                 새로운 JavaScript 블럭
               </button>

@@ -13,7 +13,6 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 
 export default function Code({ selectedCode, selectedProblem, selectedFileName, isDocsVisible, codeRun, endGame, setSelectedCode }) {
-    console.log(selectedCode,selectedProblem,selectedFileName);
     const CodeEditorStyle = {
         width: "95%",
         height: "10%",
