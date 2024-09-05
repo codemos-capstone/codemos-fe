@@ -7,6 +7,7 @@ import Docs from "views/Docs";
 import ReactMarkdown from "react-markdown";
 import GameCanvas from "components/GameCanvas";
 import axios from "axios";
+import { javascriptGenerator } from 'blockly/javascript';
 
 import "./Code.css";
 import "react-ace-builds/webpack-resolver-min";
@@ -29,6 +30,11 @@ export default function Code() {
         setIsDocsVisible(!isDocsVisible);
     };
 
+    const handleBlockCode = (code) => {
+        console.log(code)
+        javascriptGenerator.workspaceToCode(code);
+    }
+
     const startResize = (e) => {
         window.addEventListener('mousemove', resize);
         window.addEventListener('mouseup', stopResize);
@@ -47,7 +53,6 @@ export default function Code() {
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
     const [judgeMessage, setJudgeMessage] = useState("");
-    const [isBlockCoding, setIsBlockCoding] = useState(false)
     const [docsWidth, setDocsWidth] = useState(50);
     const resizeRef = useRef(null);
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
@@ -158,7 +163,7 @@ export default function Code() {
                     height="fit-content"
                     editorProps={{ $blockScrolling: false }}
                 />
-                : <BlockEditor setCode={setSelectedCode} />}
+                : <BlockEditor />}
                 <div style={{ color: "white" }}>
                     {isJudging ? (
                         <div>
@@ -183,7 +188,7 @@ export default function Code() {
                         </>
                     )}
                 </div>
-                {run && <GameCanvas className="GameCanvas" size={[600, 800]} code={selectedCode} problem={selectedProblem} endAnimation={endGame} setScore={setScore}></GameCanvas>}
+                {run && <GameCanvas className="GameCanvas" size={[600, 800]} code={currentLang == 'block' ? handleBlockCode(selectedCode) : selectedCode} problem={selectedProblem} endAnimation={endGame} setScore={setScore}></GameCanvas>}
             </div>
         </div>
     );

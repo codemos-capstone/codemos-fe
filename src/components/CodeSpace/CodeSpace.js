@@ -61,9 +61,9 @@ function CodeSpaceInner() {
   };
 
   const handleSaveCode = async () => {
-    console.log(selectedCode);
-    console.log(selectedCodeId);
-    console.log(selectedFileName);
+    console.log("selectedcode: ", selectedCode);
+    console.log("selectedCodeId: ", selectedCodeId);
+    console.log("selectedFileName: ", selectedFileName);
     console.log(selectedProblem);
     if (selectedCodeId) {
       try {

@@ -26,7 +26,6 @@ import './BlocklyComponent.css';
 import {useEffect, useRef} from 'react';
 
 import * as Blockly from 'blockly/core';
-import {javascriptGenerator} from 'blockly/javascript';
 import * as locale from 'blockly/msg/en';
 import 'blockly/blocks';
 
@@ -37,13 +36,19 @@ function BlocklyComponent(props) {
   const toolbox = useRef();
   let primaryWorkspace = useRef();
 
-  const generateCode = () => {
-    var code = javascriptGenerator.workspaceToCode(primaryWorkspace.current);
-    props.setCode(code);
+  const handleCode = () => {
+    const code = Blockly.serialization.workspaces.save(primaryWorkspace.current);
+    const processed = JSON.stringify(code);
+    console.log(processed)
+    props.setSavedCode(processed);
   };
 
   useEffect(() => {
     const {initialXml, children, ...rest} = props;
+    if (props.savedCode) {
+      const processed = JSON.parse(props.savedCode);
+      Blockly.serialization.workspaces.load(processed, primaryWorkspace.current);
+    }
     primaryWorkspace.current = Blockly.inject(blocklyDiv.current, {
       toolbox: toolbox.current,
       ...rest,
@@ -55,11 +60,11 @@ function BlocklyComponent(props) {
         primaryWorkspace.current,
       );
     }
-  }, [primaryWorkspace, toolbox, blocklyDiv, props]);
+  }, [primaryWorkspace, toolbox]);
 
   return (
     <React.Fragment>
-      <button onClick={generateCode}>Convert</button>
+      <button onClick={handleCode}>Convert</button>
       <div ref={blocklyDiv} id="blocklyDiv" />
       <div style={{display: 'none'}} ref={toolbox}>
         {props.children}
