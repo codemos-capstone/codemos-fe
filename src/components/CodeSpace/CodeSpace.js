@@ -16,6 +16,8 @@ function ContextProvider ({ children }){
   const [run, setRun] = useState(false);
   const [showNewFile, setShowNewFile] = useState(false); // 입력 필드 표시 여부
   const [judgeMessage, setJudgeMessage] = useState(""); // 판정 메시지 상태
+  const [currentLang, setCurrentLang] = useState(null);
+
   return(
     <CodeSpaceContext.Provider value={{
       selectedProblem, setSelectedProblem,
@@ -25,6 +27,7 @@ function ContextProvider ({ children }){
       run, setRun,
       showNewFile, setShowNewFile,
       judgeMessage, setJudgeMessage //저징메시지 전달
+      currentLang, setCurrentLang
     }}>
       {children}
     </CodeSpaceContext.Provider>
@@ -62,9 +65,9 @@ function CodeSpaceInner() {
   };
 
   const handleSaveCode = async () => {
-    console.log(selectedCode);
-    console.log(selectedCodeId);
-    console.log(selectedFileName);
+    console.log("selectedcode: ", selectedCode);
+    console.log("selectedCodeId: ", selectedCodeId);
+    console.log("selectedFileName: ", selectedFileName);
     console.log(selectedProblem);
     if (selectedCodeId) {
       setSaveStatus("저장 중..."); // 저장 중 메시지 설정

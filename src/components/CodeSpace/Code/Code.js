@@ -7,6 +7,7 @@ import Docs from "views/Docs";
 import ReactMarkdown from "react-markdown";
 import GameCanvas from "components/GameCanvas";
 import axios from "axios";
+import { javascriptGenerator } from 'blockly/javascript';
 
 import "./Code.css";
 import "react-ace-builds/webpack-resolver-min";
@@ -14,7 +15,8 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 
 export default function Code() {
-    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun, judgeMessage,setJudgeMessage } = useContext(CodeSpaceContext);
+    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun, judgeMessage,setJudgeMessage,currentLang } = useContext(CodeSpaceContext);
+
     const CodeEditorStyle = {
         width: "95%",
         height: "10%",
@@ -27,6 +29,11 @@ export default function Code() {
     const toggleDocs = () => {
         setIsDocsVisible(!isDocsVisible);
     };
+
+    const handleBlockCode = (code) => {
+        console.log(code)
+        javascriptGenerator.workspaceToCode(code);
+    }
 
     const startResize = (e) => {
         window.addEventListener('mousemove', resize);
@@ -45,7 +52,8 @@ export default function Code() {
     const [isJudging, setIsJudging] = useState(false);
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
-    const [isBlockCoding, setIsBlockCoding] = useState(false)
+    const [judgeMessage, setJudgeMessage] = useState("");
+
     const [docsWidth, setDocsWidth] = useState(50);
     const resizeRef = useRef(null);
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
@@ -162,7 +170,7 @@ export default function Code() {
 
                 )}
                 <div className="fileSubject">{selectedFileName}</div>
-                <AceEditor
+                {currentLang == 'js' ? <AceEditor
                     style={CodeEditorStyle}
                     id="editor"
                     mode="javascript"
@@ -175,6 +183,7 @@ export default function Code() {
                     height="fit-content"
                     editorProps={{ $blockScrolling: false }}
                 />
+                : <BlockEditor />}
                 <div style={{ color: "white" }}>
                     {isJudging ? (
                         <div>

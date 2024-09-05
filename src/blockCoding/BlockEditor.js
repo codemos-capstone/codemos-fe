@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
+import { CodeSpaceContext } from 'common/CodeSpaceContext';
 import BlocklyComponent, { Block, Category } from './Blockly';
 
 import './blocks/customblocks';
 import './generator/generator';
 
-export default function BlockEditor({ setCode }) {
+export default function BlockEditor() {
+  const { selectedCode, setSelectedCode } = useContext(CodeSpaceContext);
   const toolbox = `
     <xml xmlns="http://www.w3.org/1999/xhtml">
       <category name="Logic" colour="#5C81A6">
@@ -92,7 +94,8 @@ export default function BlockEditor({ setCode }) {
           readOnly={false}
           trashcan={true}
           media={'media/'}
-          setCode={setCode}
+          savedCode={selectedCode}
+          setSavedCode={setSelectedCode}
           move={{
             scrollbars: true,
             drag: true,
