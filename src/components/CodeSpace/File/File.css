@@ -102,7 +102,7 @@
   opacity: 1;
 }
 
-input[type="text"] {
+.fileNameDetail input[type="text"] {
   background-color: #3c3c3c;
   border: none;
   color: #d4d4d4;
@@ -110,6 +110,6 @@ input[type="text"] {
   width: calc(100% - 10px);
 }
 
-input[type="text"]::placeholder {
+.fileNameDetail input[type="text"]::placeholder {
   color: #888;
 }

@@ -181,6 +181,7 @@ export default function Code() {
                     showPrintMargin={false}
                     height="fit-content"
                     editorProps={{ $blockScrolling: false }}
+                    marginBottom="4%"
                 />
                 : <BlockEditor />}
                 <div style={{ color: "white" }}>
@@ -194,7 +195,7 @@ export default function Code() {
                             
                             {judgeResult && (
                                 <div>
-                                    <table style={{width:"30%", float:"right"}}>
+                                    <table style={{width:"20%", float:"right", marginRight:"4%"}}>
                                     <tbody>
                                         <tr>
                                             <td colSpan="2">Judge Result</td>
