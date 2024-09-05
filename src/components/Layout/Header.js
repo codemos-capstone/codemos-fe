@@ -35,7 +35,7 @@ export default function Header(){
     };
 
     const getProfileImage = (nickname) => {
-        return `https://robohash.org/${nickname}?size=200x200`;
+        return `https://robohash.org/${nickname}?size=200x200&set=set4`;
     };
 
     return(
