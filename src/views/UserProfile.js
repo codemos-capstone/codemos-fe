@@ -39,7 +39,7 @@ const UserProfile = () => {
     if (!profile) return <div>Loading...</div>;
 
     const getProfileImage = (nickname) => {
-        return `https://robohash.org/${nickname}?size=200x200`;
+        return `https://robohash.org/${nickname}?size=200x200&set=set4`;
     };
 
 
