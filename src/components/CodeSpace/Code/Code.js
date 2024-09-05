@@ -91,12 +91,6 @@ export default function Code() {
 
     return (
         <div className="code">
-            <div style={{ width: "100%", height: "25px", backgroundColor: "black", display: "flex", justifyContent: "flex-start" }}>
-                <FileBtn />
-                <FileBtn />
-                <FileBtn />
-                <FileBtn />
-            </div>
             <div className="code-container">
                 {selectedProblem ? (
                     <>
