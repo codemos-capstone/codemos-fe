@@ -14,6 +14,7 @@ import MainView from "./views/MainView";
 import UserPage from "views/UserPage";
 import Layout from "components/Layout/Layout";
 import NotFound from "views/NotFound";
+import UserProfile from "./views/UserProfile";
 
 export default function App(){
     const location = useLocation();
@@ -37,6 +38,7 @@ export default function App(){
                         <Route path="problem" element={<ProblemList />} />
                         <Route path="problem/edit/:id?" element={<ProblemEdit />} />
                     </Route>
+                    <Route path="/profile/:nickname" element={<UserProfile />} />
                     <Route path="/userpage" element={<UserPage />} />
                     <Route path="*" element={<NotFound />} />
                 </Route>
