@@ -48,7 +48,6 @@ export default function Landing() {
     return (
         <div className="container">
             <div className="content">
-
                 <div className="title">Problems</div>
                 {problems? problems.map((problem) => (
                     <Matter key={problem.id} problem={problem} onTryProblem={handleTryProblem} solvedProblems={solvedProblems}/>

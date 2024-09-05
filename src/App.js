@@ -29,7 +29,7 @@ export default function App(){
                     <Route path="/codespaces" element={<CodeSpaces/>}/>
                     <Route path="/docs" element={<Docs isVisible={false} />} />
                     <Route path="/login" element={<LoginPage/>} />
-                    <Route path="/leader" element={<Leader />} />
+                    <Route path="/leader/:problemId" element={<Leader />} />
                     <Route path="/google/callback" element={<OnLogin />} />
                     <Route path="/oauthMiddle" element={<OAuthMiddle />} />
                     <Route path="/auth/reset-password" element={<ResetPassword />} />
