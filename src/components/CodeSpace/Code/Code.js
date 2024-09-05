@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AceEditor from "react-ace-builds";
-//import BlockEditor from "blockCoding/BlockEditor";
+import BlockEditor from "blockCoding/BlockEditor";
 import FileBtn from "../../Buttons/FileBtn";
 import Docs from "views/Docs";
 import ReactMarkdown from "react-markdown";
@@ -29,6 +29,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
     const [judgeMessage, setJudgeMessage] = useState("");
+    const [isBlockCoding, setIsBlockCoding] = useState(false)
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     useEffect(() => {
         if (codeRun && selectedProblem) {
@@ -130,7 +131,10 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                     <div></div>
                     //선택 안하면 아무것도 없음
                 )}
-                <AceEditor
+                <div><button onClick={() => {setIsBlockCoding(!isBlockCoding)}}>toggle</button></div>
+                {isBlockCoding ?
+                <BlockEditor />
+                :<AceEditor
                     style={CodeEditorStyle}
                     id="editor"
                     mode="javascript"
@@ -142,7 +146,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                     showPrintMargin={false}
                     height="fit-content"
                     editorProps={{ $blockScrolling: false }}
-                />
+                />}
                 <div style={{ color: "white" }}>
                     {isJudging ? (
                         <div>
