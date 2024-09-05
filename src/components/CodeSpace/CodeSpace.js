@@ -12,11 +12,13 @@ export default function CodeSpace() {
   const [selectedCodeId, setSelectedCodeId] = useState('');  // 관리할 상태 추가
   const [run, setRun] = useState(false);
   const [isDocsVisible, setIsDocsVisible] = useState(false);
-  const [reloadFiles, setReloadFiles] = useState(false); 
-  const [showInput, setShowInput] = useState(false); 
-  const [docsWidth, setDocsWidth] = useState(400);
+  const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
+  const [showInput, setShowInput] = useState(false); // 입력 필드 표시 여부
+  const [docsWidth, setDocsWidth] = useState(600);
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
+  const [fileWidth, setFileWidth] = useState(200); // Initial file width
+
 
   useEffect(() => {
     const problem = JSON.parse(sessionStorage.getItem('selectedProblem'));
@@ -103,7 +105,6 @@ export default function CodeSpace() {
         setShowInput={setShowInput} 
       />
       <div className="space">
-        <div className="file-container">
           <File 
             setSelectedCode={setSelectedCode} 
             setSelectedProblem={setSelectedProblem} 
@@ -114,8 +115,6 @@ export default function CodeSpace() {
             setShowInput={setShowInput} 
             selectedProblem={selectedProblem} 
           />
-        </div>
-        <div className="resizer" ref={resizerRef} onMouseDown={handleMouseDown}></div>
         <div className="code-container">
           <Code
             selectedCode={selectedCode}

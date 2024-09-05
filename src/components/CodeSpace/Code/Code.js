@@ -95,18 +95,6 @@ export default function Code({ selectedCode, selectedProblem, selectedFileName, 
                 <FileBtn />
             </div>
             <div className="code-container">
-                {isDocsVisible && (
-                    <>
-                        <div 
-                            className="docs-resize-handle" 
-                            onMouseDown={startResize}
-                            ref={resizeRef}
-                        ></div>
-                        <div className="docs" style={{ width: `${docsWidth}%` }}>
-                            <Docs />
-                        </div>
-                    </>
-                )}
                 {selectedProblem ? (
                     <>
                         <div className="problems">
