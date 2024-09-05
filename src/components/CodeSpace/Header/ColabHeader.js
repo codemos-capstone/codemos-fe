@@ -12,11 +12,11 @@ const ColabHeader = ({ toggleDocsVisibility }) => {
   const runGame = () => { setRun(true) };
 
   const handleNewJs = () => {
-    setShowNewFile(true);
+    setShowNewFile('js');
     setDropdownVisible(false);
   }
   const handleNewBlock = () => {
-    setShowNewFile(true);
+    setShowNewFile('block');
     setDropdownVisible(false);
   }
 

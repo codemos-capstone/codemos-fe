@@ -69,13 +69,13 @@ export default function File({ reloadFiles }) {
           problemId: selectedProblem ? selectedProblem.problemNumber : "0000",
           name: newFileName,
           content: "",
-          language: "js"
+          language: showNewFile
         }, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setNewFileName('');
         fetchData('code-file', setCodeFiles);
-        setShowNewFile(false);
+        setShowNewFile(null);
       } catch (error) {
         console.error('Error creating file:', error);
       }
@@ -166,7 +166,7 @@ export default function File({ reloadFiles }) {
                 {showNewFile && (
                   <li>
                     <div className='fileNameDetail'>
-                      <img src={jsImage} alt="JS Logo" style={{ width: '14px' }} />
+                      <img src={showNewFile == 'js' ? jsImage : blockImage} alt={`${showNewFile ? 'JS' : 'Block'} Logo`} style={{ width: '14px' }} />
                       <input
                         type="text"
                         value={newFileName}
