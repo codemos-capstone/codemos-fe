@@ -52,7 +52,6 @@ export default function Code() {
     const [isJudging, setIsJudging] = useState(false);
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
-    const [judgeMessage, setJudgeMessage] = useState("");
 
     const [docsWidth, setDocsWidth] = useState(50);
     const resizeRef = useRef(null);

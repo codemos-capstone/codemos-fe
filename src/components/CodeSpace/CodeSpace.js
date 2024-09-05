@@ -26,7 +26,7 @@ function ContextProvider ({ children }){
       selectedFileName, setSelectedFileName,
       run, setRun,
       showNewFile, setShowNewFile,
-      judgeMessage, setJudgeMessage //저징메시지 전달
+      judgeMessage, setJudgeMessage,
       currentLang, setCurrentLang
     }}>
       {children}
@@ -51,7 +51,7 @@ function CodeSpaceInner() {
   const resizerRef = useRef(null);
   const [fileWidth, setFileWidth] = useState(200); // Initial file width
   const [saveStatus, setSaveStatus] = useState(""); //저장 상태메시징
-  const [judgeMessage, setJudgeMessage] = useState(''); // 판정 메시지 상태 추가
+  
 
   useEffect(() => {
     const problem = JSON.parse(sessionStorage.getItem('selectedProblem'));
@@ -65,9 +65,9 @@ function CodeSpaceInner() {
   };
 
   const handleSaveCode = async () => {
-    console.log("selectedcode: ", selectedCode);
-    console.log("selectedCodeId: ", selectedCodeId);
-    console.log("selectedFileName: ", selectedFileName);
+    console.log(selectedCode);
+    console.log(selectedCodeId);
+    console.log(selectedFileName);
     console.log(selectedProblem);
     if (selectedCodeId) {
       setSaveStatus("저장 중..."); // 저장 중 메시지 설정
