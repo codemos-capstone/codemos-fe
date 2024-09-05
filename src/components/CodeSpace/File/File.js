@@ -7,7 +7,7 @@ import proImage from 'assets/images/FILE.png';
 import blockImage from 'assets/images/block.svg'
 
 export default function File({ reloadFiles }) {
-  const { selectedProblem, setSelectedProblem, setSelectedCode, selectedCodeId, setSelectedCodeId, setSelectedFileName, showNewFile, setShowNewFile } = useContext(CodeSpaceContext);
+  const { selectedProblem, setSelectedProblem, setSelectedCode, selectedCodeId, setSelectedCodeId, setSelectedFileName, showNewFile, setShowNewFile, setCurrentLang } = useContext(CodeSpaceContext);
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [codeFiles, setCodeFiles] = useState([]);
   const [problems, setProblems] = useState([]);
@@ -85,7 +85,8 @@ export default function File({ reloadFiles }) {
   const handleFileClick = (codeFile) => {
     setSelectedCode(codeFile.content);
     setSelectedCodeId(codeFile.id);  // setSelectedCodeId를 호출하여 ID 전달
-    setSelectedFileName(codeFile.name);  
+    setSelectedFileName(codeFile.name);
+    setCurrentLang(codeFile.language);
   };
 
 

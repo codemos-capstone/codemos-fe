@@ -15,6 +15,7 @@ function ContextProvider ({ children }){
   const [selectedFileName, setSelectedFileName] = useState(null); 
   const [run, setRun] = useState(false);
   const [showNewFile, setShowNewFile] = useState(false); // 입력 필드 표시 여부
+  const [currentLang, setCurrentLang] = useState(null);
 
   return(
     <CodeSpaceContext.Provider value={{
@@ -23,7 +24,8 @@ function ContextProvider ({ children }){
       selectedCodeId, setSelectedCodeId,
       selectedFileName, setSelectedFileName,
       run, setRun,
-      showNewFile, setShowNewFile
+      showNewFile, setShowNewFile,
+      currentLang, setCurrentLang
     }}>
       {children}
     </CodeSpaceContext.Provider>

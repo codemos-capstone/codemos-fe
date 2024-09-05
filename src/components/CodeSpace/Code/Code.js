@@ -14,7 +14,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 
 export default function Code() {
-    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun } = useContext(CodeSpaceContext);
+    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun, currentLang } = useContext(CodeSpaceContext);
     const CodeEditorStyle = {
         width: "95%",
         height: "10%",
@@ -145,7 +145,7 @@ export default function Code() {
 
                 )}
                 <div className="fileSubject">{selectedFileName}</div>
-                <AceEditor
+                {currentLang == 'js' ? <AceEditor
                     style={CodeEditorStyle}
                     id="editor"
                     mode="javascript"
@@ -158,6 +158,7 @@ export default function Code() {
                     height="fit-content"
                     editorProps={{ $blockScrolling: false }}
                 />
+                : <BlockEditor setCode={setSelectedCode} />}
                 <div style={{ color: "white" }}>
                     {isJudging ? (
                         <div>
