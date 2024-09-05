@@ -27,68 +27,68 @@
 import {javascriptGenerator} from 'blockly/javascript';
 
 
-javascriptGenerator['main_loop'] = function(block) {
+javascriptGenerator.forBlock['main_loop'] = function(block) {
   var statements_content = javascriptGenerator.statementToCode(block, 'content');
   var code = '_mainLoop = function() {\n' + statements_content + '};\n';
   return code;
 };
 
-javascriptGenerator['get_velocity_x'] = function(block) {
+javascriptGenerator.forBlock['get_velocity_x'] = function(block) {
   var code = 'getVelocityX()';
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
 };
 
-javascriptGenerator['get_velocity_y'] = function(block) {
+javascriptGenerator.forBlock['get_velocity_y'] = function(block) {
   var code = 'getVelocityY()';
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
 };
 
-javascriptGenerator['get_angle'] = function(block) {
+javascriptGenerator.forBlock['get_angle'] = function(block) {
   var code = 'getAngle()';
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
 };
 
-javascriptGenerator['get_height'] = function(block) {
+javascriptGenerator.forBlock['get_height'] = function(block) {
   var code = 'getHeight()';
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
 };
 
-javascriptGenerator['get_rotation_velocity'] = function(block) {
+javascriptGenerator.forBlock['get_rotation_velocity'] = function(block) {
   var code = 'getRotationVelocity()';
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
 };
 
-javascriptGenerator['engine_on'] = function(block) {
+javascriptGenerator.forBlock['engine_on'] = function(block) {
   var code = 'engineOn();\n';
   return code;
 };
 
-javascriptGenerator['engine_off'] = function(block) {
+javascriptGenerator.forBlock['engine_off'] = function(block) {
   var code = 'engineOff();\n';
   return code;
 };
 
-javascriptGenerator['rotate_left'] = function(block) {
+javascriptGenerator.forBlock['rotate_left'] = function(block) {
   var code = 'rotateLeft();\n';
   return code;
 };
 
-javascriptGenerator['stop_left_rotation'] = function(block) {
+javascriptGenerator.forBlock['stop_left_rotation'] = function(block) {
   var code = 'stopLeftRotation();\n';
   return code;
 };
 
-javascriptGenerator['rotate_right'] = function(block) {
+javascriptGenerator.forBlock['rotate_right'] = function(block) {
   var code = 'rotateRight();\n';
   return code;
 };
 
-javascriptGenerator['stop_right_rotation'] = function(block) {
+javascriptGenerator.forBlock['stop_right_rotation'] = function(block) {
   var code = 'stopRightRotation();\n';
   return code;
 };
 
-javascriptGenerator['logging'] = function(block) {
+javascriptGenerator.forBlock['logging'] = function(block) {
   var code = 'logging();\n';
   return code;
 };
