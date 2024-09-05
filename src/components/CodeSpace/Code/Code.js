@@ -12,8 +12,8 @@ import "react-ace-builds/webpack-resolver-min";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 
-export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame, setSelectedCode }) {
-    console.log(selectedCode);
+export default function Code({ selectedCode, selectedProblem, selectedFileName, isDocsVisible, codeRun, endGame, setSelectedCode }) {
+    console.log(selectedCode,selectedProblem,selectedFileName);
     const CodeEditorStyle = {
         width: "95%",
         height: "10%",
@@ -101,9 +101,9 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                 {selectedProblem ? (
                     <>
                         <div className="problems">
-                            <h2>
+                            <h3>
                                 {selectedProblem.problemNumber} : {selectedProblem.title}
-                            </h2>
+                            </h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -148,11 +148,10 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                 ) : (
                     <div></div>
                     //선택 안하면 아무것도 없음
+
                 )}
-                <div><button onClick={() => {setIsBlockCoding(!isBlockCoding)}}>toggle</button></div>
-                {isBlockCoding ?
-                <BlockEditor setCode = {(value) => setSelectedCode(value)} />
-                :<AceEditor
+                <div className="fileSubject">{selectedFileName}</div>
+                <AceEditor
                     style={CodeEditorStyle}
                     id="editor"
                     mode="javascript"
@@ -164,7 +163,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                     showPrintMargin={false}
                     height="fit-content"
                     editorProps={{ $blockScrolling: false }}
-                />}
+                />
                 <div style={{ color: "white" }}>
                     {isJudging ? (
                         <div>

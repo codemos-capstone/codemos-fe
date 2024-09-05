@@ -19,7 +19,7 @@ export default function Login({ setForm }) {
         marginTop: '10%',
         maxWidth: '300px',
         margin: 'auto',
-        background: '#fff',
+        backgroundColor: 'rgba(255,255,255,0.8)',
         padding: '20px',
         borderRadius: '8px',
         boxShadow: '0 0 10px rgba(255, 255, 255, 0.4)',

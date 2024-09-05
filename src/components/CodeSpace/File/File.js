@@ -4,7 +4,7 @@ import axios from 'axios';
 import jSImage from 'assets/images/JS.png';
 import proImage from 'assets/images/FILE.png';
 
-export default function File({ setSelectedCode, setSelectedProblem, reloadFiles, showInput, selectedProblem, setShowInput }) {
+export default function File({ setSelectedCode, setSelectedFileName, setSelectedProblem, setSelectedCodeId,selectedCodeId, reloadFiles, showInput, selectedProblem, setShowInput }) {
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [codeFiles, setCodeFiles] = useState([]);
   const [problems, setProblems] = useState([]);
@@ -81,8 +81,10 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
 
   const handleFileClick = (codeFile) => {
     setSelectedCode(codeFile.content);
-    setSelectedFileId(codeFile.id);
+    setSelectedCodeId(codeFile.id);  // setSelectedCodeId를 호출하여 ID 전달
+    setSelectedFileName(codeFile.name);  
   };
+
 
   const handleContextMenu = (e, fileId) => {
     e.preventDefault();
@@ -148,7 +150,7 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
                     key={codeFile.id}
                     onClick={() => handleFileClick(codeFile)}
                     onContextMenu={(e) => handleContextMenu(e, codeFile.id)}
-                    className={codeFile.id === selectedFileId ? 'selected' : ''}
+                    className={codeFile.id === selectedCodeId ? 'selected' : ''}
                   >
                     <div className="fileNameDetail">
                       <img src={jSImage} alt="JS Logo" style={{ width: '14px' }} />
