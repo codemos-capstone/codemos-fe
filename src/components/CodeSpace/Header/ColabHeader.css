@@ -48,8 +48,19 @@
   
   .actions img{
     width: 13px;
-    cursor:pointer; 
+    height: 13px;
+    margin-right: 10px;
+    cursor:pointer;
   }
   .actions img:hover{
     background-color: #333333;
+  }
+  .actions{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;  
+    align-items: center;
+  }
+  .action-message{
+    color:#24c541
   }

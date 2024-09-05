@@ -29,7 +29,7 @@
   cursor: pointer;
 }
 
-.file li:hover {
+.file li ul li:hover {
   background-color: #2a2d2e;
 }
 

@@ -15,6 +15,7 @@ function ContextProvider ({ children }){
   const [selectedFileName, setSelectedFileName] = useState(null); 
   const [run, setRun] = useState(false);
   const [showNewFile, setShowNewFile] = useState(false); // 입력 필드 표시 여부
+  const [judgeMessage, setJudgeMessage] = useState(""); // 판정 메시지 상태
   const [currentLang, setCurrentLang] = useState(null);
 
   return(
@@ -25,6 +26,7 @@ function ContextProvider ({ children }){
       selectedFileName, setSelectedFileName,
       run, setRun,
       showNewFile, setShowNewFile,
+      judgeMessage, setJudgeMessage //저징메시지 전달
       currentLang, setCurrentLang
     }}>
       {children}
@@ -48,6 +50,8 @@ function CodeSpaceInner() {
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
   const [fileWidth, setFileWidth] = useState(200); // Initial file width
+  const [saveStatus, setSaveStatus] = useState(""); //저장 상태메시징
+  const [judgeMessage, setJudgeMessage] = useState(''); // 판정 메시지 상태 추가
 
   useEffect(() => {
     const problem = JSON.parse(sessionStorage.getItem('selectedProblem'));
@@ -66,6 +70,7 @@ function CodeSpaceInner() {
     console.log("selectedFileName: ", selectedFileName);
     console.log(selectedProblem);
     if (selectedCodeId) {
+      setSaveStatus("저장 중..."); // 저장 중 메시지 설정
       try {
         const token = sessionStorage.getItem("accessToken");
         const now = new Date().toISOString();
@@ -80,8 +85,14 @@ function CodeSpaceInner() {
           }
         );
         console.log("Code saved successfully");
+        setSaveStatus("저장 완료");
+        setTimeout(() => setSaveStatus(""), 2000);
+
+        // 파일 리로드 트리거 설정
+        setReloadFiles(prev => !prev);
       } catch (error) {
         console.error("Error saving code:", error);
+        setSaveStatus("저장 실패");
       }
     } else {
       console.log('No selectedFileID');
@@ -124,6 +135,7 @@ function CodeSpaceInner() {
     <div className='contents'>
       <ColabHeader 
         toggleDocsVisibility={toggleDocsVisibility} 
+        saveStatus={saveStatus}
       />
       <div className="space">
           <File reloadFiles={reloadFiles} />

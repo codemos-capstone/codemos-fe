@@ -86,3 +86,6 @@ font-size: 90%;
     top: 100px;
     right: 0%; /* 컴포넌트의 너비를 고려한 조정 필요 */
 }
+.result-table{
+    width: 30%;
+}
