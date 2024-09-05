@@ -74,6 +74,7 @@ function CodeSpaceInner() {
       try {
         const token = sessionStorage.getItem("accessToken");
         const now = new Date().toISOString();
+        const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
         await axios.put(
           `http://localhost:8080/api/v1/code-file/${selectedCodeId}`,
           {

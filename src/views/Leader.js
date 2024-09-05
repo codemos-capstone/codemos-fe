@@ -16,7 +16,8 @@ export default function Leader() {
 
   const fetchLeaderboardData = async (pageNumber) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/problem-ranking/problem?problemId=${problemId}&page=${pageNumber}`);
+      const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+      const response = await fetch(`${serverAddress}/api/v1/problem-ranking/problem?problemId=${problemId}&page=${pageNumber}`);
       const data = await response.json();
       setPage(pageNumber);
       setLeaderData(data.content);
