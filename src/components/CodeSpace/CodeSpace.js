@@ -3,11 +3,13 @@ import './CodeSpace.css';
 import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";
-import Docs from "views/Docs";
+import axios from 'axios';
 
 export default function CodeSpace() {
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedProblem, setSelectedProblem] = useState(null);
+  const [selectedFileName, setSelectedFileName] = useState(null); 
+  const [selectedCodeId, setSelectedCodeId] = useState('');  // 관리할 상태 추가
   const [run, setRun] = useState(false);
   const [isDocsVisible, setIsDocsVisible] = useState(false);
   const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
@@ -30,9 +32,52 @@ export default function CodeSpace() {
   };
 
   const handleFileCreationSuccess = () => {
-    setReloadFiles(prev => !prev); // 파일이 생성되었을 때 리로드 트리거
-    setShowInput(false); // 파일 생성 후 입력 필드 숨기기
-  }
+    setReloadFiles(prev => !prev);
+    setShowInput(false); 
+  };
+
+  const handleSaveCode = async () => {
+    console.log(selectedCode);
+    console.log(selectedCodeId);
+    console.log(selectedFileName);
+    console.log(selectedProblem);
+    if (selectedCodeId) {
+      try {
+        const token = sessionStorage.getItem("accessToken");
+        const now = new Date().toISOString();
+        await axios.put(
+          `http://localhost:8080/api/v1/code-file/${selectedCodeId}`,
+          {
+            content: selectedCode,
+            updatedAt: now
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+        console.log("Code saved successfully");
+      } catch (error) {
+        console.error("Error saving code:", error);
+      }
+    } else {
+      console.log('No selectedFileID');
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      handleSaveCode();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedCode, selectedCodeId]);
+
   const handleMouseDown = (e) => {
     e.preventDefault();
     window.addEventListener('mousemove', handleMouseMove);
@@ -57,38 +102,30 @@ export default function CodeSpace() {
         toggleDocsVisibility={toggleDocsVisibility} 
         setRun={setRun} 
         onFileCreationSuccess={handleFileCreationSuccess} 
-        setShowInput={setShowInput} // showInput 상태 전달
+        setShowInput={setShowInput} 
       />
       <div className="space">
           <File 
             setSelectedCode={setSelectedCode} 
             setSelectedProblem={setSelectedProblem} 
+            setSelectedFileName={setSelectedFileName} 
+            setSelectedCodeId={setSelectedCodeId}
             reloadFiles={reloadFiles} 
-            showInput={showInput} // showInput 상태 전달
-            setShowInput={setShowInput} // 필요하면 setShowInput 전달
-            selectedProblem={selectedProblem} // 선택된 문제 전달
+            showInput={showInput} 
+            setShowInput={setShowInput} 
+            selectedProblem={selectedProblem} 
           />
-        <div className="resizer"></div>
         <div className="code-container">
           <Code
             selectedCode={selectedCode}
             selectedProblem={selectedProblem}
+            selectedFileName={selectedFileName} 
             isDocsVisible={isDocsVisible}
             codeRun={run}
             endGame={() => setRun(false)}
             setSelectedCode={setSelectedCode}
+            handleSaveCode={handleSaveCode}  
           />
-        </div>
-        <div 
-          className={`docs-panel ${isDocsVisible ? 'visible' : ''}`} 
-          ref={docsRef} 
-          style={{ width: isDocsVisible ? `${docsWidth}px` : '0' }}
-        >
-          <div className="resizer" ref={resizerRef} onMouseDown={handleMouseDown}></div>
-          <Docs />
-        </div>
-        <div className="toggle-docs" onClick={toggleDocsVisibility}>
-          {isDocsVisible ? '▶' : '◀'}
         </div>
       </div>
     </div>

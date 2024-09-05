@@ -10,8 +10,8 @@ import ReactMarkdown from "react-markdown";
 import GameCanvas from "components/GameCanvas";
 import axios from "axios";
 
-export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame, setSelectedCode }) {
-    console.log(selectedCode);
+export default function Code({ selectedCode, selectedProblem, selectedFileName, isDocsVisible, codeRun, endGame, setSelectedCode }) {
+    console.log(selectedCode,selectedProblem,selectedFileName);
     const CodeEditorStyle = {
         width: "95%",
         height: "10%",
@@ -98,9 +98,9 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                 {selectedProblem ? (
                     <>
                         <div className="problems">
-                            <h2>
+                            <h3>
                                 {selectedProblem.problemNumber} : {selectedProblem.title}
-                            </h2>
+                            </h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -145,7 +145,9 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                 ) : (
                     <div></div>
                     //선택 안하면 아무것도 없음
+
                 )}
+                <div className="fileSubject">{selectedFileName}</div>
                 <AceEditor
                     style={CodeEditorStyle}
                     id="editor"
