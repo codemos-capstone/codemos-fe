@@ -14,10 +14,14 @@ export default function useRegister() {
         .then(response => {
             // JSON 파싱 시도
             return response.text().then(text => {
+                if (response.status == 200){
+                    alert("회원가입 성공");
+                    return window.location.href = "/login";
+                }
                 try {
-                    return JSON.parse(text);
+                    return alert(text);
                 } catch {
-                    return { message: text };
+                    return alert({ message: text });
                 }
             });
         })

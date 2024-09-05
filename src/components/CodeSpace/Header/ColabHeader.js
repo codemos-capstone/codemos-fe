@@ -1,30 +1,36 @@
 import React, { useState } from 'react';
 import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
-const ColabHeader = ({ toggleDocsVisibility, setRun }) => {
-  console.log(typeof toggleDocsVisibility); // "function"이어야 합니다.
+
+const ColabHeader = ({ toggleDocsVisibility, setRun, onFileCreationSuccess, setShowInput }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);
-  const runGame = () => {setRun(true)};
-  const stopGame = () => {setRun(false)};
+
+  const runGame = () => { setRun(true) };
+
   return (
     <header className="colab-header">
       <div className="menu">
         <button 
-            className="menu-button" 
-            onMouseOver={() => setDropdownVisible(true)}
-            onMouseLeave={() => setDropdownVisible(false)}
-          >
-            File
-            {dropdownVisible && (
-              <div className="dropdown-content">
-                <button className="dropdown-item">New JavaScript Space</button>
-                <button className="dropdown-item">New Block Space</button>
-                <button className="dropdown-item">Open</button>
-                <button className="dropdown-item">Save</button>
-              </div>
-            )}
+          className="menu-button" 
+          onMouseOver={() => setDropdownVisible(true)}
+          onMouseLeave={() => setDropdownVisible(false)}
+        >
+          생성
+          {dropdownVisible && (
+            <div className="dropdown-content">
+              <button 
+                className="dropdown-item" 
+                onClick={() => setShowInput(true)} // showInput 상태를 true로 설정
+              >
+                새로운 JavaScript 블럭
+              </button>
+              <button className="dropdown-item">새로운 블럭 스페이스</button>
+              <button className="dropdown-item">Open</button>
+              <button className="dropdown-item">Save</button>
+            </div>
+          )}
         </button>
         <button 
           className="menu-button" 
@@ -52,15 +58,16 @@ const ColabHeader = ({ toggleDocsVisibility, setRun }) => {
               <button className="dropdown-item">Run</button>
               <button className="dropdown-item">Debug</button>
             </div>
-          )}</button>
+          )}
+        </button>
         <button className="menu-button">Tools</button>
         <button className="menu-button">Help</button>
       </div>
+
       <div className="actions">
-      <img src = {runImg} onClick={runGame}/>
+        <img src={runImg} onClick={runGame} alt="Run" />
         <button className="action-button">remove</button>
         <button className="action-button" onClick={toggleDocsVisibility}>DOCS</button>
-      {/* 기타 버튼 및 UI 요소 */}
         <button className="action-button"><span className="action-icon">&#9881;</span></button>
       </div>
     </header>

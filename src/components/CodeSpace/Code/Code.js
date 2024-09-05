@@ -16,21 +16,42 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
     console.log(selectedCode);
     const CodeEditorStyle = {
         width: "95%",
-        height: "10%", // 초기 높이를 20%로 설정
-        maxHeight: "fit-content", // 최대 높이를 내용에 맞추어 조정
+        height: "10%",
+        maxHeight: "fit-content",
         border: "5px solid #3D3D3D",
         borderTop: "20px solid #3D3D3D",
     };
+
     const toggleDocs = () => {
         setIsDocsVisible(!isDocsVisible);
     };
+
+    const startResize = (e) => {
+        window.addEventListener('mousemove', resize);
+        window.addEventListener('mouseup', stopResize);
+    };
+
+    const resize = (e) => {
+        const newWidth = (window.innerWidth - e.clientX) / window.innerWidth * 100;
+        setDocsWidth(Math.max(20, Math.min(80, newWidth))); // Limit width between 20% and 80%
+    };
+
+    const stopResize = () => {
+        window.removeEventListener('mousemove', resize);
+        window.removeEventListener('mouseup', stopResize);
+    };
+
     const [score, setScore] = useState(null);
     const [isJudging, setIsJudging] = useState(false);
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
     const [judgeMessage, setJudgeMessage] = useState("");
     const [isBlockCoding, setIsBlockCoding] = useState(false)
+    const [docsWidth, setDocsWidth] = useState(50);
+    const resizeRef = useRef(null);
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+
+    
     useEffect(() => {
         if (codeRun && selectedProblem) {
             setJudgeProgress(0);
@@ -77,9 +98,6 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                 <FileBtn />
             </div>
             <div className="code-container">
-                <div className={`docs ${isDocsVisible ? "docs-visible" : ""}`}>
-                    <Docs />
-                </div>
                 {selectedProblem ? (
                     <>
                         <div className="problems">
