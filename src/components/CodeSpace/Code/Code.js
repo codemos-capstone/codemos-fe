@@ -1,35 +1,60 @@
-import React, { useState, useEffect } from "react";
-import "./Code.css";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { CodeSpaceContext } from 'common/CodeSpaceContext';
 import AceEditor from "react-ace-builds";
-import "react-ace-builds/webpack-resolver-min";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-ambiance";
+import BlockEditor from "blockCoding/BlockEditor";
 import FileBtn from "../../Buttons/FileBtn";
 import Docs from "views/Docs";
 import ReactMarkdown from "react-markdown";
 import GameCanvas from "components/GameCanvas";
 import axios from "axios";
 
-export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame, setSelectedCode }) {
-    console.log(selectedCode);
+import "./Code.css";
+import "react-ace-builds/webpack-resolver-min";
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/theme-ambiance";
+
+export default function Code() {
+    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun } = useContext(CodeSpaceContext);
     const CodeEditorStyle = {
         width: "95%",
-        height: "10%", // 초기 높이를 20%로 설정
-        maxHeight: "fit-content", // 최대 높이를 내용에 맞추어 조정
+        height: "10%",
+        maxHeight: "fit-content",
         border: "5px solid #3D3D3D",
         borderTop: "20px solid #3D3D3D",
     };
+
+    const endGame = () => { setRun(false) };
+
     const toggleDocs = () => {
         setIsDocsVisible(!isDocsVisible);
     };
+
+    const startResize = (e) => {
+        window.addEventListener('mousemove', resize);
+        window.addEventListener('mouseup', stopResize);
+    };
+    const resize = (e) => {
+        const newWidth = (window.innerWidth - e.clientX) / window.innerWidth * 100;
+        setDocsWidth(Math.max(20, Math.min(80, newWidth))); // Limit width between 20% and 80%
+    };
+    const stopResize = () => {
+        window.removeEventListener('mousemove', resize);
+        window.removeEventListener('mouseup', stopResize);
+    };
+
     const [score, setScore] = useState(null);
     const [isJudging, setIsJudging] = useState(false);
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
     const [judgeMessage, setJudgeMessage] = useState("");
+    const [isBlockCoding, setIsBlockCoding] = useState(false)
+    const [docsWidth, setDocsWidth] = useState(50);
+    const resizeRef = useRef(null);
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+
+    
     useEffect(() => {
-        if (codeRun && selectedProblem) {
+        if (run && selectedProblem) {
             setJudgeProgress(0);
             const judgeCode = async () => {
                 setIsJudging(true);
@@ -62,27 +87,17 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
             };
             judgeCode();
         }
-    }, [codeRun, selectedProblem, selectedCode]);
+    }, [run, selectedProblem, selectedCode]);
 
-    console.log(isDocsVisible);
     return (
         <div className="code">
-            <div style={{ width: "100%", height: "25px", backgroundColor: "black", display: "flex", justifyContent: "flex-start" }}>
-                <FileBtn />
-                <FileBtn />
-                <FileBtn />
-                <FileBtn />
-            </div>
             <div className="code-container">
-                <div className={`docs ${isDocsVisible ? "docs-visible" : ""}`}>
-                    <Docs />
-                </div>
                 {selectedProblem ? (
                     <>
                         <div className="problems">
-                            <h2>
+                            <h3>
                                 {selectedProblem.problemNumber} : {selectedProblem.title}
-                            </h2>
+                            </h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -127,7 +142,9 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                 ) : (
                     <div></div>
                     //선택 안하면 아무것도 없음
+
                 )}
+                <div className="fileSubject">{selectedFileName}</div>
                 <AceEditor
                     style={CodeEditorStyle}
                     id="editor"
@@ -165,7 +182,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                         </>
                     )}
                 </div>
-                {codeRun && <GameCanvas className="GameCanvas" size={[600, 800]} code={selectedCode} problem={selectedProblem} endAnimation={endGame} setScore={setScore}></GameCanvas>}
+                {run && <GameCanvas className="GameCanvas" size={[600, 800]} code={selectedCode} problem={selectedProblem} endAnimation={endGame} setScore={setScore}></GameCanvas>}
             </div>
         </div>
     );

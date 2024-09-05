@@ -9,11 +9,11 @@ import docs_u from "assets/images/docs_u.png";
 import docs_r from "assets/images/docs_r.png";
 import docs_l from "assets/images/docs_l.png";
 
-const basicForm = `// TODO: 
-newInterval = setInterval(() => {
-    // TODO: 
-}, 1); // 1ms loop
-// TODO:`;
+const basicForm = `// 변수, 함수 선언
+_mainloop = function() {
+    // 반복 실행할 코드
+};
+// TODO: `;
 
 const wrongEx = `// 잘못된 예시
 
@@ -31,7 +31,7 @@ function engineCtrl() { // 고도에 따라 엔진 control
         engineOff();
 }
 
-newInterval = setInterval(() => { // main loop
+_mainloop = function() { // main loop
     if (getAngle() > 0) { // 우주선 각도 조정
         stopRightRotation();
         rotateLeft();
@@ -40,7 +40,7 @@ newInterval = setInterval(() => { // main loop
         rotateRight();
     }
     engineCtrl();
-}, 1);`;
+};`;
 
 const aboutLogging = `logging()
 
@@ -83,54 +83,44 @@ const Docs = () => {
         <h2>INDEX</h2>
         <ul  className="links">
             <li><a href="#description">Description</a></li>
-            <li><a href="#tip">Tip</a></li>
             <li><a href="#start">Getting Started</a></li>
             <li><a href="#get">Get Methods</a>
                 <ul>
-                    <li><a href="#getVelocityX">getVelocityX</a></li>
-                    <li><a href="#getVelocityY">getVelocityY</a></li>
-                    <li><a href="#getAngle">getAngle</a></li>
-                    <li><a href="#getHeight">getHeight</a></li>
+                    <li><a href="#getVelocityX">getVelocityX()</a></li>
+                    <li><a href="#getVelocityY">getVelocityY()</a></li>
+                    <li><a href="#getAngle">getAngle()</a></li>
+                    <li><a href="#getHeight">getHeight()</a></li>
                     <li><a href="#getRotationVelocity">getRotationVelocity</a></li>
                 </ul>
             </li>
             <li><a href="#set">Set Methods</a>
                 <ul>
-                    <li><a href="#engineOn">engineOn</a></li>
-                    <li><a href="#engineOff">engineOff</a></li>
-                    <li><a href="#rotateLeft">rotateLeft</a></li>
-                    <li><a href="#stopLeftRotation">stopLeftRotation</a></li>
-                    <li><a href="#rotateRight">rotateRight</a></li>
-                    <li><a href="#stopRightRotation">stopRightRotation</a></li>
+                    <li><a href="#engineOn">engineOn()</a></li>
+                    <li><a href="#engineOff">engineOff()</a></li>
+                    <li><a href="#rotateLeft">rotateLeft()</a></li>
+                    <li><a href="#stopLeftRotation">stopLeftRotation()</a></li>
+                    <li><a href="#rotateRight">rotateRight()</a></li>
+                    <li><a href="#stopRightRotation">stopRightRotation()</a></li>
                 </ul>
             </li>
             <li><a href="#util">Utility Methods</a>
                 <ul>
-                    <li><a href="#logging">logging</a></li>
+                    <li><a href="#logging">logging()</a></li>
                 </ul>
             </li>
+            <li><a href="#tip">Tip</a></li>
             <li><a href="#tmi">TMI</a></li>
         </ul>
         <h2 id="description">Description</h2>
         <div>
-            - 하단의 버튼으로 API 페이지와 코드 에디터를 열고 닫을 수 있습니다.<br />
-            - 코드를 모두 작성한 뒤, Apply 버튼을 눌러, 우주선에 착륙 알고리즘을 주입할 수 있습니다.<br />
-            - 착륙 속도 12.0 MPH, 착륙 각도 11.0° 미만일 때 착륙으로 간주합니다.<br />
-            - 키보드 방향키로 우주선을 작동시켜 볼 수 있습니다. 단, 키보드로 착륙한 결과는 순위표에 등재되지 않습니다.<br />
-        </div>
-        <h2 id="tip">Tip</h2>
-        <div>
-            1. JS ES6의 모든 문법을 사용해 CodeMos 우주선 알고리즘을 작성할 수 있습니다.<br />
-            2. 알고리즘이 작동하지 않는다면 코드를 잘못 짠게 아닐지 고민해 보세요.<br />
-            3. 버그가 발견되었다면 이스터에그입니다.<br />
         </div>
         <h2 id="start">Getting Started</h2>
         <div className="api-function" id="">
             <h2 className="function-title">main loop</h2>
             <p className="function-description">
-                CodeMos 알고리즘에서 main loop는 아래와 같이 "newInterval"에 할당되어야 합니다.<br />
-                "newInterval"에 할당하지 않고 setInterval을 호출할 시 초기화 오류가 발생할 수 있습니다.<br />
-                interval 간격은 수정할 수 있습니다.<br />
+                CodeMos 알고리즘에서 main loop는 아래와 같이 "_mainloop"로 단 한 번만 할당되어야 합니다.<br />
+                "_mainloop" 이외의 동기/비동기 반복문을 사용하면 채점이 이루어지지 않습니다.<br />
+                <br />
             </p>
             <div className="function-example">
                 <pre><code className="language-javascript">
@@ -143,7 +133,7 @@ const Docs = () => {
             <h2 className="function-title">알고리즘 작성 예시</h2>
             <p className="function-description">
                 전역 스코프에서 함수와 변수를 정의할 수 있습니다.<br />
-                아래는 착륙 알고리즘 예제 입니다.(고득점 불가)<br />
+                아래는 간단한 착륙 알고리즘 예시 입니다.<br />
             </p>
             <div className="function-example">
                 <pre><code className="language-javascript">
@@ -153,12 +143,12 @@ const Docs = () => {
             <h2 className="function-title">잘 짠 착륙 알고리즘 예시</h2>
             <div className="function-description">
                 <pre><code className="language-javascript">
-    // 비밀~
+    // 비밀
                 </code></pre>
             </div>
             <img src={landing_sample} width="100%" /><br />
             <p className="function-description">
-                by 조영효<br />
+                <br />
             </p>
         </div>
         <h2 id="get">Get Methods</h2>
@@ -204,8 +194,8 @@ const Docs = () => {
         <div className="api-function" id="getHeight">
             <h2 className="function-title">getHeight</h2>
             <p className="function-description">
-    이 함수는 우주선의 현재 고도(ft, 피트)를 정수형으로 반환합니다.<br />
-    착륙지점의 고도는 0ft 입니다.<br />
+    이 함수는 우주선의 현재 고도(m, 미터)를 정수형으로 반환합니다.<br />
+    착륙지점의 고도는 0m 입니다.<br />
             </p>
             <div className="function-example">
                 <pre><code className="language-javascript">
@@ -316,12 +306,20 @@ const Docs = () => {
                 </code></pre>
             </div>
         </div>
+        <h2 id="tip">Tip</h2>
+        <div>
+            1. JS ES6의 (거의)모든 문법을 사용해 CodeMos 우주선 알고리즘을 작성할 수 있습니다.<br />
+            2. Java Script에 익숙하지 않다면 블록 코딩을 사용해 우주선 알고리즘을 작성해 보세요.<br />
+            3. 알고리즘이 작동하지 않는다면 코드를 잘못 짠게 아닐지 고민해 보세요.<br />
+            4. 버그가 발견되었다면 이스터에그입니다.<br />
+        </div>
         <h2 id="tmi">TMI</h2>
         <div>
             1. CodeMos 행성은 중력(4.29158 m/s²) 외에는 어떠한 힘도 작용하지 않습니다.<br />
             2. 주 엔진 thrust : Δ10.729 m/s<br />
             3. 좌, 우측 엔진 thrust: Δ1.2 각속도/s<br />
-            4. 착륙 속도 0.0 MPH, 착륙 각도 0.0° 일 때, 100점을 획득합니다.<br />
+            4. 착륙 속도 0.0 m/s, 착륙 각도 0.0° 일 때, 100점을 획득합니다.<br />
+            5. 착륙 속도 5.36448m/s, 착륙 각도 11.0° 미만일 때 착륙으로 간주합니다.<br />
         </div>
         <br /><br /><br /><br /><br />
         </div>

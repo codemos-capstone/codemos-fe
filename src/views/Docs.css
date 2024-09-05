@@ -45,3 +45,26 @@
 .docs-container .desc {
     text-align: center;
 }
+
+
+
+.docs-container .links {
+    padding-left: 20px;
+  }
+  
+  .docs-container .links ul {
+    padding-left: 20px;
+  }
+  
+  .docs-container .links li {
+    margin-bottom: 5px;
+  }
+  
+  .docs-container .links a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .docs-container .links a:hover {
+    text-decoration: underline;
+  }

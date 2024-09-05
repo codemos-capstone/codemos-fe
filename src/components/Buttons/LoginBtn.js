@@ -16,9 +16,12 @@ function ProfileBtn(){
 export default function LoginBtn({ isLogin, setIsLogin }){
     const navigate = useNavigate();
     function logout(){
-        alert('로그아웃 하시겠습니까?');
-        setIsLogin(false);
-        sessionStorage.removeItem("accessToken");
+        var state = confirm('로그아웃 하시겠습니까?');
+        
+        if (state){
+            setIsLogin(false);
+            sessionStorage.removeItem("accessToken");
+        } 
     
     }
     if (isLogin) {
