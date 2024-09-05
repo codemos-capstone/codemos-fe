@@ -92,7 +92,9 @@
     position: absolute;
     z-index: 1000;
     background-color: #444; /* 컨텍스트 메뉴 배경색 */
-    padding: 5px; /* padding을 줄여서 더 컴팩트하게 */
+    padding: 5px; 
+    padding-top: 3px;
+    padding-bottom: 3px;
     border-radius: 4px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
     color: white; /* 텍스트 색상 */

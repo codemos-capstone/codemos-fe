@@ -3,14 +3,14 @@ import './File.css';
 import axios from 'axios';
 import jSImage from 'assets/images/JS.png';
 import proImage from 'assets/images/FILE.png';
-export default function File({ setSelectedCode, setSelectedProblem, reloadFiles, showInput, selectedProblem, setShowInput }) {
+
+export default function File({ setSelectedCode, setSelectedFileName, setSelectedProblem, setSelectedCodeId,selectedCodeId, reloadFiles, showInput, selectedProblem, setShowInput }) {
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [codeFiles, setCodeFiles] = useState([]);
   const [problems, setProblems] = useState([]);
   const [dropdownStates, setDropdownStates] = useState({ files: true, problems: false });
   const [newFileName, setNewFileName] = useState('');
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, fileId: null });
-  const [selectedFileId, setSelectedFileId] = useState(null);
 
   useEffect(() => {
     fetchData('code-file', setCodeFiles);
@@ -79,18 +79,18 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
 
   const handleFileClick = (codeFile) => {
     setSelectedCode(codeFile.content);
-    setSelectedFileId(codeFile.id);  // 선택된 파일의 ID를 저장
+    setSelectedCodeId(codeFile.id);  // setSelectedCodeId를 호출하여 ID 전달
+    setSelectedFileName(codeFile.name);  
   };
 
   const handleContextMenu = (e, fileId) => {
     e.preventDefault();
 
-    // 상위 컴포넌트에 있는 헤더의 높이를 가져옴
     const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
     const colabHeader = document.querySelector('.colab-header')?.offsetHeight || 0;
 
-    const offsetX = e.clientX; // 클릭한 위치의 X 좌표
-    const offsetY = e.clientY - headerHeight-colabHeader; // 헤더 높이를 뺀 Y 좌표
+    const offsetX = e.clientX; 
+    const offsetY = e.clientY - headerHeight - colabHeader;
 
     setContextMenu({
       visible: true,
@@ -98,7 +98,7 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
       y: offsetY, 
       fileId: fileId
     });
-};
+  };
 
 
   const handleDeleteFile = async () => {
@@ -134,7 +134,7 @@ export default function File({ setSelectedCode, setSelectedProblem, reloadFiles,
                   key={codeFile.id}
                   onClick={() => handleFileClick(codeFile)}
                   onContextMenu={(e) => handleContextMenu(e, codeFile.id)}
-                  className={codeFile.id === selectedFileId ? 'selected' : ''} // 선택된 파일에 클래스 추가
+                  className={codeFile.id === selectedCodeId ? 'selected' : ''} // 선택된 파일에 클래스 추가
                 >
                   <div className="fileNameDetail">
                     <img src={jSImage} alt="JS Logo" style={{ width: '14px' }} />
