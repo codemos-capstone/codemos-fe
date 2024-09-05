@@ -5,7 +5,7 @@ import BlocklyComponent, { Block, Category } from './Blockly';
 import './blocks/customblocks';
 import './generator/generator';
 
-export default function BlockEditor(props) {
+export default function BlockEditor({ setCode }) {
   const toolbox = `
     <xml xmlns="http://www.w3.org/1999/xhtml">
       <category name="Logic" colour="#5C81A6">
@@ -87,12 +87,12 @@ export default function BlockEditor(props) {
   `;
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="block-editor-container" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
         <BlocklyComponent
           readOnly={false}
           trashcan={true}
           media={'media/'}
+          setCode={setCode}
           move={{
             scrollbars: true,
             drag: true,
@@ -106,7 +106,6 @@ export default function BlockEditor(props) {
           toolbox={toolbox}
         >
         </BlocklyComponent>
-      </header>
     </div>
   );
 }

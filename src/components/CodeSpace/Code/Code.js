@@ -133,7 +133,7 @@ export default function Code({ selectedCode, selectedProblem, isDocsVisible, cod
                 )}
                 <div><button onClick={() => {setIsBlockCoding(!isBlockCoding)}}>toggle</button></div>
                 {isBlockCoding ?
-                <BlockEditor />
+                <BlockEditor setCode = {(value) => setSelectedCode(value)} />
                 :<AceEditor
                     style={CodeEditorStyle}
                     id="editor"

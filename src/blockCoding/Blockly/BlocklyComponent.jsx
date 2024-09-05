@@ -39,7 +39,7 @@ function BlocklyComponent(props) {
 
   const generateCode = () => {
     var code = javascriptGenerator.workspaceToCode(primaryWorkspace.current);
-    console.log(code);
+    props.setCode(code);
   };
 
   useEffect(() => {
