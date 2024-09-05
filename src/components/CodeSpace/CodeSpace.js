@@ -39,20 +39,13 @@ export default function CodeSpace () {
 }
 
 function CodeSpaceInner() {
-  const {
-    selectedProblem, setSelectedProblem,
-    selectedCode, setSelectedCode,
-    selectedCodeId, setSelectedCodeId,
-    selectedFileName, setSelectedFileName,
-    run, setRun,
-    showNewFile, setShowNewFile} = useContext(CodeSpaceContext);
+  const { selectedProblem, setSelectedProblem, selectedCode, selectedCodeId, selectedFileName } = useContext(CodeSpaceContext);
   const [isDocsVisible, setIsDocsVisible] = useState(false);
   const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
   const [docsWidth, setDocsWidth] = useState(600);
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
   const [fileWidth, setFileWidth] = useState(200); // Initial file width
-
 
   useEffect(() => {
     const problem = JSON.parse(sessionStorage.getItem('selectedProblem'));
@@ -63,11 +56,6 @@ function CodeSpaceInner() {
 
   const toggleDocsVisibility = () => {
     setIsDocsVisible(!isDocsVisible);
-  };
-
-  const handleFileCreationSuccess = () => {
-    setReloadFiles(prev => !prev);
-    setShowNewFile(false); 
   };
 
   const handleSaveCode = async () => {
@@ -134,30 +122,12 @@ function CodeSpaceInner() {
     <div className='contents'>
       <ColabHeader 
         toggleDocsVisibility={toggleDocsVisibility} 
-        setRun={setRun} 
-        setShowNewFile={setShowNewFile}
       />
       <div className="space">
-          <File 
-            setSelectedCode={setSelectedCode} 
-            setSelectedProblem={setSelectedProblem} 
-            setSelectedFileName={setSelectedFileName} 
-            setSelectedCodeId={setSelectedCodeId}
-            reloadFiles={reloadFiles} 
-            showNewFile={showNewFile} 
-            setShowNewFile={setShowNewFile} 
-            selectedProblem={selectedProblem} 
-          />
+          <File reloadFiles={reloadFiles} />
         <div className="resizer"></div>
         <div className="code-container">
-          <Code
-            selectedCode={selectedCode}
-            selectedProblem={selectedProblem}
-            isDocsVisible={isDocsVisible}
-            codeRun={run}
-            endGame={() => setRun(false)}
-            setSelectedCode={setSelectedCode}
-          />
+          <Code />
         </div>
         <div 
           className={`docs-panel ${isDocsVisible ? 'visible' : ''}`} 

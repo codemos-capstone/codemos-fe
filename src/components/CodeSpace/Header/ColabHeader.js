@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { CodeSpaceContext } from 'common/CodeSpaceContext';
 import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
 
-const ColabHeader = ({ toggleDocsVisibility, setRun, setShowNewFile }) => {
+const ColabHeader = ({ toggleDocsVisibility }) => {
+  const { setRun, setShowNewFile } = useContext(CodeSpaceContext);
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);

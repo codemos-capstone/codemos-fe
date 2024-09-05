@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { CodeSpaceContext } from 'common/CodeSpaceContext';
 import AceEditor from "react-ace-builds";
 import BlockEditor from "blockCoding/BlockEditor";
 import FileBtn from "../../Buttons/FileBtn";
@@ -12,7 +13,8 @@ import "react-ace-builds/webpack-resolver-min";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 
-export default function Code({ selectedCode, selectedProblem, selectedFileName, isDocsVisible, codeRun, endGame, setSelectedCode }) {
+export default function Code() {
+    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun } = useContext(CodeSpaceContext);
     const CodeEditorStyle = {
         width: "95%",
         height: "10%",
@@ -20,6 +22,8 @@ export default function Code({ selectedCode, selectedProblem, selectedFileName, 
         border: "5px solid #3D3D3D",
         borderTop: "20px solid #3D3D3D",
     };
+
+    const endGame = () => { setRun(false) };
 
     const toggleDocs = () => {
         setIsDocsVisible(!isDocsVisible);
@@ -29,12 +33,10 @@ export default function Code({ selectedCode, selectedProblem, selectedFileName, 
         window.addEventListener('mousemove', resize);
         window.addEventListener('mouseup', stopResize);
     };
-
     const resize = (e) => {
         const newWidth = (window.innerWidth - e.clientX) / window.innerWidth * 100;
         setDocsWidth(Math.max(20, Math.min(80, newWidth))); // Limit width between 20% and 80%
     };
-
     const stopResize = () => {
         window.removeEventListener('mousemove', resize);
         window.removeEventListener('mouseup', stopResize);
@@ -52,7 +54,7 @@ export default function Code({ selectedCode, selectedProblem, selectedFileName, 
 
     
     useEffect(() => {
-        if (codeRun && selectedProblem) {
+        if (run && selectedProblem) {
             setJudgeProgress(0);
             const judgeCode = async () => {
                 setIsJudging(true);
@@ -85,9 +87,8 @@ export default function Code({ selectedCode, selectedProblem, selectedFileName, 
             };
             judgeCode();
         }
-    }, [codeRun, selectedProblem, selectedCode]);
+    }, [run, selectedProblem, selectedCode]);
 
-    console.log(isDocsVisible);
     return (
         <div className="code">
             <div style={{ width: "100%", height: "25px", backgroundColor: "black", display: "flex", justifyContent: "flex-start" }}>
@@ -187,7 +188,7 @@ export default function Code({ selectedCode, selectedProblem, selectedFileName, 
                         </>
                     )}
                 </div>
-                {codeRun && <GameCanvas className="GameCanvas" size={[600, 800]} code={selectedCode} problem={selectedProblem} endAnimation={endGame} setScore={setScore}></GameCanvas>}
+                {run && <GameCanvas className="GameCanvas" size={[600, 800]} code={selectedCode} problem={selectedProblem} endAnimation={endGame} setScore={setScore}></GameCanvas>}
             </div>
         </div>
     );
