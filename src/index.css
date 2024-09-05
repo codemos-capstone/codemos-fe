@@ -8,6 +8,7 @@ body {
     align-items: center; /* 수평으로 중앙 정렬합니다. */
     margin: 0;
     background: #02071e;
+    z-index: -3;
     font: 400 18px/1.5 -apple-system, BlinkMacSystemFont, sans-serif;
 }
 #root {

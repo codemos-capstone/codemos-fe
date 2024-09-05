@@ -14,6 +14,7 @@ import MainView from "./views/MainView";
 import UserPage from "views/UserPage";
 import Layout from "components/Layout/Layout";
 import NotFound from "views/NotFound";
+import UserProfile from "./views/UserProfile";
 
 export default function App(){
     const location = useLocation();
@@ -29,7 +30,7 @@ export default function App(){
                     <Route path="/codespaces" element={<CodeSpaces/>}/>
                     <Route path="/docs" element={<Docs isVisible={false} />} />
                     <Route path="/login" element={<LoginPage/>} />
-                    <Route path="/leader" element={<Leader />} />
+                    <Route path="/leader/:problemId" element={<Leader />} />
                     <Route path="/google/callback" element={<OnLogin />} />
                     <Route path="/oauthMiddle" element={<OAuthMiddle />} />
                     <Route path="/auth/reset-password" element={<ResetPassword />} />
@@ -37,6 +38,7 @@ export default function App(){
                         <Route path="problem" element={<ProblemList />} />
                         <Route path="problem/edit/:id?" element={<ProblemEdit />} />
                     </Route>
+                    <Route path="/profile/:nickname" element={<UserProfile />} />
                     <Route path="/userpage" element={<UserPage />} />
                     <Route path="*" element={<NotFound />} />
                 </Route>
