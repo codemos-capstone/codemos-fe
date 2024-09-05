@@ -9,12 +9,13 @@ import Docs from "views/Docs";
 export default function CodeSpace() {
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedProblem, setSelectedProblem] = useState(null);
-  const [selectedFileName, setSelectedFileName] = useState(null); 
+  const [selectedCode, setSelectedCode] = useState('');
   const [selectedCodeId, setSelectedCodeId] = useState('');  // 관리할 상태 추가
+  const [selectedFileName, setSelectedFileName] = useState(null); 
   const [run, setRun] = useState(false);
+  const [showNewFile, setShowNewFile] = useState(false); // 입력 필드 표시 여부
   const [isDocsVisible, setIsDocsVisible] = useState(false);
   const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
-  const [showNewFile, setShowNewFile] = useState(false); // 입력 필드 표시 여부
   const [docsWidth, setDocsWidth] = useState(600);
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
@@ -102,8 +103,7 @@ export default function CodeSpace() {
       <ColabHeader 
         toggleDocsVisibility={toggleDocsVisibility} 
         setRun={setRun} 
-        onFileCreationSuccess={handleFileCreationSuccess} 
-        setShowNewFile={setShowNewFile} // showInput 상태 전달
+        setShowNewFile={setShowNewFile}
       />
       <div className="space">
           <File 
