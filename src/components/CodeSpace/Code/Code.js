@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import "./Code.css";
 import AceEditor from "react-ace-builds";
-import "react-ace-builds/webpack-resolver-min";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-ambiance";
+//import BlockEditor from "blockCoding/BlockEditor";
 import FileBtn from "../../Buttons/FileBtn";
 import Docs from "views/Docs";
 import ReactMarkdown from "react-markdown";
 import GameCanvas from "components/GameCanvas";
 import axios from "axios";
+
+import "./Code.css";
+import "react-ace-builds/webpack-resolver-min";
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/theme-ambiance";
 
 export default function Code({ selectedCode, selectedProblem, isDocsVisible, codeRun, endGame, setSelectedCode }) {
     console.log(selectedCode);

@@ -5,15 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "postinstall": "cp -r node_modules/blockly/media public/media"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.7.2",
+    "blockly": "^11.1.1",
     "highlight.js": "^11.9.0",
     "react": "^18.2.0",
     "react-ace-builds": "^7.4.1",
+    "react-datepicker": "^7.3.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.22.3",
@@ -32,6 +35,15 @@
     ]
   },
   "devDependencies": {
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  },
+  "blocklyDemoConfig": {
+    "title": "Blockly in React",
+    "description": "Load Blockly in a React project.",
+    "files": [
+      "build/index.html",
+      "build/**/*"
+    ]
   }
 }
