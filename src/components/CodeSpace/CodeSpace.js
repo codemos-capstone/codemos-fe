@@ -12,7 +12,7 @@ export default function CodeSpace() {
   const [isDocsVisible, setIsDocsVisible] = useState(false);
   const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
   const [showInput, setShowInput] = useState(false); // 입력 필드 표시 여부
-  const [docsWidth, setDocsWidth] = useState(400);
+  const [docsWidth, setDocsWidth] = useState(600);
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
   const [fileWidth, setFileWidth] = useState(200); // Initial file width

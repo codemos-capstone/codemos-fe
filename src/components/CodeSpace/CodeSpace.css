@@ -1,13 +1,12 @@
 .contents {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
-  overflow: hidden;
 }
 
 .space {
   display: flex;
-  position: relative;
-  height: calc(100vh - 25px); /* Adjust based on your header height */
+  flex: 1;
   overflow: hidden;
 }
 
@@ -22,15 +21,19 @@
 }
 
 .docs-panel {
-  position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
   background-color: #f0f0f0;
   transition: width 0.3s ease-in-out;
-  z-index: 10;
-  overflow-y: auto;
+  overflow-y: scroll;  /* Changed from auto to scroll */
   overflow-x: hidden;
+  scrollbar-width: none;  /* For Firefox */
+  -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+}
+
+.docs-panel::-webkit-scrollbar {
+  display: none;  /* For Chrome, Safari, and Opera */
 }
 
 .docs-panel.visible {
@@ -51,9 +54,13 @@
 
 .resizer {
   width: 5px;
-  background-color: #ddd;
-  cursor: ew-resize;
-  user-select: none;
+  background: #ddd;
+  cursor: col-resize;
+  transition: background 0.2s;
+}
+
+.resizer:hover {
+  background: #999;
 }
 
 .docs-panel .resizer {
@@ -73,4 +80,49 @@
 .docs-panel, .file-container, .code-container {
   will-change: transform;
   transform: translateZ(0);
+}
+
+/* Custom scrollbar styles */
+.code-container, .file-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) black; /* For Firefox */
+}
+
+/* Webkit browsers like Chrome and Safari */
+.code-container::-webkit-scrollbar,
+.file-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.code-container::-webkit-scrollbar-track,
+.file-container::-webkit-scrollbar-track {
+  background: black;
+}
+
+.code-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3); /* Slightly lighter than the code background */
+  border-radius: 5px;
+}
+
+.file-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3); /* Slightly lighter than the file background */
+  border-radius: 5px;
+}
+
+.code-container::-webkit-scrollbar-thumb:hover,
+.file-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.5); /* Lighter on hover for better visibility */
+}
+
+/* Overlay scrollbar */
+.code-container, .file-container {
+  overflow-y: overlay;
+}
+
+/* For browsers that don't support overlay */
+@supports not (overflow-y: overlay) {
+  .code-container, .file-container {
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
 }
