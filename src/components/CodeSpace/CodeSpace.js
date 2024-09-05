@@ -4,6 +4,7 @@ import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";
 import axios from 'axios';
+import Docs from "views/Docs";
 
 export default function CodeSpace() {
   const [selectedCode, setSelectedCode] = useState('');
@@ -102,7 +103,7 @@ export default function CodeSpace() {
         toggleDocsVisibility={toggleDocsVisibility} 
         setRun={setRun} 
         onFileCreationSuccess={handleFileCreationSuccess} 
-        setShowInput={setShowInput} 
+        setShowInput={setShowInput} // showInput 상태 전달
       />
       <div className="space">
           <File 
@@ -115,17 +116,27 @@ export default function CodeSpace() {
             setShowInput={setShowInput} 
             selectedProblem={selectedProblem} 
           />
+        <div className="resizer"></div>
         <div className="code-container">
           <Code
             selectedCode={selectedCode}
             selectedProblem={selectedProblem}
-            selectedFileName={selectedFileName} 
             isDocsVisible={isDocsVisible}
             codeRun={run}
             endGame={() => setRun(false)}
             setSelectedCode={setSelectedCode}
-            handleSaveCode={handleSaveCode}  
           />
+        </div>
+        <div 
+          className={`docs-panel ${isDocsVisible ? 'visible' : ''}`} 
+          ref={docsRef} 
+          style={{ width: isDocsVisible ? `${docsWidth}px` : '0' }}
+        >
+          <div className="resizer" ref={resizerRef} onMouseDown={handleMouseDown}></div>
+          <Docs />
+        </div>
+        <div className="toggle-docs" onClick={toggleDocsVisibility}>
+          {isDocsVisible ? '▶' : '◀'}
         </div>
       </div>
     </div>
