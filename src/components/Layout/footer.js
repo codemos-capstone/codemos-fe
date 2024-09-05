@@ -26,7 +26,7 @@ export default function Footer(){
                 
                 <div className="subscribe-section">
                     <form action="">
-                        <input type="email" placeholder="Email Address" required/>
+                        <input type="email" placeholder="Contact Us" required/>
                         <button type="submit">OK</button>
                     </form>
                 </div>

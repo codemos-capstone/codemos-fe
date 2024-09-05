@@ -15,7 +15,7 @@ export default function File({ reloadFiles }) {
   const [newFileName, setNewFileName] = useState('');
   const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, fileId: null });
   const [selectedFileId, setSelectedFileId] = useState(null);
-  const [fileWidth, setFileWidth] = useState(200);
+  const [fileWidth, setFileWidth] = useState(300);
   const fileRef = useRef(null);
   const resizerRef = useRef(null);
   const inputRef = useRef(null); //인풋 포커싱 줄라고

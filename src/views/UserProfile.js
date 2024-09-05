@@ -84,7 +84,7 @@ const UserProfile = () => {
             <div className="user-profile-header">
                 {isEditing ? (
                     <div>
-                        <input 
+                        <input style={{padding:"3px", width:"60%"}}
                             type="text" 
                             value={newProfilePicURL} 
                             onChange={(e) => setNewProfilePicURL(e.target.value)}

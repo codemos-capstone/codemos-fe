@@ -3,6 +3,7 @@
     width:100%;
     flex-direction: column;
     overflow-y: auto;
+    margin-bottom: 10%;
 }
 .logo{
     margin-top: 6%;

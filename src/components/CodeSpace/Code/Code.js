@@ -19,8 +19,7 @@ export default function Code() {
 
     const CodeEditorStyle = {
         width: "95%",
-        height: "10%",
-        maxHeight: "fit-content",
+        height: "70vh",
         border: "5px solid #3D3D3D",
         borderTop: "20px solid #3D3D3D",
     };
@@ -179,11 +178,10 @@ export default function Code() {
                     value={selectedCode || "_mainloop = function(){\n\n}"} // selectedCode 없으면 기본값
                     onChange={(value) => setSelectedCode(value)}
                     showPrintMargin={false}
-                    height="fit-content"
                     editorProps={{ $blockScrolling: false }}
                     marginBottom="4%"
                 />
-                : <BlockEditor />}
+                :<BlockEditor />}
                 <div style={{ color: "white" }}>
                     {isJudging ? (
                         <div>

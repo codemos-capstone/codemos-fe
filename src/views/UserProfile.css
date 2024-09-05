@@ -1,4 +1,5 @@
 .user-profile {
+    min-width: 700px;
     max-width: 800px;
     margin: 2rem auto;
     padding: 2rem;
@@ -9,15 +10,21 @@
 
 .user-profile-header {
     display: flex;
+    flex-direction: row;
+    justify-content: space-around;
     align-items: center;
     margin-bottom: 2rem;
 }
 
 .user-profile-image {
-    width: 100px;
+    width: fit-content;
     height: 100px;
     border-radius: 50%;
     margin-right: 2rem;
+}
+
+.user-profile-info {
+    width: fit-content;
 }
 
 .user-profile-info h2 {
