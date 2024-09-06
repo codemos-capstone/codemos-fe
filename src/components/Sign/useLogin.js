@@ -21,7 +21,7 @@ export default function useLogin() {
             return response.json();
         })
         .then(token => {
-            console.log('Login successful!');
+            // console.log('Login successful!');
             sessionStorage.setItem('accessToken', token.accessToken);
             alert("로그인 성공");
             window.location.href = "/";

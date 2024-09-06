@@ -30,7 +30,7 @@ export default function Code() {
     };
 
     const handleBlockCode = (code) => {
-        console.log(code)
+        // console.log(code)
         javascriptGenerator.workspaceToCode(code);
     }
 

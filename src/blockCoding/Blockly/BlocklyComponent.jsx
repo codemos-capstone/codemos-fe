@@ -39,7 +39,7 @@ function BlocklyComponent(props) {
   const handleCode = () => {
     const code = Blockly.serialization.workspaces.save(primaryWorkspace.current);
     const processed = JSON.stringify(code);
-    console.log(processed)
+    // console.log(processed)
     props.setSavedCode(processed);
   };
 

@@ -28,7 +28,7 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
       const reader = new FileReader();
       reader.onload = (event) => {
         const fileContent = event.target.result;
-        console.log('파일 내용:', fileContent); // 파일 내용을 콘솔에 출력
+        // console.log('파일 내용:', fileContent); // 파일 내용을 콘솔에 출력
         // 필요한 처리 로직 추가
       };
       reader.readAsText(file); // 텍스트 파일 읽기

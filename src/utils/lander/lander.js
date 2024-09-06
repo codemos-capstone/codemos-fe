@@ -259,11 +259,11 @@ export const makeLander = (state, setting, endAnimation) => {
                     rocket.rotatingLeft = false;
                     rocket.rotatingRight = false;
                     logs.push(deepCopy(rocket));
-                    console.log("alsdkfjlkasdjlfjalsdflasdjkfjlsdjlfjksdlf" + logs.length)
+                    // console.log("alsdkfjlkasdjlfjalsdflasdjkfjlsdjlfjksdlf" + logs.length)
                 }
             }
         } catch (e) {
-            console.log(e);
+            // console.log(e);
             return;
         };
 
@@ -417,7 +417,7 @@ export const makeLander = (state, setting, endAnimation) => {
         );
         let clouds = makeClouds(lastLog);
         const score = landingState.land? scoreLanding(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity)).toFixed(1): scoreCrash(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity)).toFixed(1);
-        console.log(lastLog)
+        // console.log(lastLog)
         
         let confetti = makeConfetti(state, Math.round(100)); //amount depends on score
         const drawFromLogs = () => {

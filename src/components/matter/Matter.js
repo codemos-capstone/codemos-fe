@@ -21,7 +21,7 @@ export default function Matter({ problem, onTryProblem, solvedProblems }) {
     };
 
     const isSolved = solvedProblems.includes(String(problemNumber));
-    console.log(solvedProblems, problemNumber);
+    // console.log(solvedProblems, problemNumber);
     return (
         <div className="prob">
             <div style={{ backgroundColor: isSolved ? "#4CAF50" : "#A64044" }}></div>

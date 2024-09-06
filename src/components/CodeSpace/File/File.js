@@ -53,7 +53,7 @@ export default function File({ reloadFiles }) {
       setState(response.data);
     } catch (error) {
       console.error(`Error fetching ${endpoint}:`, error);
-      console.log(`Failed to load ${endpoint}. Please try again later.`);
+      // console.log(`Failed to load ${endpoint}. Please try again later.`);
     }
   }
 

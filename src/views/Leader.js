@@ -34,7 +34,7 @@ export default function Leader() {
   // selectedCode가 변경되었을 때 모달을 열도록 처리
   useEffect(() => {
     if (selectedCode) {
-      console.log("SELECTEDCODE: ", selectedCode);
+      // console.log("SELECTEDCODE: ", selectedCode);
       setModalIsOpen(true);
     }
   }, [selectedCode]);

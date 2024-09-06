@@ -15,7 +15,7 @@ export default function UserInfo(){
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUser(response.data);
-                console.log(response.data)
+                // console.log(response.data)
             } catch (error) {
                 console.error("페치페일:", error);
             }

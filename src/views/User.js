@@ -117,10 +117,10 @@ function registerCode(codeNum){
             if(!response.ok){
                 throw new Error(response.status)
             }
-            console.log("등록 완료!")
+            // console.log("등록 완료!")
         })
         .catch((error) => {
-            console.log('Error', error)
+            // console.log('Error', error)
         })      
     }
 }

@@ -65,10 +65,10 @@ function CodeSpaceInner() {
   };
 
   const handleSaveCode = async () => {
-    console.log(selectedCode);
-    console.log(selectedCodeId);
-    console.log(selectedFileName);
-    console.log(selectedProblem);
+    // console.log(selectedCode);
+    // console.log(selectedCodeId);
+    // console.log(selectedFileName);
+    // console.log(selectedProblem);
     if (selectedCodeId) {
       setSaveStatus("저장 중..."); // 저장 중 메시지 설정
       try {
@@ -85,7 +85,7 @@ function CodeSpaceInner() {
             headers: { Authorization: `Bearer ${token}` }
           }
         );
-        console.log("Code saved successfully");
+        // console.log("Code saved successfully");
         setSaveStatus("저장 완료");
         setTimeout(() => setSaveStatus(""), 2000);
 
@@ -96,7 +96,7 @@ function CodeSpaceInner() {
         setSaveStatus("저장 실패");
       }
     } else {
-      console.log('No selectedFileID');
+      // console.log('No selectedFileID');
     }
   };
 
