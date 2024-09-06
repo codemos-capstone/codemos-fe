@@ -7,11 +7,18 @@ import defaultProfilePic from 'assets/images/dol.jpg'
 import './Header.css';
 import LBBtn from "../Buttons/LBBtn";
 import axios from 'axios';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function Header(){
     const [isLogin, setIsLogin] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
     const navigate = useNavigate();
+    const { user, logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
 
     useEffect(() => {
         const token = sessionStorage.getItem("accessToken");
@@ -57,18 +64,22 @@ export default function Header(){
                 </div>
             </div>
             <div className="right">
-                <LBBtn></LBBtn>
-                <LoginBtn isLogin={isLogin} setIsLogin={setIsLogin}/>
-                {isLogin && userProfile && (
-                    <button 
-                    className="profile-image-button"
-                    onClick={() => navigate(`/profile/${userProfile.nickname}`)}
-                >
-                    <img 
-                        src={userProfile.profilePicUrl || getProfileImage(userProfile.nickname)} 
-                        alt="Profile" 
-                    />
-                </button>
+                <LBBtn />
+                {user ? (
+                    <>
+                        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+                        <button 
+                            className="profile-image-button"
+                            onClick={() => navigate(`/profile/${user.nickname}`)}
+                        >
+                            <img 
+                                src={user.profilePicUrl || getProfileImage(user.nickname)} 
+                                alt="Profile" 
+                            />
+                        </button>
+                    </>
+                ) : (
+                    <button btntype="login" className="login-btn" onClick={() => navigate("/login")}>Login</button>
                 )}
             </div>
         </div>

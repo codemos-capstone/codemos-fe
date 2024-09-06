@@ -15,6 +15,7 @@ import UserPage from "views/UserPage";
 import Layout from "components/Layout/Layout";
 import NotFound from "views/NotFound";
 import UserProfile from "./views/UserProfile";
+import { AuthProvider } from './contexts/AuthContext';
 
 export default function App(){
     const location = useLocation();
@@ -22,6 +23,7 @@ export default function App(){
     if (pageName === "") { pageName = 'main' }
 
     return(
+        <AuthProvider>
         <div className={pageName} style={{ height: "100%", display: "flex"}}>
             <Routes>
                 <Route path="/" element={<Layout />}>
@@ -44,5 +46,6 @@ export default function App(){
                 </Route>
             </Routes>
         </div>
+        </AuthProvider>
     )
 }
