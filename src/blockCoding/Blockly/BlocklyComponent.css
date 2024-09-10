@@ -5,6 +5,10 @@
   margin: 20px 0;
 }
 
+rect.blocklyMainBackground {
+  stroke: none;
+}
+
 div.injectionDiv svg {
   width: 100%;
 }
