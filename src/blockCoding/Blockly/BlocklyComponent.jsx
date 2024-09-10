@@ -55,12 +55,16 @@ function BlocklyComponent(props) {
         primaryWorkspace.current,
       );
     }
-
-    if (savedCode) {
-      const processed = JSON.parse(savedCode);
-      Blockly.serialization.workspaces.load(processed, primaryWorkspace.current);
-    }
   }, [primaryWorkspace, toolbox]);
+  useEffect(() => {
+    const savedCode = props.savedCode;
+    if(primaryWorkspace.current) {
+      if (savedCode) {
+        const processed = JSON.parse(savedCode);
+        Blockly.serialization.workspaces.load(processed, primaryWorkspace.current);
+      }
+    }
+  }, [props.savedCode])
 
   return (
     <React.Fragment>
