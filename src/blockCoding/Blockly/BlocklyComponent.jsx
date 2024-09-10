@@ -40,6 +40,7 @@ function BlocklyComponent(props) {
     const code = Blockly.serialization.workspaces.save(primaryWorkspace.current);
     const processed = JSON.stringify(code);
     props.setSavedCode(processed);
+    console.log('converted')
   };
 
   useEffect(() => {
@@ -68,7 +69,7 @@ function BlocklyComponent(props) {
 
   return (
     <React.Fragment>
-      <button onClick={handleCode}>Convert</button>
+      <button className='block-convert-btn' onClick={handleCode}>Convert</button>
       <div ref={blocklyDiv} id="blocklyDiv" />
       <div style={{display: 'none'}} ref={toolbox}>
         {props.children}

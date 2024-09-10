@@ -72,5 +72,5 @@ export default function GameCanvas({ code, problem, endAnimation, setScore }){
         };
     }, [])
 
-    return <canvas ref={ canvasRef } style={{width: `70%`, height: `20%`}}></canvas>
+    return <canvas ref={ canvasRef } style={{width: "90%", minWidth: "25rem", minHeight: "15rem", marginBottom: "1rem"}}></canvas>
 }

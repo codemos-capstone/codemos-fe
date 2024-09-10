@@ -114,7 +114,7 @@ export default function Code() {
 
     return (
         <div className="code">
-            <div className="code-container">
+            <div className="editor-container">
                 {selectedProblem ? (
                     <>
                         <div className="problems">

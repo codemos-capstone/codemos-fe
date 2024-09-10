@@ -1,6 +1,19 @@
 #blocklyDiv {
-  height: 60%;
+  height: 20rem;
+  width: 90%;
+  min-width: 20rem;
+  margin: 20px 0;
+}
+
+div.injectionDiv svg {
   width: 100%;
-  position: absolute;
-  bottom: 0;
+}
+
+svg.blocklySvg {
+  height: 100%;
+}
+
+.block-convert-btn {
+  padding: 3px 6px;
+  cursor: pointer;
 }
