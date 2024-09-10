@@ -39,16 +39,11 @@ function BlocklyComponent(props) {
   const handleCode = () => {
     const code = Blockly.serialization.workspaces.save(primaryWorkspace.current);
     const processed = JSON.stringify(code);
-    // console.log(processed)
     props.setSavedCode(processed);
   };
 
   useEffect(() => {
-    const {initialXml, children, ...rest} = props;
-    if (props.savedCode) {
-      const processed = JSON.parse(props.savedCode);
-      Blockly.serialization.workspaces.load(processed, primaryWorkspace.current);
-    }
+    const {initialXml, children, savedCode, ...rest} = props;
     primaryWorkspace.current = Blockly.inject(blocklyDiv.current, {
       toolbox: toolbox.current,
       ...rest,
@@ -59,6 +54,11 @@ function BlocklyComponent(props) {
         Blockly.utils.xml.textToDom(initialXml),
         primaryWorkspace.current,
       );
+    }
+
+    if (savedCode) {
+      const processed = JSON.parse(savedCode);
+      Blockly.serialization.workspaces.load(processed, primaryWorkspace.current);
     }
   }, [primaryWorkspace, toolbox]);
 
