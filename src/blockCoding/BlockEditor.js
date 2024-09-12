@@ -87,9 +87,15 @@ export default function BlockEditor() {
       </category>
     </xml>
   `;
+  const containerStyles = {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  }
 
   return (
-    <div className="block-editor-container" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+    <div className="block-editor-container" style={containerStyles}>
         <BlocklyComponent
           readOnly={false}
           trashcan={true}

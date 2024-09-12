@@ -40,6 +40,7 @@ function BlocklyComponent(props) {
     const code = Blockly.serialization.workspaces.save(primaryWorkspace.current);
     const processed = JSON.stringify(code);
     props.setSavedCode(processed);
+    console.log('converted')
   };
 
   useEffect(() => {
@@ -48,6 +49,22 @@ function BlocklyComponent(props) {
       toolbox: toolbox.current,
       ...rest,
     });
+    primaryWorkspace.current.setTheme(Blockly.Theme.defineTheme('dark', {
+      'base': Blockly.Themes.Classic,
+      'componentStyles': {
+        'workspaceBackgroundColour': '#202020',
+        'toolboxBackgroundColour': '#3D3D3D',
+        'toolboxForegroundColour': '#fff',
+        'flyoutBackgroundColour': '#252526',
+        'flyoutForegroundColour': '#ccc',
+        'flyoutOpacity': 1,
+        'scrollbarColour': '#797979',
+        'insertionMarkerColour': '#fff',
+        'insertionMarkerOpacity': 0.3,
+        'scrollbarOpacity': 0.4,
+        'cursorColour': '#d0d0d0',
+      },
+    }));
 
     if (initialXml) {
       Blockly.Xml.domToWorkspace(
@@ -68,7 +85,7 @@ function BlocklyComponent(props) {
 
   return (
     <React.Fragment>
-      <button onClick={handleCode}>Convert</button>
+      <button className='block-convert-btn' onClick={handleCode}>Convert</button>
       <div ref={blocklyDiv} id="blocklyDiv" />
       <div style={{display: 'none'}} ref={toolbox}>
         {props.children}
