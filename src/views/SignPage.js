@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import Login from "components/Sign/Login";
 import Register from "components/Sign/Register";
-
-import "./LoginPage.css"
 import ForgotPassword from "components/Sign/ForgotPassword";
+
+import "./SignPage.css"
 
 const btnTexts = require('lang/kor.json').login;
 
-export default function LoginPage(){
+export default function SignPage(){
     const navigate = useNavigate();
     const location = useLocation();
     const { formType } = useParams();
