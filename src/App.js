@@ -1,7 +1,7 @@
 import React from "react"
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Docs from "views/Docs"
-import LoginPage from "views/LoginPage"
+import SignPage from "views/SignPage"
 import Leader from "views/Leader"
 import OnLogin from "views/OnLogin"
 import OAuthMiddle from "hooks/auth";
@@ -31,7 +31,7 @@ export default function App(){
                     <Route path="/landing" element={<Landing/>}/>
                     <Route path="/codespaces" element={<CodeSpaces/>}/>
                     <Route path="/docs" element={<Docs isVisible={false} />} />
-                    <Route path="/login" element={<LoginPage/>} />
+                    <Route path="/sign/:formType" element={<SignPage/>} />
                     <Route path="/leader/:problemId" element={<Leader />} />
                     <Route path="/google/callback" element={<OnLogin />} />
                     <Route path="/oauthMiddle" element={<OAuthMiddle />} />

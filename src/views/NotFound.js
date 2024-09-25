@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function NotFound(){
+    useEffect(()=>{
+        window.history.replaceState({}, '', '/404');
+    }, [])
     return(
         <div style={{
             height: "100%", // Viewport height
