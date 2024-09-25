@@ -1,19 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import useLogin from './useLogin'; // Import the custom hook
 import googleLoginImage from 'assets/images/continueGoogle.png';
 const btnTexts = require('lang/kor.json').login;
 
-export default function Login({ setForm }) {
+export default function Login() {
     const { email, setEmail, password, setPassword, handleLogin } = useLogin();
+    const navigate = useNavigate();
     const googleOAuth = process.env.REACT_APP_GOOGLE_OAUTH_ADDRESS;
-
-    function pageToggle() {
-        setForm('register');
-    }
-
-    function handleForgotPassword() {
-        setForm('forgot-password');
-    }
 
     const containerStyle = {
         marginTop: '10%',
@@ -42,7 +36,7 @@ export default function Login({ setForm }) {
                     <input type="password" id="password" name="password" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} required />
                     <div
                         style={{ float: 'left', fontSize: '60%', textDecoration: 'underline', cursor: 'pointer' }}
-                        onClick={handleForgotPassword}
+                        onClick={() => navigate("/sign/forgotpassword")}
                     >
                         비밀번호를 잊으셨나요?
                     </div>
@@ -54,7 +48,7 @@ export default function Login({ setForm }) {
                     </a>
                 </div>
                 <button type="submit" style={{ margin: '5px' }}>{btnTexts[1]}</button>
-                <button type="button" onClick={pageToggle}>{btnTexts[2]}</button>
+                <button type="button" onClick={() => navigate("/sign/register")}>{btnTexts[2]}</button>
             </form>
         </div>
     );

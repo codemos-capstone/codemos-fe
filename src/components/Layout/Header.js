@@ -79,7 +79,7 @@ export default function Header(){
                         </button>
                     </>
                 ) : (
-                    <button btntype="login" className="login-btn" onClick={() => navigate("/login")}>Login</button>
+                    <button btntype="login" className="login-btn" onClick={() => navigate("/sign/login")}>Login</button>
                 )}
             </div>
         </div>

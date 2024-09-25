@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useRegister from './useRegister'; // 사용자 정의 훅 import
 const btnTexts = require('lang/kor.json').login;
 
-export default function Register({ setForm, initialEmail }) {
+export default function Register({ initialEmail }) {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -57,7 +57,7 @@ export default function Register({ setForm, initialEmail }) {
                 </div>
                 <div className="form-group">
                     <label htmlFor="email" style={labelStyle}>Email</label>
-                    <input type="text" id="reg-id" name="email" value={email} onChange={e => setEmail(e.target.value)} required 
+                    <input type="text" id="reg-id" name="email" value={email} placeholder="Enter your email" onChange={e => setEmail(e.target.value)} required 
                            readOnly={!!initialEmail} style={!!initialEmail ? inputReadOnlyStyle : {}} />
                 </div>
                 <div className="form-group">
@@ -70,8 +70,7 @@ export default function Register({ setForm, initialEmail }) {
                 </div>
                 <button type="submit" style={{ margin: '5px' }}>{btnTexts[2]}</button>
                 <button type="button" onClick={() => {
-                    setForm('login');
-                    navigate('/login');
+                    navigate('/sign/login');
                 }}>{btnTexts[3]}</button>
             </form>
         </div>
