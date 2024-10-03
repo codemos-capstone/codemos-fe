@@ -173,23 +173,23 @@ export default function Code() {
                 ) : (
                     <div></div>
                     //선택 안하면 아무것도 없음
-
                 )}
-                <div className="fileSubject">{selectedFileName}</div>
-                {currentLang == 'js' ? <AceEditor
-                    style={CodeEditorStyle}
-                    id="editor"
-                    mode="javascript"
-                    theme="ambiance"
-                    name="code-editor"
-                    fontSize="14px"
-                    value={selectedCode || "_mainloop = function(){\n\n}"} // selectedCode 없으면 기본값
-                    onChange={(value) => setSelectedCode(value)}
-                    showPrintMargin={false}
-                    editorProps={{ $blockScrolling: false }}
-                    marginBottom="4%"
-                />
-                :<BlockEditor />}
+                {selectedCode ? <div className="fileSubject">{selectedFileName}</div> :
+                    <div className="no-file">파일을 생성해주세요.<br /> (파일을 생성하지 않으면 코드가 저장되지 않습니다.)</div>}
+                {currentLang == 'block' ? <BlockEditor />
+                : <AceEditor
+                style={CodeEditorStyle}
+                id="editor"
+                mode="javascript"
+                theme="ambiance"
+                name="code-editor"
+                fontSize="14px"
+                value={selectedCode || "_mainloop = function(){\n\n}"}
+                onChange={(value) => setSelectedCode(value)}
+                showPrintMargin={false}
+                editorProps={{ $blockScrolling: false }}
+                marginBottom="4%"
+            />}
                 <div style={{ color: "white" }}>
                     {isJudging ? (
                         <div>
