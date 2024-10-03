@@ -30,6 +30,17 @@ import * as Blockly from 'blockly/core';
 import '../fields/BlocklyReactField';
 import '../fields/DateField';
 
+Blockly.Blocks['get_fuel'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("getFuel()");
+    this.setOutput(true, "Number");
+    this.setColour(230);
+    this.setTooltip("우주선의 현재 남은 연료를 실수형으로 반환합니다.");
+    this.setHelpUrl("");
+  }
+};
+
 Blockly.Blocks['get_velocity_x'] = {
   init: function() {
     this.appendDummyInput()

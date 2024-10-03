@@ -33,6 +33,11 @@ javascriptGenerator.forBlock['main_loop'] = function(block) {
   return code;
 };
 
+javascriptGenerator.forBlock['get_fuel'] = function(block) {
+  var code = 'getFuel()';
+  return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
+};
+
 javascriptGenerator.forBlock['get_velocity_x'] = function(block) {
   var code = 'getVelocityX()';
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];

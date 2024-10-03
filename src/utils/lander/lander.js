@@ -143,6 +143,13 @@ export const makeLander = (state, setting, endAnimation) => {
     const updateIterator = (code, logs) => {
         const rocket = deepCopy(logs[0]);
         
+        const getFuel = () => {
+            if(allowed.getFuel) {
+                return constants.FUELLIMIT - rocket.usedfuel;}
+            else {
+                throw new TypeError("getFuel is not a function")
+            }
+        };
         // Rocket functions
         const engineOn = () => {
             if(allowed.engineOn)

@@ -140,6 +140,10 @@ export default function ProblemEdit() {
                     <label>허용 함수:</label>
                     <div>
                         <label>
+                            <input type="checkbox" name="getFuel" checked={problem.restrictedMethods.includes("getFuel")} onChange={handleCheckboxChange} />
+                            getFuel
+                        </label>
+                        <label>
                             <input type="checkbox" name="getVelocityX" checked={problem.restrictedMethods.includes("getVelocityX")} onChange={handleCheckboxChange} />
                             getVelocityX
                         </label>
