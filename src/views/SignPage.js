@@ -34,7 +34,7 @@ export default function SignPage(){
         <div className="sign-container">
             {form}
             <div className="home">
-                <button btntype='main' className="home-btn" onClick={()=>{navigate("/");}}>{btnTexts[4]}</button>
+                <button btntype='main' className="home-btn" onClick={()=>{navigate("/");}}>{btnTexts[5]}</button>
             </div>
         </div>
     )

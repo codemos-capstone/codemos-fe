@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useRegister from './useRegister'; // 사용자 정의 훅 import
 const btnTexts = require('lang/kor.json').login;
 
@@ -68,10 +68,10 @@ export default function Register({ initialEmail }) {
                     <label htmlFor="confirmPassword" style={labelStyle}>Confirm Password</label>
                     <input type="password" id="re-password" name="re-password" placeholder="Re-enter your password" onChange={e => setConfirmPassword(e.target.value)} required />
                 </div>
-                <button type="submit" style={{ margin: '5px' }}>{btnTexts[2]}</button>
-                <button type="button" onClick={() => {
-                    navigate('/sign/login');
-                }}>{btnTexts[3]}</button>
+                <div className="btn-container">
+                    <button type="submit" className="submit">{btnTexts[2]}</button>
+                    <Link to={"/sign/login"}>{btnTexts[3]}</Link>
+                </div>
             </form>
         </div>
     );
