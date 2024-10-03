@@ -124,10 +124,10 @@ export default function Code() {
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Time Limit</th>
+                                        <th>Time Limit<br /><span>getTimeLeft()</span></th>
                                         <th>Fuel Limit<br /><span>getFuel()</span></th>
                                         <th>Initial Position(x, y)<br /><span>getX(), getY()</span></th>
-                                        <th>Initial Velocity(x, y)<br /><span>getVelocityX()<br/>getVelocityY()</span></th>
+                                        <th>Initial Velocity(x, y)<br /><span>getVelocityX(), getVelocityY()</span></th>
                                         <th>Initial Rotation Velocity<br /><span>getRotationVelocity()</span></th>
                                         <th>Initial Angle(deg)</th>
                                     </tr>

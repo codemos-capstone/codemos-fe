@@ -72,11 +72,15 @@ export default function BlockEditor() {
       <sep></sep>
       <category name="Game" colour="#A6745C">
         <block type="main_loop"></block>
+        <block type="get_x"></block>
+        <block type="get_y"></block>
         <block type="get_velocity_x"></block>
         <block type="get_velocity_y"></block>
         <block type="get_angle"></block>
         <block type="get_height"></block>
         <block type="get_rotation_velocity"></block>
+        <block type="get_fuel"></block>
+        <block type="get_time_left"></block>
         <block type="engine_on"></block>
         <block type="engine_off"></block>
         <block type="rotate_left"></block>
