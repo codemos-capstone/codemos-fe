@@ -46,12 +46,9 @@
 #board .row:hover{
     background-color: #00244b;
 }
-tr:hover {
+#board tbody tr:hover {
 background-color: #b5a7a7;
 cursor: pointer; /* 마우스를 올렸을 때 커서를 포인터로 변경 */
-}
-th:hover {
-cursor: none; /* 마우스를 올렸을 때 커서를 포인터로 변경 */
 }
 
 /* 클릭된 행에 대한 스타일 */
