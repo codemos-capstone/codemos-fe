@@ -88,6 +88,9 @@ const Docs = () => {
             <li><a href="#get">Get Methods</a>
                 <ul>
                     <li><a href="#getFuel">getFuel</a></li>
+                    <li><a href="#getTimeLeft">getTimeLeft</a></li>
+                    <li><a href="#getX">getX</a></li>
+                    <li><a href="#getY">getY</a></li>
                     <li><a href="#getVelocityX">getVelocityX()</a></li>
                     <li><a href="#getVelocityY">getVelocityY()</a></li>
                     <li><a href="#getAngle">getAngle()</a></li>
@@ -162,6 +165,39 @@ const Docs = () => {
             <div className="function-example">
                 <pre><code className="language-javascript">
     getFuel()
+                </code></pre>
+            </div>
+        </div>
+        <div className="api-function" id="getTimeLeft">
+            <h2 className="function-title">getTimeLeft</h2>
+            <p className="function-description">
+    이 함수는 현재 남은 제한 시간을 정수형으로 반환합니다.<br />
+            </p>
+            <div className="function-example">
+                <pre><code className="language-javascript">
+    getTimeLeft()
+                </code></pre>
+            </div>
+        </div>
+        <div className="api-function" id="getX">
+            <h2 className="function-title">getX</h2>
+            <p className="function-description">
+    이 함수는 우주선의 현재 X 좌표를 실수형으로 반환합니다.<br />
+            </p>
+            <div className="function-example">
+                <pre><code className="language-javascript">
+    getX()
+                </code></pre>
+            </div>
+        </div>
+        <div className="api-function" id="getY">
+            <h2 className="function-title">getY</h2>
+            <p className="function-description">
+    이 함수는 우주선의 현재 Y 좌표를 실수형으로 반환합니다.<br />
+            </p>
+            <div className="function-example">
+                <pre><code className="language-javascript">
+    getY()
                 </code></pre>
             </div>
         </div>

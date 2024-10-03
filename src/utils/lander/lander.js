@@ -17,7 +17,7 @@ export const makeLander = (state, setting, endAnimation) => {
 
     // Use grounded height to approximate distance from ground
     const _landingData = state.get("terrain").getLandingData();
-    const _groundedHeight = _landingData.terrainAvgHeight - constants.ROCKET_HEIGHT / 2;    
+    const _groundedHeight = _landingData.terrainAvgHeight - constants.ROCKET_HEIGHT / 2;
 
     const drawHUD = (rocket) => {
         const textWidth = CTX.measureText("100.0 m/s").width + 2;
@@ -142,87 +142,113 @@ export const makeLander = (state, setting, endAnimation) => {
 
     const updateIterator = (code, logs) => {
         const rocket = deepCopy(logs[0]);
-        
+
         const getFuel = () => {
-            if(allowed.getFuel) {
-                return constants.FUELLIMIT - rocket.usedfuel;}
+            if (allowed.getFuel) {
+                return constants.FUELLIMIT - rocket.usedfuel;
+            }
             else {
                 throw new TypeError("getFuel is not a function")
             }
         };
-        // Rocket functions
-        const engineOn = () => {
-            if(allowed.engineOn)
-                rocket.engineOn = true;
+        const getTimeLeft = () => {
+            if (allowed.getTimeLeft) {
+                return constants.TIMELIMIT - rocket.timeSinceStart;
+            }
             else {
-                throw new TypeError("engineOn is not a function")
+                throw new TypeError("getTimeLeft is not a function")
             }
         };
-        const engineOff = () => {
-            if(allowed.engineOff)
-                rocket.engineOn = false;
+        const getX = () => {
+            if (allowed.getX) {
+                return rocket.position.x / canvasWidth;
+            }
             else {
-                throw new TypeError("engineOff is not a function")
+                throw new TypeError("getX is not a function")
+            }
+        };
+        const getY = () => {
+            if (allowed.getY) {
+                return 1 - rocket.position.y / canvasHeight;
+            }
+            else {
+                throw new TypeError("getY is not a function")
             }
         };
         const getVelocityX = () => {
-            if(allowed.getVelocityX) {
-                return velocityInMPS_s(rocket.velocity.x);}
+            if (allowed.getVelocityX) {
+                return velocityInMPS_s(rocket.velocity.x);
+            }
             else {
                 throw new TypeError("getVelocityX is not a function")
             }
         };
         const getVelocityY = () => {
-            if(allowed.getVelocityY)
+            if (allowed.getVelocityY)
                 return velocityInMPS_s(rocket.velocity.y);
             else {
                 throw new TypeError("getVelocityY is not a function")
             }
         };
         const getAngle = () => {
-            if(allowed.getAngle)
+            if (allowed.getAngle)
                 return rocket.angle;
             else {
                 throw new TypeError("getAngle is not a function")
             }
         };
         const getHeight = () => {
-            if(allowed.getHeight)
+            if (allowed.getHeight)
                 return heightInMeter(rocket.position.y, _groundedHeight);
             else {
                 throw new TypeError("getHeight is not a function")
             }
         };
         const getRotationVelocity = () => {
-            if(allowed.getRotationVelocity)
+            if (allowed.getRotationVelocity)
                 return velocityInMPS_s(rocket.rotationVelocity);
             else {
                 throw new TypeError("getRotationVelocity is not a function")
             }
         };
+        // Rocket functions
+        const engineOn = () => {
+            if (allowed.engineOn)
+                rocket.engineOn = true;
+            else {
+                throw new TypeError("engineOn is not a function")
+            }
+        };
+        const engineOff = () => {
+            if (allowed.engineOff)
+                rocket.engineOn = false;
+            else {
+                throw new TypeError("engineOff is not a function")
+            }
+        };
         const rotateLeft = () => {
-            if(allowed.rotateLeft)
+            if (allowed.rotateLeft)
                 rocket.rotatingLeft = true;
             else {
                 throw new TypeError("rotateLeft is not a function")
             }
         };
         const rotateRight = () => {
-            if(allowed.rotateRight)
+            if (allowed.rotateRight)
                 rocket.rotatingRight = true;
             else {
                 throw new TypeError("rotateRight is not a function")
             }
         };
         const stopLeftRotation = () => {
-            if(allowed.stopLeftRotation)
+            if (allowed.stopLeftRotation)
                 rocket.rotatingLeft = false;
             else {
                 throw new TypeError("stopLeftRotation is not a function")
             }
         };
         const stopRightRotation = () => {
-            if(allowed.stopRightRotation)
+            if (allowed.stopRightRotation)
                 rocket.rotatingRight = false;
             else {
                 throw new TypeError("stopRightRotation is not a function")
@@ -232,15 +258,15 @@ export const makeLander = (state, setting, endAnimation) => {
         const logging = () => {
             console.log(
                 "getVelocityX()        : " +
-                    getVelocityX() +
-                    "\ngetVelocityY()        : " +
-                    getVelocityY() +
-                    "\ngetAngle()            : " +
-                    getAngle() +
-                    "\ngetHeight()           : " +
-                    getHeight() +
-                    "\ngetRotationVelocity() : " +
-                    getRotationVelocity()
+                getVelocityX() +
+                "\ngetVelocityY()        : " +
+                getVelocityY() +
+                "\ngetAngle()            : " +
+                getAngle() +
+                "\ngetHeight()           : " +
+                getHeight() +
+                "\ngetRotationVelocity() : " +
+                getRotationVelocity()
             );
         }
 
@@ -252,13 +278,13 @@ export const makeLander = (state, setting, endAnimation) => {
 
         let isEnd = { end: false };
 
-        let _mainloop = () => {};
-        try{
+        let _mainloop = () => { };
+        try {
             eval(code);
-            while(!isEnd.end){
+            while (!isEnd.end) {
                 _mainloop();
                 isEnd = checkEnd(rocket);
-                if (!isEnd.end){
+                if (!isEnd.end) {
                     updateRocket(rocket)
                     logs.push(deepCopy(rocket));
                 } else {
@@ -284,15 +310,15 @@ export const makeLander = (state, setting, endAnimation) => {
 
     function deepCopy(obj) {
         if (typeof obj !== 'object' || obj === null) {
-          return obj;
+            return obj;
         }
         if (Array.isArray(obj)) {
-          return [...obj.map(deepCopy)];
+            return [...obj.map(deepCopy)];
         }
 
         const copy = {};
         for (const key in obj) {
-          copy[key] = deepCopy(obj[key]);
+            copy[key] = deepCopy(obj[key]);
         }
         return copy;
     };
@@ -300,15 +326,15 @@ export const makeLander = (state, setting, endAnimation) => {
     const checkEnd = (rocket) => {
         const landingArea = _landingData.landingSurfaces.find(({ x, width }) => rocket.position.x - constants.ROCKET_WIDTH / 2 >= x && rocket.position.x + constants.ROCKET_WIDTH / 2 <= x + width);
         const didLand = getVectorVelocity(rocket.velocity) < CRASH_VELOCITY && getAngleDeltaUpright(rocket.angle) < CRASH_ANGLE && landingArea;
-        if (rocket.timeSinceStart > constants.TIMELIMIT && constants.TIMELIMIT != -1){
-            return {end: true, land: false, ground: false}
+        if (rocket.timeSinceStart > constants.TIMELIMIT && constants.TIMELIMIT != -1) {
+            return { end: true, land: false, ground: false }
         } else if (rocket.position.y + constants.ROCKET_HEIGHT / 2 < _landingData.terrainHeight ||
-        (rocket.position.y + constants.ROCKET_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + constants.ROCKET_HEIGHT / 2) * state.get("scaleFactor")))){
-            return { end: false, land: false, ground: true};
+            (rocket.position.y + constants.ROCKET_HEIGHT / 2 >= _landingData.terrainHeight && !CTX.isPointInPath(_landingData.terrainPath2D, rocket.position.x * state.get("scaleFactor"), (rocket.position.y + constants.ROCKET_HEIGHT / 2) * state.get("scaleFactor")))) {
+            return { end: false, land: false, ground: true };
         } else if (didLand) {
-            return { end: true, land: true, ground: true};
+            return { end: true, land: true, ground: true };
         } else {
-            return { end: true, land: false, ground: true};
+            return { end: true, land: false, ground: true };
         }
     };
 
@@ -357,7 +383,7 @@ export const makeLander = (state, setting, endAnimation) => {
         if (getVectorVelocity(rocket.velocity) > getVectorVelocity(rocket.maxVelocity)) {
             rocket.maxVelocity = { ...rocket.velocity };
         }
-    
+
         if (rocket.position.y < rocket.heightMilestone + Math.min(-3500, rocket.heightMilestone * 3)) {
             rocket.heightMilestone = rocket.position.y;
         }
@@ -389,10 +415,10 @@ export const makeLander = (state, setting, endAnimation) => {
     
             cloud.displayPosition.x = cloud.position.x;
         });*/
-       explosion.draw();
+        explosion.draw();
     };
 
-    const drawCloud = (cloud) => {};
+    const drawCloud = (cloud) => { };
 
     const makeClouds = (rocket) => {
         let clouds = [];
@@ -423,18 +449,18 @@ export const makeLander = (state, setting, endAnimation) => {
             lastLog.position.y >= 0
         );
         let clouds = makeClouds(lastLog);
-        const score = landingState.land? scoreLanding(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity)).toFixed(1): scoreCrash(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity)).toFixed(1);
+        const score = landingState.land ? scoreLanding(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity)).toFixed(1) : scoreCrash(getAngleDeltaUpright(lastLog.angle), getVectorVelocity(lastLog.velocity)).toFixed(1);
         // console.log(lastLog)
-        
+
         let confetti = makeConfetti(state, Math.round(100)); //amount depends on score
         const drawFromLogs = () => {
-            if(logs.length > 0) currentState = logs.shift();
+            if (logs.length > 0) currentState = logs.shift();
 
             CTX.fillStyle = state.get("theme").backgroundGradient;
             CTX.fillRect(0, 0, canvasWidth, canvasHeight);
 
             // Move stars in parallax as lander flies high
-            state.get("stars").draw(logs.length > 0? currentState.velocity: {x: 0, y: 0});
+            state.get("stars").draw(logs.length > 0 ? currentState.velocity : { x: 0, y: 0 });
 
             // Move terrain as lander flies high
             CTX.save();
@@ -443,17 +469,17 @@ export const makeLander = (state, setting, endAnimation) => {
             CTX.restore();
 
             //Draw rocket when the game is not ended or the rocket succesfully landed
-            if(logs.length <= 0){
-                if(landingState.land) {
-                    if(img) drawRocketImg(currentState, img);
+            if (logs.length <= 0) {
+                if (landingState.land) {
+                    if (img) drawRocketImg(currentState, img);
                     else drawRocket(currentState)
                     drawLanding(currentState.position, confetti);
                 } else {
-                    drawExploding(landingState.ground, img? imgExplosion: explosion, clouds);                    
+                    drawExploding(landingState.ground, img ? imgExplosion : explosion, clouds);
                 }
                 landAnimationCount++;
             } else {
-                if(img) drawRocketImg(currentState, img);
+                if (img) drawRocketImg(currentState, img);
                 else drawRocket(currentState)
             }
 
@@ -462,7 +488,7 @@ export const makeLander = (state, setting, endAnimation) => {
             if (currentState.position.y > TRANSITION_TO_SPACE) {
                 drawTrajectory(state, currentState.position, currentState.angle, currentState.velocity, currentState.rotationVelocity);
             }
-    
+
             // Draw speed and angle text beside lander, even after crashing
             // if (currentState.position.y > TRANSITION_TO_SPACE) {
             drawHUD(currentState);
@@ -519,7 +545,7 @@ export const makeLander = (state, setting, endAnimation) => {
         CTX.closePath();
         CTX.fillStyle = state.get("theme").landerGradient;
         CTX.fill();
-        
+
         //rocket cap
         CTX.beginPath();
         CTX.moveTo(-constants.ROCKET_WIDTH / 2, -constants.ROCKET_HEIGHT / 2);
@@ -531,7 +557,7 @@ export const makeLander = (state, setting, endAnimation) => {
 
         CTX.beginPath();
         CTX.moveTo(-constants.ROCKET_WIDTH / 2, 0);
-        CTX.lineTo(-constants.ROCKET_WIDTH , 5 *constants.ROCKET_HEIGHT / 8);
+        CTX.lineTo(-constants.ROCKET_WIDTH, 5 * constants.ROCKET_HEIGHT / 8);
         CTX.lineTo(-constants.ROCKET_WIDTH / 2, constants.ROCKET_HEIGHT / 2);
         CTX.closePath();
         CTX.fillStyle = state.get("theme").threeGradient("#DFE5E5", "#4A4E6F", "#3D4264", constants.ROCKET_WIDTH / 2, -3 * constants.ROCKET_WIDTH / 4, 0.8);
@@ -539,7 +565,7 @@ export const makeLander = (state, setting, endAnimation) => {
 
         CTX.beginPath();
         CTX.moveTo(constants.ROCKET_WIDTH / 2, 0);
-        CTX.lineTo(constants.ROCKET_WIDTH , 5 *constants.ROCKET_HEIGHT / 8);
+        CTX.lineTo(constants.ROCKET_WIDTH, 5 * constants.ROCKET_HEIGHT / 8);
         CTX.lineTo(constants.ROCKET_WIDTH / 2, constants.ROCKET_HEIGHT / 2);
         CTX.closePath();
         CTX.fillStyle = state.get("theme").threeGradient("#3D4264", "#4A4E6F", "#DFE5E5", constants.ROCKET_WIDTH / 2, 3 * constants.ROCKET_WIDTH / 4, 0.2);
@@ -617,7 +643,7 @@ export const makeLander = (state, setting, endAnimation) => {
 
         // Translate to the top-left corner of the lander so engine and booster
         // flames can be drawn from 0, 0
-        CTX.translate( - constants.ROCKET_WIDTH / 2,  - constants.ROCKET_HEIGHT / 2);
+        CTX.translate(- constants.ROCKET_WIDTH / 2, - constants.ROCKET_HEIGHT / 2);
         if (rocket.usedfuel < constants.FUELLIMIT && constants.FUELLIMIT != -1) {
             if (rocket.engineOn || rocket.rotatingLeft || rocket.rotatingRight) {
                 CTX.fillStyle = randomBool() ? "#415B8C" : "#F3AFA3";
@@ -659,7 +685,7 @@ export const makeLander = (state, setting, endAnimation) => {
         CTX.restore();
     };
 
-    const drawExplodingImg = (isGround, explosion, clouds, img) => {};
+    const drawExplodingImg = (isGround, explosion, clouds, img) => { };
 
     return {
         draw,
