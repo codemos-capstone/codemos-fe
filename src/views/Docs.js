@@ -47,6 +47,7 @@ const aboutLogging = `logging()
 /*
 f12 -> [console output]
 
+getFuel()        : 19.5243920054893
 getVelocityX()        : 11.39214005489352
 getVelocityY()        : 27.95145243876781
 getAngle()            : -60.2
@@ -86,6 +87,7 @@ const Docs = () => {
             <li><a href="#start">Getting Started</a></li>
             <li><a href="#get">Get Methods</a>
                 <ul>
+                    <li><a href="#getFuel">getFuel</a></li>
                     <li><a href="#getVelocityX">getVelocityX()</a></li>
                     <li><a href="#getVelocityY">getVelocityY()</a></li>
                     <li><a href="#getAngle">getAngle()</a></li>
@@ -152,6 +154,17 @@ const Docs = () => {
             </p>
         </div>
         <h2 id="get">Get Methods</h2>
+        <div className="api-function" id="getFuel">
+            <h2 className="function-title">getFuel</h2>
+            <p className="function-description">
+    이 함수는 우주선의 현재 남은 연료양을 실수형으로 반환합니다.<br />
+            </p>
+            <div className="function-example">
+                <pre><code className="language-javascript">
+    getFuel()
+                </code></pre>
+            </div>
+        </div>
         <div className="api-function" id="getVelocityX">
             <h2 className="function-title">getVelocityX</h2>
             <p className="function-description">

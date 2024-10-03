@@ -32,6 +32,7 @@ export function makeInitState(problem, canvasSize){
     const allowed = {
         getVelocityX : true,
         getVelocityY : true,
+        getFuel: true,
         getAngle : true,
         getHeight : true,
         getRotationVelocity : true,
