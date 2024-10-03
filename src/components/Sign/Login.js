@@ -49,7 +49,7 @@ export default function Login() {
                 </div>
                 <div className='btn-container'>
                     <button className='submit' type="submit">{btnTexts[1]}</button>
-                    <Link to={"/sign/register"}>{btnTexts[4]}</Link>
+                    <div className='to-register'><Link to={"/sign/register"}>{btnTexts[4]}</Link></div>
                 </div>
             </form>
         </div>

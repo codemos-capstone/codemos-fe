@@ -66,10 +66,14 @@ function CodeSpaceInner() {
   };
 
   const handleSaveCode = async () => {
+    const token = sessionStorage.getItem("accessToken");
+    if (!token) {
+      alert('코드를 저장하려면 로그인이 필요합니다.');
+      return;
+    }
     if (selectedCodeId) {
       setSaveStatus("저장 중..."); // 저장 중 메시지 설정
       try {
-        const token = sessionStorage.getItem("accessToken");
         const now = new Date().toISOString();
         const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
         await axios.put(
@@ -93,7 +97,7 @@ function CodeSpaceInner() {
         setSaveStatus("저장 실패");
       }
     } else {
-      // console.log('No selectedFileID');
+      alert('파일 생성이 필요합니다.')
     }
   };
 

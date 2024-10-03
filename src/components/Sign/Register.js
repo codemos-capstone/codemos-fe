@@ -70,7 +70,7 @@ export default function Register({ initialEmail }) {
                 </div>
                 <div className="btn-container">
                     <button type="submit" className="submit">{btnTexts[2]}</button>
-                    <Link to={"/sign/login"}>{btnTexts[3]}</Link>
+                    <div><Link to={"/sign/login"}>{btnTexts[3]}</Link></div>
                 </div>
             </form>
         </div>
