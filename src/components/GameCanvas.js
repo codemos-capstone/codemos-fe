@@ -61,8 +61,9 @@ export default function GameCanvas({ code, problem, endAnimation, setScore }) {
       challengeManager.populateCornerInfo();
   
       const logs = [initState[0]];
-      const language = 'C';
+      const language = 'c';
       const cCode = `
+            #include <stdio.h>
             #include <math.h>
 
             extern double getVelocityX();
@@ -98,14 +99,15 @@ export default function GameCanvas({ code, problem, endAnimation, setScore }) {
             }
 
             void engineControl() {
-                if (((getVelocityY() + fabs(getVelocityX())) > (getHeight() - landAlt) / 1600 &&
-                    ((getAngle() > 0 && getVelocityX() < -0.1) || (getAngle() < 0 && getVelocityX() > 2))) ||
-                    ((getHeight() - landAlt) < getVelocityY() * 3 && getVelocityY() / 20 > (getHeight() - landAlt) / (getVelocityY() * 75)) &&
-                    fabs(getAngle()) < 90) {
-                    engineOn();
-                } else {
-                    engineOff();
-                }
+if (((getVelocityY() + fabs(getVelocityX())) > (getHeight() - landAlt) / 1600 &&
+     ((getAngle() > 0 && getVelocityX() < -0.1) || (getAngle() < 0 && getVelocityX() > 2))) ||
+     ((getHeight() - landAlt) < getVelocityY() * 3 && getVelocityY() / 20 > (getHeight() - landAlt) / (getVelocityY() * 75)) &&
+     fabs(getAngle()) < 90) {
+    engineOn();
+} else {
+    engineOff();
+}
+
             }
 
             void main() {
@@ -114,13 +116,16 @@ export default function GameCanvas({ code, problem, endAnimation, setScore }) {
             }
 
 
+
+
           `;
-  
+    
       // Asynchronous function to handle runSimulation
       async function runGame() {
+        console.log("code", code);
         let landingEffect = await lander.runSimulation(cCode, logs,language);
+        //let landingEffect = await lander.updateIterator(code, logs,language);
         console.log("logs", logs);
-  
         // Ensure this block runs after runSimulation is complete
         if (landingEffect) {
           score = lander.draw(logs, landingEffect);

@@ -22,12 +22,12 @@ export const makeLander = (state, setting, endAnimation) => {
     let wasmModule;
 
     // 서버로 C 코드를 전송해 WebAssembly로 변환하는 함수
-    const compileCodeAndGetWasm = async (cCode) => {
+    const compileCodeAndGetWasm = async (cCode,language) => {
         const formData = new FormData();
         formData.append('code', cCode);
+        //formData.append('language', language);
     
         try {
-            // 서버에 C 코드를 전송하고 WASM 파일을 받아옴
             const response = await fetch('http://selogic.seoultech.ac.kr:24242/compile', {
                 method: 'POST',
                 body: formData
@@ -175,7 +175,7 @@ export const makeLander = (state, setting, endAnimation) => {
             wasmModule = await WebAssembly.instantiate(wasmArrayBuffer, { env });
             wasmReady = true; // WASM 준비 완료
             const _mainloop = wasmModule.instance.exports.main;
-            console.log("mainloop function:", _mainloop.toString());
+            //console.log("mainloop function:", _mainloop.toString());
             while(!isEnd.end){
                 _mainloop();  // wasm mainloop 실행
                 isEnd = checkEnd(rocket);
@@ -630,9 +630,9 @@ export const makeLander = (state, setting, endAnimation) => {
 
     const drawExplodingImg = (isGround, explosion, clouds, img) => {};
     // **여기에 추가** (makeLander 함수의 마지막 부분)
-    const runLanderSimulation = async (cCode, logs) => {
+    const runLanderSimulation = async (cCode, logs, language) => {
         try {
-            const wasmArrayBuffer = await compileCodeAndGetWasm(cCode);
+            const wasmArrayBuffer = await compileCodeAndGetWasm(cCode, language);
             const landingState = updateIterator(wasmArrayBuffer, logs);
             return landingState;
         } catch (error) {
