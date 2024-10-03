@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useLogin from './useLogin'; // Import the custom hook
 import googleLoginImage from 'assets/images/continueGoogle.png';
 const btnTexts = require('lang/kor.json').login;
@@ -34,7 +34,7 @@ export default function Login() {
                 <div className="form-group">
                     <label htmlFor="password" style={labelStyle}>Password</label>
                     <input type="password" id="password" name="password" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} required />
-                    <div
+                    <div className='forgot-password'
                         style={{ float: 'left', fontSize: '60%', textDecoration: 'underline', cursor: 'pointer' }}
                         onClick={() => navigate("/sign/forgotpassword")}
                     >
@@ -42,13 +42,15 @@ export default function Login() {
                     </div>
                 </div>
               
-                <div className="form-group">
+                <div className="form-group google">
                     <a href={googleOAuth}>
                         <img src={googleLoginImage} alt="Continue with Google" style={{ width: '50%', cursor: 'pointer', marginTop:'10px'}} />
                     </a>
                 </div>
-                <button type="submit" style={{ margin: '5px' }}>{btnTexts[1]}</button>
-                <button type="button" onClick={() => navigate("/sign/register")}>{btnTexts[2]}</button>
+                <div className='btn-container'>
+                    <button className='submit' type="submit">{btnTexts[1]}</button>
+                    <Link to={"/sign/register"}>{btnTexts[4]}</Link>
+                </div>
             </form>
         </div>
     );
