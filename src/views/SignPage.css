@@ -62,10 +62,16 @@
 .sign-container form button.submit {
     width: 85%;
 }
-.sign-container form a {
-    margin-top: 0.5rem;
+.sign-container form .btn-container div {
+    margin-top: 0.7rem;
+}
+.sign-container form .btn-container a {
     font-size: 0.75rem;
     color: #414141;
+}
+.sign-container form .to-register a {
+    font-size: 0.82rem;
+    color: #0c2c68;
 }
 .sign-container form a:hover {
     color: #1347a7;
