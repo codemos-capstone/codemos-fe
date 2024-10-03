@@ -38,11 +38,16 @@ javascriptGenerator.forBlock['get_fuel'] = function(block) {
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
 };
 
-javascriptGenerator.forBlock['get_X'] = function(block) {
+javascriptGenerator.forBlock['get_time_left'] = function(block) {
+  var code = 'getTimeLeft()';
+  return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
+};
+
+javascriptGenerator.forBlock['get_x'] = function(block) {
   var code = 'getX()';
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
 };
-javascriptGenerator.forBlock['get_Y'] = function(block) {
+javascriptGenerator.forBlock['get_y'] = function(block) {
   var code = 'getY()';
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
 };

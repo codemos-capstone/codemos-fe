@@ -151,6 +151,14 @@ export const makeLander = (state, setting, endAnimation) => {
                 throw new TypeError("getFuel is not a function")
             }
         };
+        const getTimeLeft = () => {
+            if (allowed.getTimeLeft) {
+                return constants.TIMELIMIT - rocket.timeSinceStart;
+            }
+            else {
+                throw new TypeError("getTimeLeft is not a function")
+            }
+        };
         const getX = () => {
             if (allowed.getX) {
                 return rocket.position.x;

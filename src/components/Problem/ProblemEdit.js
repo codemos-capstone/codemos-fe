@@ -144,6 +144,10 @@ export default function ProblemEdit() {
                             getFuel
                         </label>
                         <label>
+                            <input type="checkbox" name="getTimeLeft" checked={problem.restrictedMethods.includes("getTimeLeft")} onChange={handleCheckboxChange} />
+                            getTimeLeft
+                        </label>
+                        <label>
                             <input type="checkbox" name="getX" checked={problem.restrictedMethods.includes("getX")} onChange={handleCheckboxChange} />
                             getX
                         </label>

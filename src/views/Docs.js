@@ -88,6 +88,7 @@ const Docs = () => {
             <li><a href="#get">Get Methods</a>
                 <ul>
                     <li><a href="#getFuel">getFuel</a></li>
+                    <li><a href="#getTimeLeft">getTimeLeft</a></li>
                     <li><a href="#getX">getX</a></li>
                     <li><a href="#getY">getY</a></li>
                     <li><a href="#getVelocityX">getVelocityX()</a></li>
@@ -164,6 +165,17 @@ const Docs = () => {
             <div className="function-example">
                 <pre><code className="language-javascript">
     getFuel()
+                </code></pre>
+            </div>
+        </div>
+        <div className="api-function" id="getTimeLeft">
+            <h2 className="function-title">getTimeLeft</h2>
+            <p className="function-description">
+    이 함수는 현재 남은 제한 시간을 정수형으로 반환합니다.<br />
+            </p>
+            <div className="function-example">
+                <pre><code className="language-javascript">
+    getTimeLeft()
                 </code></pre>
             </div>
         </div>
