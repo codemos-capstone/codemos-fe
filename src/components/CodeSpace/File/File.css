@@ -64,6 +64,9 @@
 .fileNameDetail img {
   margin-right: 5px;
 }
+.fileNameDetail .format {
+  color: #49808b;
+}
 
 .context-menu {
   background-color: #252526;
