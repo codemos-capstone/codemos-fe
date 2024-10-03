@@ -16,11 +16,16 @@
     flex-direction: column;
     align-items: center;
 }
+.editor-container .no-file {
+    text-align: center;
+    color: #ffec60;
+}
 .fileSubject{
     color: white;
+    width: 100%;
     font-size: 130%;
-    text-align: left;
-    margin-left: 5%;
+    text-align: center;
+    margin-bottom: 1rem;
     display: block;
     background-color: none;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

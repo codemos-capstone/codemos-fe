@@ -180,6 +180,7 @@ export default function File({ reloadFiles }) {
                       <img src={codeFile.language == 'js' ? jsImage : blockImage} alt={`${codeFile.language == 'js' ? 'JS' : 'Block'} Logo`} style={{ width: '14px' }} />
                       <div>P{codeFile.problemId ? codeFile.problemId : '0000'}
                         -{codeFile.name ? codeFile.name : "undefined"}
+                        <span className='format'>{(codeFile.language && '.' + codeFile.language)}</span>
                       </div>
                     </div>
                   </li>

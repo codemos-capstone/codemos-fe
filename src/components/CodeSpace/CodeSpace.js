@@ -43,7 +43,7 @@ export default function CodeSpace () {
 }
 
 function CodeSpaceInner() {
-  const { selectedProblem, setSelectedProblem, selectedCode, selectedCodeId, selectedFileName } = useContext(CodeSpaceContext);
+  const { setSelectedProblem, selectedCode, selectedCodeId } = useContext(CodeSpaceContext);
   const [isDocsVisible, setIsDocsVisible] = useState(false);
   const [reloadFiles, setReloadFiles] = useState(false); // 파일 리로드 트리거
   const [docsWidth, setDocsWidth] = useState(600);
@@ -54,7 +54,8 @@ function CodeSpaceInner() {
   
 
   useEffect(() => {
-    const problem = JSON.parse(sessionStorage.getItem('selectedProblem'));
+    const problem = JSON.parse(sessionStorage.getItem("selectedProblem"));
+    sessionStorage.removeItem("selectedProblem")
     if (problem) {
       setSelectedProblem(problem);
     }
@@ -65,10 +66,6 @@ function CodeSpaceInner() {
   };
 
   const handleSaveCode = async () => {
-    // console.log(selectedCode);
-    // console.log(selectedCodeId);
-    // console.log(selectedFileName);
-    // console.log(selectedProblem);
     if (selectedCodeId) {
       setSaveStatus("저장 중..."); // 저장 중 메시지 설정
       try {
