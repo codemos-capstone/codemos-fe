@@ -161,7 +161,7 @@ export const makeLander = (state, setting, endAnimation) => {
         };
         const getX = () => {
             if (allowed.getX) {
-                return rocket.position.x;
+                return rocket.position.x / canvasWidth;
             }
             else {
                 throw new TypeError("getX is not a function")
@@ -169,7 +169,7 @@ export const makeLander = (state, setting, endAnimation) => {
         };
         const getY = () => {
             if (allowed.getY) {
-                return rocket.position.y;
+                return 1 - rocket.position.y / canvasHeight;
             }
             else {
                 throw new TypeError("getY is not a function")
