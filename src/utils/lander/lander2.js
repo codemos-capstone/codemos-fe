@@ -1,50 +1,72 @@
-import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPS, velocityInMPS_s, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInMeter } from "../helpers/helpers.js";
+import { randomBetween, seededRandomBetween, randomBool, getVectorVelocity, velocityInMPS, velocityInMPS_s, getAngleDeltaUpright, getAngleDeltaUprightWithSign, heightInMeter, percentProgr, heightInMeteress } from "../helpers/helpers.js";
 import { scoreLanding, scoreCrash } from "../helpers/scoring.js";
 import { CRASH_VELOCITY, CRASH_ANGLE, LAND_MAX_FRAME, TRANSITION_TO_SPACE } from "../helpers/constants.js";
 import { drawTrajectory } from "./trajectory.js";
 import { transition, clampedProgress, easeInOutSine } from "../helpers/helpers.js";
 import { makeImageExplosion, makeLanderExplosion } from "./explosion.js";
 import { makeConfetti } from "./confetti.js";
-export const makeLander = (state, setting, endAnimation) => {
 
+export const makeLander = (state, setting, endAnimation) => {
     const CTX = state.get("CTX");
     const canvasWidth = state.get("canvasWidth");
     const canvasHeight = state.get("canvasHeight");
+    //const audioManager = null;
 
     const constants = setting[0];
-    const allowed = setting[1];
+    const allowed = setting[1]
 
     // Use grounded height to approximate distance from ground
     const _landingData = state.get("terrain").getLandingData();
-    const _groundedHeight = _landingData.terrainAvgHeight - constants.ROCKET_HEIGHT / 2;
-     // WebAssembly 준비 상태 플래그
-    let wasmReady = false;
-    let wasmModule;
+    const _groundedHeight = _landingData.terrainAvgHeight - constants.ROCKET_HEIGHT / 2;    
 
-    // 서버로 C 코드를 전송해 WebAssembly로 변환하는 함수
-    const compileCodeAndGetWasm = async (cCode) => {
-        const formData = new FormData();
-        formData.append('code', cCode);
-    
-        try {
-            // 서버에 C 코드를 전송하고 WASM 파일을 받아옴
-            const response = await fetch('http://selogic.seoultech.ac.kr:24242/compile', {
-                method: 'POST',
-                body: formData
-            });
-    
-            if (!response.ok) throw new Error('Failed to compile C code');
-            
-            const wasmArrayBuffer = await response.arrayBuffer();  
-            console.log("WASM ArrayBuffer length:", wasmArrayBuffer.byteLength)
-            console.log(wasmArrayBuffer);
-            return wasmArrayBuffer;
-        } catch (error) {
-            console.error('Error compiling C code to WASM:', error);
-            throw error;
+    const drawHUD = (rocket) => {
+        const textWidth = CTX.measureText("100.0 m/s").width + 2;
+        const xPosBasis = Math.abs(rocket.velocity.x) > 6 ? canvasWidth / 2 - textWidth / 2 : Math.min(rocket.position.x + constants.ROCKET_WIDTH * 2, canvasWidth - textWidth);
+        const yPosBasis = Math.max(rocket.position.y, TRANSITION_TO_SPACE);
+        const lineHeight = 14;
+        const rotatingLeft = rocket.rotationVelocity < 0;
+        const speedColor = getVectorVelocity(rocket.velocity) > CRASH_VELOCITY ? "rgb(255, 0, 0)" : "rgb(0, 255, 0)";
+        const angleColor = getAngleDeltaUpright(rocket.angle) > CRASH_ANGLE ? "rgb(255, 0, 0)" : "rgb(0, 255, 0)";
+
+        // Draw HUD text
+        CTX.save();
+        CTX.font = "400 10px -apple-system, BlinkMacSystemFont, sans-serif";
+        CTX.fillStyle = speedColor;
+        CTX.fillText(`${velocityInMPS(rocket.velocity)} m/s`, xPosBasis, yPosBasis - lineHeight);
+        CTX.fillStyle = angleColor;
+        CTX.fillText(`${getAngleDeltaUprightWithSign(rocket.angle).toFixed(1)}°`, xPosBasis, yPosBasis);
+        CTX.fillStyle = state.get("theme").infoFontColor;
+        CTX.fillText(`${heightInMeter(rocket.position.y, _groundedHeight)} Meter`, xPosBasis, yPosBasis + lineHeight);
+        CTX.restore();
+
+        // Draw hud rotation direction arrow
+        const arrowHeight = 7;
+        const arrowWidth = 6;
+        const arrowTextMargin = 3;
+        const arrowVerticalOffset = -3;
+        if (rotatingLeft) {
+            CTX.save();
+            CTX.strokeStyle = angleColor;
+            CTX.beginPath();
+            CTX.moveTo(xPosBasis - arrowWidth - arrowTextMargin, yPosBasis + arrowVerticalOffset);
+            CTX.lineTo(xPosBasis - arrowTextMargin, yPosBasis + arrowVerticalOffset - arrowHeight / 2);
+            CTX.lineTo(xPosBasis - arrowTextMargin, yPosBasis + arrowVerticalOffset + arrowHeight / 2);
+            CTX.closePath();
+            CTX.stroke();
+            CTX.restore();
+        } else {
+            CTX.save();
+            CTX.strokeStyle = angleColor;
+            CTX.beginPath();
+            CTX.moveTo(xPosBasis - arrowWidth - arrowTextMargin, yPosBasis + arrowVerticalOffset - arrowHeight / 2);
+            CTX.lineTo(xPosBasis - arrowTextMargin, yPosBasis + arrowVerticalOffset);
+            CTX.lineTo(xPosBasis - arrowWidth - arrowTextMargin, yPosBasis + arrowVerticalOffset + arrowHeight / 2);
+            CTX.closePath();
+            CTX.stroke();
+            CTX.restore();
         }
     };
-    
+
     const drawBottomHUD = (rocket) => {
         const yPadding = constants.ROCKET_HEIGHT;
         const xPadding = constants.ROCKET_HEIGHT;
@@ -117,93 +139,148 @@ export const makeLander = (state, setting, endAnimation) => {
 
         CTX.restore();
     };
-    // WebAssembly 실행 및 시뮬레이션을 업데이트하는 함수
-    const updateIterator = async (wasmArrayBuffer, logs) => {
+
+    const updateIterator = (code, logs) => {
+        console.log(logs[0]);
         const rocket = deepCopy(logs[0]);
         console.log("rocket:", rocket);
-        const env = {
-            engineOn: () => {
-                if (allowed.engineOn) rocket.engineOn = true;
-                else throw new TypeError("engineOn is not a function");
-            },
-            engineOff: () => {
-                if (allowed.engineOff) rocket.engineOn = false;
-                else throw new TypeError("engineOff is not a function");
-            },
-            getVelocityX: () => {
-                if (allowed.getVelocityX) return velocityInMPS_s(rocket.velocity.x);
-                else throw new TypeError("getVelocityX is not a function");
-            },
-            getVelocityY: () => {
-                if (allowed.getVelocityY) return velocityInMPS_s(rocket.velocity.y);
-                else throw new TypeError("getVelocityY is not a function");
-            },
-            getAngle: () => {
-                if (allowed.getAngle) return rocket.angle;
-                else throw new TypeError("getAngle is not a function");
-            },
-            getHeight: () => {
-                if (allowed.getHeight) return heightInMeter(rocket.position.y, _groundedHeight);
-                else throw new TypeError("getHeight is not a function");
-            },
-            getRotationVelocity: () => {
-                if (allowed.getRotationVelocity) return velocityInMPS_s(rocket.rotationVelocity);
-                else throw new TypeError("getRotationVelocity is not a function");
-            },
-            rotateLeft: () => {
-                if (allowed.rotateLeft) rocket.rotatingLeft = true;
-                else throw new TypeError("rotateLeft is not a function");
-            },
-            rotateRight: () => {
-                if (allowed.rotateRight) rocket.rotatingRight = true;
-                else throw new TypeError("rotateRight is not a function");
-            },
-            stopLeftRotation: () => {
-                if (allowed.stopLeftRotation) rocket.rotatingLeft = false;
-                else throw new TypeError("stopLeftRotation is not a function");
-            },
-            stopRightRotation: () => {
-                if (allowed.stopRightRotation) rocket.rotatingRight = false;
-                else throw new TypeError("stopRightRotation is not a function");
-            },
+        const getFuel = () => {
+            if(allowed.getFuel) {
+                return constants.FUELLIMIT - rocket.usedfuel;}
+            else {
+                throw new TypeError("getFuel is not a function")
+            }
         };
+        // Rocket functions
+        const engineOn = () => {
+            if(allowed.engineOn)
+                rocket.engineOn = true;
+            else {
+                throw new TypeError("engineOn is not a function")
+            }
+        };
+        const engineOff = () => {
+            if(allowed.engineOff)
+                rocket.engineOn = false;
+            else {
+                throw new TypeError("engineOff is not a function")
+            }
+        };
+        const getVelocityX = () => {
+            if(allowed.getVelocityX) {
+                return velocityInMPS_s(rocket.velocity.x);}
+            else {
+                throw new TypeError("getVelocityX is not a function")
+            }
+        };
+        const getVelocityY = () => {
+            if(allowed.getVelocityY)
+                return velocityInMPS_s(rocket.velocity.y);
+            else {
+                throw new TypeError("getVelocityY is not a function")
+            }
+        };
+        const getAngle = () => {
+            if(allowed.getAngle)
+                return rocket.angle;
+            else {
+                throw new TypeError("getAngle is not a function")
+            }
+        };
+        const getHeight = () => {
+            if(allowed.getHeight)
+                return heightInMeter(rocket.position.y, _groundedHeight);
+            else {
+                throw new TypeError("getHeight is not a function")
+            }
+        };
+        const getRotationVelocity = () => {
+            if(allowed.getRotationVelocity)
+                return velocityInMPS_s(rocket.rotationVelocity);
+            else {
+                throw new TypeError("getRotationVelocity is not a function")
+            }
+        };
+        const rotateLeft = () => {
+            if(allowed.rotateLeft)
+                rocket.rotatingLeft = true;
+            else {
+                throw new TypeError("rotateLeft is not a function")
+            }
+        };
+        const rotateRight = () => {
+            if(allowed.rotateRight)
+                rocket.rotatingRight = true;
+            else {
+                throw new TypeError("rotateRight is not a function")
+            }
+        };
+        const stopLeftRotation = () => {
+            if(allowed.stopLeftRotation)
+                rocket.rotatingLeft = false;
+            else {
+                throw new TypeError("stopLeftRotation is not a function")
+            }
+        };
+        const stopRightRotation = () => {
+            if(allowed.stopRightRotation)
+                rocket.rotatingRight = false;
+            else {
+                throw new TypeError("stopRightRotation is not a function")
+            }
+        };
+
+        const logging = () => {
+            console.log(
+                "getVelocityX()        : " +
+                    getVelocityX() +
+                    "\ngetVelocityY()        : " +
+                    getVelocityY() +
+                    "\ngetAngle()            : " +
+                    getAngle() +
+                    "\ngetHeight()           : " +
+                    getHeight() +
+                    "\ngetRotationVelocity() : " +
+                    getRotationVelocity()
+            );
+        }
+
+        // prohibited functions
+        const setInterval = () => { throw new TypeError("setInterval is not a function") };
+        const setTimeout = () => { throw new TypeError("setTimeout is not a function") };
+        const requestAnimationFrame = () => { throw new TypeError("requestAnimationFrame is not a function") };
+        const setImmediate = () => { throw new TypeError("setImmediate is not a function") };
+
         let isEnd = { end: false };
-        let landingState = { land: false, ground: false };
-        try {
-            console.log("wasmArrayBuffer:", wasmArrayBuffer);
-            console.log(wasmArrayBuffer instanceof ArrayBuffer);  
-            wasmModule = await WebAssembly.instantiate(wasmArrayBuffer, { env });
-            wasmReady = true; // WASM 준비 완료
-            const _mainloop = wasmModule.instance.exports.main;
-            console.log("mainloop function:", _mainloop.toString());
+        let _mainloop = () => {};
+        try{
+            eval(code);
             while(!isEnd.end){
-                _mainloop();  // wasm mainloop 실행
+                _mainloop();
                 isEnd = checkEnd(rocket);
-                if (!isEnd.end) {
-                    updateRocket(rocket);
+                if (!isEnd.end){
+                    updateRocket(rocket)
                     logs.push(deepCopy(rocket));
                 } else {
                     rocket.engineOn = false;
                     rocket.rotatingLeft = false;
                     rocket.rotatingRight = false;
                     logs.push(deepCopy(rocket));
-                    landingState = {
-                        land: isEnd.land,
-                        ground: isEnd.ground
-                    };
+                    // console.log("alsdkfjlkasdjlfjalsdflasdjkfjlsdjlfjksdlf" + logs.length)
                 }
             }
         } catch (e) {
-            console.error("Error running WebAssembly code:", e);
+            // console.log(e);
+            return;
+        };
+
+        let landingState = {
+            land: isEnd.land,
+            ground: isEnd.ground
         }
-    
+
         return landingState;
     };
-
-
-
-
-    
 
     function deepCopy(obj) {
         if (typeof obj !== 'object' || obj === null) {
@@ -234,53 +311,7 @@ export const makeLander = (state, setting, endAnimation) => {
             return { end: true, land: false, ground: true};
         }
     };
-    const drawHUD = (rocket) => {
-        const textWidth = CTX.measureText("100.0 m/s").width + 2;
-        const xPosBasis = Math.abs(rocket.velocity.x) > 6 ? canvasWidth / 2 - textWidth / 2 : Math.min(rocket.position.x + constants.ROCKET_WIDTH * 2, canvasWidth - textWidth);
-        const yPosBasis = Math.max(rocket.position.y, TRANSITION_TO_SPACE);
-        const lineHeight = 14;
-        const rotatingLeft = rocket.rotationVelocity < 0;
-        const speedColor = getVectorVelocity(rocket.velocity) > CRASH_VELOCITY ? "rgb(255, 0, 0)" : "rgb(0, 255, 0)";
-        const angleColor = getAngleDeltaUpright(rocket.angle) > CRASH_ANGLE ? "rgb(255, 0, 0)" : "rgb(0, 255, 0)";
-    
-        // Draw HUD text
-        CTX.save();
-        CTX.font = "400 10px -apple-system, BlinkMacSystemFont, sans-serif";
-        CTX.fillStyle = speedColor;
-        CTX.fillText(`${velocityInMPS(rocket.velocity)} m/s`, xPosBasis, yPosBasis - lineHeight);
-        CTX.fillStyle = angleColor;
-        CTX.fillText(`${getAngleDeltaUprightWithSign(rocket.angle).toFixed(1)}°`, xPosBasis, yPosBasis);
-        CTX.fillStyle = state.get("theme").infoFontColor;
-        CTX.fillText(`${heightInMeter(rocket.position.y, _groundedHeight)} Meter`, xPosBasis, yPosBasis + lineHeight);
-        CTX.restore();
-    
-        // Draw hud rotation direction arrow
-        const arrowHeight = 7;
-        const arrowWidth = 6;
-        const arrowTextMargin = 3;
-        const arrowVerticalOffset = -3;
-        if (rotatingLeft) {
-            CTX.save();
-            CTX.strokeStyle = angleColor;
-            CTX.beginPath();
-            CTX.moveTo(xPosBasis - arrowWidth - arrowTextMargin, yPosBasis + arrowVerticalOffset);
-            CTX.lineTo(xPosBasis - arrowTextMargin, yPosBasis + arrowVerticalOffset - arrowHeight / 2);
-            CTX.lineTo(xPosBasis - arrowTextMargin, yPosBasis + arrowVerticalOffset + arrowHeight / 2);
-            CTX.closePath();
-            CTX.stroke();
-            CTX.restore();
-        } else {
-            CTX.save();
-            CTX.strokeStyle = angleColor;
-            CTX.beginPath();
-            CTX.moveTo(xPosBasis - arrowWidth - arrowTextMargin, yPosBasis + arrowVerticalOffset - arrowHeight / 2);
-            CTX.lineTo(xPosBasis - arrowTextMargin, yPosBasis + arrowVerticalOffset);
-            CTX.lineTo(xPosBasis - arrowWidth - arrowTextMargin, yPosBasis + arrowVerticalOffset + arrowHeight / 2);
-            CTX.closePath();
-            CTX.stroke();
-            CTX.restore();
-        }
-    };
+
     const updateRocket = (rocket) => {
         const deltaTimeMultiplier = 1;// deltaTime / INTERVAL;
         rocket.position.y = rocket.position.y + deltaTimeMultiplier * rocket.velocity.y;
@@ -361,7 +392,7 @@ export const makeLander = (state, setting, endAnimation) => {
        explosion.draw();
     };
 
-    const drawCloud = (cloud) => {};
+    const drawCloud = (구름) => {};
 
     const makeClouds = (rocket) => {
         let clouds = [];
@@ -629,28 +660,9 @@ export const makeLander = (state, setting, endAnimation) => {
     };
 
     const drawExplodingImg = (isGround, explosion, clouds, img) => {};
-    // **여기에 추가** (makeLander 함수의 마지막 부분)
-    const runLanderSimulation = async (cCode, logs) => {
-        try {
-            const wasmArrayBuffer = await compileCodeAndGetWasm(cCode);
-            const landingState = updateIterator(wasmArrayBuffer, logs);
-            return landingState;
-        } catch (error) {
-            console.error('Error running simulation:', error);
-        }
-    };
 
-    const runSimulation=(cCode, logs, language)=> {
-        if (cCode) {
-            console.log("logs1", logs[0]);
-            return runLanderSimulation(cCode, logs, language); // WebAssembly로 시뮬레이션 실행
-        }
-    }
-
-    // 함수 호출 (비동기적으로 WebAssembly를 불러온 후 시뮬레이션 시작)
     return {
         draw,
-        updateIterator,
-        runSimulation
+        updateIterator
     };
 };
