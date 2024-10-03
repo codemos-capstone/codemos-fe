@@ -5,7 +5,7 @@ import BlockEditor from "blockCoding/BlockEditor";
 import FileBtn from "../../Buttons/FileBtn";
 import Docs from "views/Docs";
 import ReactMarkdown from "react-markdown";
-import GameCanvas from "components/GameCanvas";
+import GameCanvas from "./GameCanvas";
 import axios from "axios";
 import { javascriptGenerator } from 'blockly/javascript';
 
