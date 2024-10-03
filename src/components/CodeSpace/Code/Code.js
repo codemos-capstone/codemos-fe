@@ -122,15 +122,17 @@ export default function Code() {
                                 {selectedProblem.problemNumber} : {selectedProblem.title}
                             </h3>
                             <table>
-                                <tbody>
+                                <thead>
                                     <tr>
                                         <th>Time Limit</th>
-                                        <th>Fuel Limit</th>
-                                        <th>Initial Position(x, y)</th>
-                                        <th>Initial Velocity(x, y)</th>
-                                        <th>Initial Rotation Velocity</th>
+                                        <th>Fuel Limit<br /><span>getFuel()</span></th>
+                                        <th>Initial Position(x, y)<br /><span>getX(), getY()</span></th>
+                                        <th>Initial Velocity(x, y)<br /><span>getVelocityX()<br/>getVelocityY()</span></th>
+                                        <th>Initial Rotation Velocity<br /><span>getRotationVelocity()</span></th>
                                         <th>Initial Angle(deg)</th>
                                     </tr>
+                                </thead>
+                                <tbody>
                                     <tr>
                                         <td> {selectedProblem.timeLimit} ms</td>
                                         <td> {selectedProblem.fuelLimit}</td>
@@ -160,6 +162,12 @@ export default function Code() {
                                     </ul>
                                 </div>
                             )}
+                            <div><details>
+                                <summary>Hint</summary>
+                                <ul>
+                                    <li>{/*Todo: 서버에서 받아오거나 문제 조건 보고 알아서 추가*/}</li>
+                                </ul>
+                            </details></div>
                         </div>
                     </>
                 ) : (

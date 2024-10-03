@@ -1,5 +1,5 @@
 
-.leader  #board table{
+.leader  .leader table table{
     border-collapse: collapse;
     color: #fff;
     margin: 0;
@@ -27,34 +27,51 @@
     padding-right: 30px;
 }
 
-.leader .load div{
+.leader .load div {
     display: flex;
     width: 100%;
     justify-content: center;
 }
-#board td, #board th{
+
+.leader table {
+    border-collapse: collapse;
+    /* 테두리 겹치기 방지 */
+    width: 100%;
+    color: #ffffff;
+}
+.leader table td, .leader table th {
     width: 20%;
     text-align: center;
 }
-#board td p{
-    text-align: initial;
+.leader table tbody tr:hover {
+    background-color: #b5a7a7;
+    cursor: pointer;
+    /* 마우스를 올렸을 때 커서를 포인터로 변경 */
 }
-#board tr{
-    border-radius: 8px;
-    overflow: hidden;
+/* 클릭된 행에 대한 스타일 */
+.leader tr.active {
+    background-color: #d1e7dd;
+    /* 클릭 시 배경색을 변경 */
 }
-#board .row:hover{
-    background-color: #00244b;
+.leader th {
+    border: 1px solid rgb(255, 255, 255);
+    /* 테두리 설정 */
+    padding: 8px;
+    /* 셀 안의 여백 */
+    text-align: left;
+    /* 텍스트 왼쪽 정렬 */
+    font-size: 0.7rem;
 }
-#board tbody tr:hover {
-background-color: #b5a7a7;
-cursor: pointer; /* 마우스를 올렸을 때 커서를 포인터로 변경 */
+.leader td {
+    border: 1px solid rgb(255, 255, 255);
+    /* 테두리 설정 */
+    padding: 8px;
+    /* 셀 안의 여백 */
+    text-align: left;
+    /* 텍스트 왼쪽 정렬 */
+    font-size: 0.8rem;
 }
 
-/* 클릭된 행에 대한 스타일 */
-tr.active {
-background-color: #d1e7dd; /* 클릭 시 배경색을 변경 */
-}
 .leader .details{
     background-color: #0f0f25;
     display: table-row;
