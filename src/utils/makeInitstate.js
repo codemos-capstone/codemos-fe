@@ -30,6 +30,8 @@ export function makeInitState(problem, canvasSize){
         TIMELIMIT : 2000,
     }
     const allowed = {
+        getX : true,
+        getY : true,
         getVelocityX : true,
         getVelocityY : true,
         getFuel: true,

@@ -41,6 +41,28 @@ Blockly.Blocks['get_fuel'] = {
   }
 };
 
+Blockly.Blocks['get_X'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("getX()");
+    this.setOutput(true, "Number");
+    this.setColour(230);
+    this.setTooltip("우주선의 현재 X 좌표를 실수형으로 반환합니다.");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['get_Y'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("getY()");
+    this.setOutput(true, "Number");
+    this.setColour(230);
+    this.setTooltip("우주선의 현재 Y 좌표를 실수형으로 반환합니다.");
+    this.setHelpUrl("");
+  }
+};
+
 Blockly.Blocks['get_velocity_x'] = {
   init: function() {
     this.appendDummyInput()

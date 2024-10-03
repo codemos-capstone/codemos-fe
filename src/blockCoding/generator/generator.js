@@ -38,6 +38,15 @@ javascriptGenerator.forBlock['get_fuel'] = function(block) {
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
 };
 
+javascriptGenerator.forBlock['get_X'] = function(block) {
+  var code = 'getX()';
+  return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
+};
+javascriptGenerator.forBlock['get_Y'] = function(block) {
+  var code = 'getY()';
+  return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
+};
+
 javascriptGenerator.forBlock['get_velocity_x'] = function(block) {
   var code = 'getVelocityX()';
   return [code, javascriptGenerator.ORDER_FUNCTION_CALL];
