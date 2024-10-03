@@ -61,7 +61,7 @@ const Docs = () => {
         }
         document.querySelectorAll('pre code').forEach((block) => {
             if (!block.dataset.highlighted) {
-                hljs.highlightBlock(block);
+                hljs.highlightElement(block);
                 block.dataset.highlighted = true;
             }
         });

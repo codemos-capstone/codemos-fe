@@ -16,7 +16,7 @@ export default function Leaderboard({ data, onRowClick }) {
         </thead>
         <tbody>
           {data.map((entry) => (
-            <tr key={entry.id} onClick={() => onRowClick(entry)}> {/* 클릭 이벤트 추가 */}
+            <tr key={entry.id} onClick={() => onRowClick(entry)}/* 클릭 이벤트 추가 */>
               <td>{entry.score}</td>
               <td>{entry.fuel}</td>
               <td>{entry.time}</td>
