@@ -113,6 +113,7 @@ export default function File({ reloadFiles }) {
   };
 
   const handleFileClick = (codeFile) => {
+    handleProblemClick(codeFile.problemId);
     setSelectedCode(codeFile.content);
     setSelectedCodeId(codeFile.id);  // setSelectedCodeId를 호출하여 ID 전달
     setSelectedFileName(codeFile.name);

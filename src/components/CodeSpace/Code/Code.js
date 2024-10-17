@@ -185,7 +185,7 @@ export default function Code() {
                 : <AceEditor
                 style={CodeEditorStyle}
                 id="editor"
-                mode={currentLang ? modeName[currentLang] : 'javascript'}
+                mode={currentLang && currentLang != 'c' ? modeName[currentLang] : 'javascript'}
                 theme="ambiance"
                 name="code-editor"
                 fontSize="14px"

@@ -65,11 +65,16 @@ export default function GameCanvas({ language, code, problem, endAnimation, setS
         //terrain.setShowLandingSurfaces();
 
         const logs = [initState[0]]
-        const landingEffect = lander.updateIterator(code, logs);
-        if (landingEffect) {
-            score = lander.draw(logs, landingEffect);
-            setScore(score);
+        const runGame = async () => {
+            const landingEffect = await lander.updateIterator(code, logs);
+            if (landingEffect) {
+                score = lander.draw(logs, landingEffect);
+                setScore(score);
+            };
         };
+
+        runGame();
+
     }, [])
 
     return <canvas ref={ canvasRef } style={{width: "90%", minWidth: "25rem", minHeight: "15rem", marginBottom: "1rem"}}></canvas>
