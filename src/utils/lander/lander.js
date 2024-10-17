@@ -473,7 +473,7 @@ export const makeLander = (state, setting, endAnimation) => {
         formData.append('code', code);
     
         try {
-            const response = await fetch(process.env.REACT_APP_WASM_SERVER_ADDRES, {
+            const response = await fetch(process.env.REACT_APP_WASM_SERVER_ADDRESS, {
                 method: 'POST',
                 body: formData
             });
