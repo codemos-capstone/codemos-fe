@@ -66,7 +66,7 @@ export default function GameCanvas({ language, code, problem, endAnimation, setS
 
         const logs = [initState[0]]
         const runGame = async () => {
-            const landingEffect = await lander.updateIterator(code, logs);
+            const landingEffect = await lander.runSimulation(language, code, logs);
             if (landingEffect) {
                 score = lander.draw(logs, landingEffect);
                 setScore(score);
