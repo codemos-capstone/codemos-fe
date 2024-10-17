@@ -16,6 +16,14 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
     setShowNewFile('js');
     setDropdownVisible(false);
   }
+  const handleNewC = () => {
+    setShowNewFile('c');
+    setDropdownVisible(false);
+  }
+  const handleNewPython = () => {
+    setShowNewFile('py');
+    setDropdownVisible(false);
+  }
   const handleNewBlock = () => {
     setShowNewFile('block');
     setDropdownVisible(false);
@@ -51,13 +59,10 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
           생성
           {dropdownVisible && (
             <div className="dropdown-content">
-              <button 
-                className="dropdown-item" 
-                onClick={handleNewJs}
-              >
-                새로운 JavaScript 블럭
-              </button>
-              <button className="dropdown-item" onClick={handleNewBlock}>새로운 블럭 스페이스</button>
+              <button className="dropdown-item" onClick={handleNewJs}>New JavaScript File</button>
+              <button className="dropdown-item" onClick={handleNewC}>New C File</button>
+              <button className="dropdown-item" onClick={handleNewPython}>New Python File</button>
+              <button className="dropdown-item" onClick={handleNewBlock}>New block coding space</button>
               <button className="dropdown-item" onClick={handleOpenFile}>Open</button> {/* 파일 열기 버튼 */}
               <button className="dropdown-item">Save</button>
             </div>

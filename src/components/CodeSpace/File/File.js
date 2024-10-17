@@ -2,9 +2,19 @@ import React, { useEffect, useState, useRef, useContext } from 'react';
 import { CodeSpaceContext } from 'common/CodeSpaceContext';
 import './File.css';
 import axios from 'axios';
+
+import probImage from 'assets/images/FILE.png';
 import jsImage from 'assets/images/JS.png';
-import proImage from 'assets/images/FILE.png';
-import blockImage from 'assets/images/block.svg'
+import pythonImage from 'assets/images/python.png';
+import cImage from 'assets/images/c.png';
+import blockImage from 'assets/images/block.svg';
+
+const logos = {
+  'js': jsImage,
+  'py': pythonImage,
+  'c': cImage,
+  'block': blockImage
+}
 
 export default function File({ reloadFiles }) {
   const { selectedProblem, setSelectedProblem, setSelectedCode, selectedCodeId, setSelectedCodeId, setSelectedFileName, showNewFile, setShowNewFile, setCurrentLang } = useContext(CodeSpaceContext);
@@ -177,7 +187,7 @@ export default function File({ reloadFiles }) {
                     className={codeFile.id === selectedCodeId ? 'selected' : ''}
                   >
                     <div className="fileNameDetail">
-                      <img src={codeFile.language == 'js' ? jsImage : blockImage} alt={`${codeFile.language == 'js' ? 'JS' : 'Block'} Logo`} style={{ width: '14px' }} />
+                      <img src={logos[codeFile.language]} alt={`${codeFile.language} Logo`} style={{ width: '14px' }} />
                       <div>P{codeFile.problemId ? codeFile.problemId : '0000'}
                         -{codeFile.name ? codeFile.name : "undefined"}
                         <span className='format'>{(codeFile.language && '.' + codeFile.language)}</span>
@@ -188,7 +198,7 @@ export default function File({ reloadFiles }) {
                 {showNewFile && (
                   <li>
                     <div className='fileNameDetail'>
-                      <img src={showNewFile == 'js' ? jsImage : blockImage} alt={`${showNewFile ? 'JS' : 'Block'} Logo`} style={{ width: '14px' }} />
+                      <img src={logos[showNewFile]} alt={`${showNewFile} Logo`} style={{ width: '14px' }} />
                       <input
                         type="text"
                         ref={inputRef}
@@ -216,7 +226,7 @@ export default function File({ reloadFiles }) {
                     className={selectedProblem && selectedProblem.problemNumber === problem.problemNumber ? 'selected' : ''}
                   >
                     <div className="fileNameDetail">
-                      <img src={proImage} alt="Problem Icon" style={{ width: '14px' }} />
+                      <img src={probImage} alt="Problem Icon" style={{ width: '14px' }} />
                       <div>{problem.problemNumber}</div>
                     </div>
                   </li>

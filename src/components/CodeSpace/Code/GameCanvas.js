@@ -13,7 +13,7 @@ import { makeTheme } from "utils/theme.js";
 import { makeInitState } from "utils/makeInitstate";
 //import rocketImg from "assets/images/rocket.png";
 
-export default function GameCanvas({ code, problem, endAnimation, setScore }){
+export default function GameCanvas({ language, code, problem, endAnimation, setScore }){
     const canvasRef = useRef(null);
     const img = new Image();
     //img.src = rocketImg;

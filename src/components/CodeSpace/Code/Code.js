@@ -14,8 +14,15 @@ import "react-ace-builds/webpack-resolver-min";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 
+const modeName = {
+    js: 'javascript',
+    py: 'python',
+    c: 'c',
+    block: 'block'
+}
+
 export default function Code() {
-    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun, judgeMessage,setJudgeMessage,currentLang } = useContext(CodeSpaceContext);
+    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun, judgeMessage,setJudgeMessage, currentLang } = useContext(CodeSpaceContext);
 
     const CodeEditorStyle = {
         width: "95%",
@@ -64,8 +71,6 @@ export default function Code() {
     
     useEffect(() => {
         if (run) {
-           
-            
             setAnimationRunning(false);  // 먼저 애니메이션을 false로 설정하고
     
             setTimeout(() => {
@@ -180,7 +185,7 @@ export default function Code() {
                 : <AceEditor
                 style={CodeEditorStyle}
                 id="editor"
-                mode="javascript"
+                mode={currentLang ? modeName[currentLang] : 'javascript'}
                 theme="ambiance"
                 name="code-editor"
                 fontSize="14px"
@@ -248,6 +253,7 @@ export default function Code() {
                 {animationRunning && <GameCanvas 
                                         className="GameCanvas" 
                                         size={[600, 800]} 
+                                        language={currentLang} 
                                         code={selectedCode} 
                                         problem={selectedProblem} 
                                         endAnimation={endGame} 
