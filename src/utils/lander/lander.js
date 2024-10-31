@@ -595,7 +595,7 @@ export const makeLander = (state, setting, endAnimation) => {
                 return jsUpdateIterator(code, logs);
             } else if (language == 'py') {
                 return pyUpdateIterator(code, logs);
-            } else if (language == 'c') {
+            } else if (language == 'cpp') {
                 return cUpdateIterator(code, logs);
             } else if (language == 'block') {
                 return jsUpdateIterator(code, logs);

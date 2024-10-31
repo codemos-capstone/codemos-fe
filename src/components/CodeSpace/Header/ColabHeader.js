@@ -16,8 +16,8 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
     setShowNewFile('js');
     setDropdownVisible(false);
   }
-  const handleNewC = () => {
-    setShowNewFile('c');
+  const handleNewCPP = () => {
+    setShowNewFile('cpp');
     setDropdownVisible(false);
   }
   const handleNewPython = () => {
@@ -60,7 +60,7 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
           {dropdownVisible && (
             <div className="dropdown-content">
               <button className="dropdown-item" onClick={handleNewJs}>New JavaScript File</button>
-              <button className="dropdown-item" onClick={handleNewC}>New C File</button>
+              <button className="dropdown-item" onClick={handleNewCPP}>New C++ File</button>
               <button className="dropdown-item" onClick={handleNewPython}>New Python File</button>
               <button className="dropdown-item" onClick={handleNewBlock}>New block coding File</button>
               <button className="dropdown-item" onClick={handleOpenFile}>Open</button> {/* 파일 열기 버튼 */}

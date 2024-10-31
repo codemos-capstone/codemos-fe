@@ -13,7 +13,7 @@ import "ace-builds/src-noconflict/theme-ambiance";
 const modeName = {
     js: 'javascript',
     py: 'python',
-    c: 'c_cpp',
+    cpp: 'c_cpp',
     block: 'block'
 }
 
