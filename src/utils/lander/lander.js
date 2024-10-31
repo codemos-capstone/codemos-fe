@@ -503,7 +503,7 @@ export const makeLander = (state, setting, endAnimation) => {
             throw error;
         }
     };
-    const cUpdateIterator = async (code, logs) => {f
+    const cUpdateIterator = async (code, logs) => {
         const wasmArrayBuffer = await compileCodeAndGetWasm(code);
         const rocket = deepCopy(logs[0]);
         console.log("rocket:", rocket);

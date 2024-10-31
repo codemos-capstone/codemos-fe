@@ -1,20 +1,19 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { CodeSpaceContext } from 'common/CodeSpaceContext';
-import AceEditor from "react-ace-builds";
+import AceEditor from "aceEditor/AceEditor";
 import BlockEditor from "blockCoding/BlockEditor";
 import GameCanvas from "./GameCanvas";
 import axios from "axios";
 import { getEncodedCode } from "blockCoding/Blockly/BlocklyComponent";
 
 import "./Code.css";
-import "react-ace-builds/webpack-resolver-min";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 
 const modeName = {
     js: 'javascript',
     py: 'python',
-    c: 'c',
+    c: 'c_cpp',
     block: 'block'
 }
 
@@ -167,9 +166,10 @@ export default function Code() {
                     <div className="no-file">파일을 생성해주세요.<br /> (파일을 생성하지 않으면 코드가 저장되지 않습니다.)</div>}
                 {currentLang == 'block' ? <BlockEditor />
                 : <AceEditor
+                selectedFileName={selectedFileName}
                 style={CodeEditorStyle}
                 id="editor"
-                mode={currentLang && currentLang != 'c' ? modeName[currentLang] : 'javascript'}
+                mode={currentLang && modeName[currentLang]}
                 theme="ambiance"
                 name="code-editor"
                 fontSize="14px"
