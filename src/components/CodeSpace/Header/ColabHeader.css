@@ -20,6 +20,10 @@
     padding: 5px 10px;
     cursor: pointer;
   }
+
+  .menu-button.help {
+    color: #24c541;
+  }
   
   .menu-button:hover, .action-button:hover {
     background-color: #333333;
