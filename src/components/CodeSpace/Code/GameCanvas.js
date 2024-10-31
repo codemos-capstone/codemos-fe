@@ -13,7 +13,7 @@ import { makeTheme } from "utils/theme.js";
 import { makeInitState } from "utils/makeInitstate";
 //import rocketImg from "assets/images/rocket.png";
 
-export default function GameCanvas({ code, problem, endAnimation, setScore }){
+export default function GameCanvas({ language, code, problem, endAnimation, setScore }){
     const canvasRef = useRef(null);
     const img = new Image();
     //img.src = rocketImg;
@@ -65,11 +65,16 @@ export default function GameCanvas({ code, problem, endAnimation, setScore }){
         //terrain.setShowLandingSurfaces();
 
         const logs = [initState[0]]
-        const landingEffect = lander.updateIterator(code, logs);
-        if (landingEffect) {
-            score = lander.draw(logs, landingEffect);
-            setScore(score);
+        const runGame = async () => {
+            const landingEffect = await lander.runSimulation(language, code, logs);
+            if (landingEffect) {
+                score = lander.draw(logs, landingEffect);
+                setScore(score);
+            };
         };
+
+        runGame();
+
     }, [])
 
     return <canvas ref={ canvasRef } style={{width: "90%", minWidth: "25rem", minHeight: "15rem", marginBottom: "1rem"}}></canvas>

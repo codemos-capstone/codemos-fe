@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import AceEditor from "react-ace-builds";
-import "react-ace-builds/webpack-resolver-min";
+import AceEditor from "aceEditor/AceEditor";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 

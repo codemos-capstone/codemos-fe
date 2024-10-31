@@ -29,7 +29,7 @@ import {javascriptGenerator} from 'blockly/javascript';
 
 javascriptGenerator.forBlock['main_loop'] = function(block) {
   var statements_content = javascriptGenerator.statementToCode(block, 'content');
-  var code = '_mainLoop = function() {\n' + statements_content + '};\n';
+  var code = '_mainloop = function() {\n' + statements_content + '};\n';
   return code;
 };
 

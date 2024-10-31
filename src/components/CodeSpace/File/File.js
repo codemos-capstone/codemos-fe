@@ -2,9 +2,19 @@ import React, { useEffect, useState, useRef, useContext } from 'react';
 import { CodeSpaceContext } from 'common/CodeSpaceContext';
 import './File.css';
 import axios from 'axios';
+
+import probImage from 'assets/images/FILE.png';
 import jsImage from 'assets/images/JS.png';
-import proImage from 'assets/images/FILE.png';
-import blockImage from 'assets/images/block.svg'
+import pythonImage from 'assets/images/python.png';
+import cImage from 'assets/images/c.png';
+import blockImage from 'assets/images/block.svg';
+
+const logos = {
+  'js': jsImage,
+  'py': pythonImage,
+  'c': cImage,
+  'block': blockImage
+}
 
 export default function File({ reloadFiles }) {
   const { selectedProblem, setSelectedProblem, setSelectedCode, selectedCodeId, setSelectedCodeId, setSelectedFileName, showNewFile, setShowNewFile, setCurrentLang } = useContext(CodeSpaceContext);
@@ -103,6 +113,7 @@ export default function File({ reloadFiles }) {
   };
 
   const handleFileClick = (codeFile) => {
+    handleProblemClick(codeFile.problemId);
     setSelectedCode(codeFile.content);
     setSelectedCodeId(codeFile.id);  // setSelectedCodeId를 호출하여 ID 전달
     setSelectedFileName(codeFile.name);
@@ -110,7 +121,7 @@ export default function File({ reloadFiles }) {
   };
 
 
-  const handleContextMenu = (e, fileId) => {
+  const handleContextMenu = (e, fileId, fileName) => {
     e.preventDefault();
     const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
     const colabHeader = document.querySelector('.colab-header')?.offsetHeight || 0;
@@ -120,22 +131,24 @@ export default function File({ reloadFiles }) {
       visible: true,
       x: offsetX, 
       y: offsetY, 
-      fileId: fileId
+      fileId: fileId,
+      fileName
     });
   };
 
   const handleDeleteFile = async () => {
     if (contextMenu.fileId) {
-      try {
-        const token = sessionStorage.getItem('accessToken');
-        await axios.delete(`${serverAddress}/api/v1/code-file/${contextMenu.fileId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setContextMenu({ visible: false, x: 0, y: 0, fileId: null });
-        fetchData('code-file', setCodeFiles);
-      } catch (error) {
-        console.error('Error deleting file:', error);
-      }
+      if (confirm(`Delete file '${contextMenu.fileName}'?`))
+        try {
+          const token = sessionStorage.getItem('accessToken');
+          await axios.delete(`${serverAddress}/api/v1/code-file/${contextMenu.fileId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setContextMenu({ visible: false, x: 0, y: 0, fileId: null });
+          fetchData('code-file', setCodeFiles);
+        } catch (error) {
+          console.error('Error deleting file:', error);
+        }
     }
   };
 
@@ -173,11 +186,11 @@ export default function File({ reloadFiles }) {
                   <li
                     key={codeFile.id}
                     onClick={() => handleFileClick(codeFile)}
-                    onContextMenu={(e) => handleContextMenu(e, codeFile.id)}
+                    onContextMenu={(e) => handleContextMenu(e, codeFile.id, codeFile.name)}
                     className={codeFile.id === selectedCodeId ? 'selected' : ''}
                   >
                     <div className="fileNameDetail">
-                      <img src={codeFile.language == 'js' ? jsImage : blockImage} alt={`${codeFile.language == 'js' ? 'JS' : 'Block'} Logo`} style={{ width: '14px' }} />
+                      <img src={logos[codeFile.language]} alt={`${codeFile.language} Logo`} style={{ width: '14px' }} />
                       <div>P{codeFile.problemId ? codeFile.problemId : '0000'}
                         -{codeFile.name ? codeFile.name : "undefined"}
                         <span className='format'>{(codeFile.language && '.' + codeFile.language)}</span>
@@ -188,7 +201,7 @@ export default function File({ reloadFiles }) {
                 {showNewFile && (
                   <li>
                     <div className='fileNameDetail'>
-                      <img src={showNewFile == 'js' ? jsImage : blockImage} alt={`${showNewFile ? 'JS' : 'Block'} Logo`} style={{ width: '14px' }} />
+                      <img src={logos[showNewFile]} alt={`${showNewFile} Logo`} style={{ width: '14px' }} />
                       <input
                         type="text"
                         ref={inputRef}
@@ -216,7 +229,7 @@ export default function File({ reloadFiles }) {
                     className={selectedProblem && selectedProblem.problemNumber === problem.problemNumber ? 'selected' : ''}
                   >
                     <div className="fileNameDetail">
-                      <img src={proImage} alt="Problem Icon" style={{ width: '14px' }} />
+                      <img src={probImage} alt="Problem Icon" style={{ width: '14px' }} />
                       <div>{problem.problemNumber}</div>
                     </div>
                   </li>

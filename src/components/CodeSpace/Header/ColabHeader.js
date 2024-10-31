@@ -4,7 +4,7 @@ import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
 
 const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
-  const { setRun, setShowNewFile, judgeMessage } = useContext(CodeSpaceContext);
+  const { setRun, setShowNewFile, judgeMessage} = useContext(CodeSpaceContext);
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);
@@ -14,6 +14,14 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
 
   const handleNewJs = () => {
     setShowNewFile('js');
+    setDropdownVisible(false);
+  }
+  const handleNewCPP = () => {
+    setShowNewFile('c');
+    setDropdownVisible(false);
+  }
+  const handleNewPython = () => {
+    setShowNewFile('py');
     setDropdownVisible(false);
   }
   const handleNewBlock = () => {
@@ -43,27 +51,24 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
   return (
     <header className="colab-header">
       <div className="menu">
-        <button 
+        <div
           className="menu-button" 
           onMouseOver={() => setDropdownVisible(true)}
           onMouseLeave={() => setDropdownVisible(false)}
         >
-          생성
+          New File
           {dropdownVisible && (
             <div className="dropdown-content">
-              <button 
-                className="dropdown-item" 
-                onClick={handleNewJs}
-              >
-                새로운 JavaScript 블럭
-              </button>
-              <button className="dropdown-item" onClick={handleNewBlock}>새로운 블럭 스페이스</button>
-              <button className="dropdown-item" onClick={handleOpenFile}>Open</button> {/* 파일 열기 버튼 */}
-              <button className="dropdown-item">Save</button>
+              <button className="dropdown-item" onClick={handleNewJs}>New JavaScript File</button>
+              <button className="dropdown-item" onClick={handleNewCPP}>New C File</button>
+              <button className="dropdown-item" onClick={handleNewPython}>New Python File</button>
+              <button className="dropdown-item" onClick={handleNewBlock}>New block coding File</button>
+              {/*<button className="dropdown-item" onClick={handleOpenFile}>Open</button>
+              <button className="dropdown-item">Save</button>*/}
             </div>
           )}
-        </button>
-        <button 
+        </div>
+        {/*<div
           className="menu-button" 
           onMouseEnter={() => setEditDropdownVisible(true)}
           onMouseLeave={() => setEditDropdownVisible(false)}
@@ -78,8 +83,8 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
               <button className="dropdown-item">Paste</button>
             </div>
           )}
-        </button>
-        <button className="menu-button" 
+        </div>
+        <div className="menu-button" 
           onMouseEnter={() => setRunDropdownVisible(true)}
           onMouseLeave={() => setRunDropdownVisible(false)}
         >
@@ -90,16 +95,15 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
               <button className="dropdown-item">Debug</button>
             </div>
           )}
-        </button>
-        <button className="menu-button">Tools</button>
-        <button className="menu-button">Help</button>
+        </div>
+        <div className="menu-button">Tools</div>*/}
+        <div className="menu-button help">Help</div>
       </div>
 
       <div className="actions">
       {saveStatus &&  <div className="action-button" style={{ color: 'green' ,fontSize:'80%' }}> {saveStatus}</div>}
       {judgeMessage && <div className="action-button" style={{ color: 'green' ,fontSize:'80%'}}>{judgeMessage}</div>}
-        <img src={runImg} onClick={runGame} alt="Run" />
-        <button className="action-button">remove</button>
+        <button className="action-button run" onClick={runGame}><img src={runImg} alt="Run" /></button>
         <button className="action-button" onClick={toggleDocsVisibility}>DOCS</button>
         <button className="action-button"><span className="action-icon">&#9881;</span></button>
       </div>

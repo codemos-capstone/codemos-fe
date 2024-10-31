@@ -140,7 +140,7 @@ export const makeLander = (state, setting, endAnimation) => {
         CTX.restore();
     };
 
-    const updateIterator = (code, logs) => {
+    const jsUpdateIterator = (code, logs) => {
         const rocket = deepCopy(logs[0]);
 
         const getFuel = () => {
@@ -254,7 +254,7 @@ export const makeLander = (state, setting, endAnimation) => {
                 throw new TypeError("stopRightRotation is not a function")
             }
         };
-
+    
         const logging = () => {
             console.log(
                 "getVelocityX()        : " +
@@ -269,15 +269,15 @@ export const makeLander = (state, setting, endAnimation) => {
                 getRotationVelocity()
             );
         }
-
+    
         // prohibited functions
         const setInterval = () => { throw new TypeError("setInterval is not a function") };
         const setTimeout = () => { throw new TypeError("setTimeout is not a function") };
         const requestAnimationFrame = () => { throw new TypeError("requestAnimationFrame is not a function") };
         const setImmediate = () => { throw new TypeError("setImmediate is not a function") };
-
+    
         let isEnd = { end: false };
-
+    
         let _mainloop = () => { };
         try {
             eval(code);
@@ -296,17 +296,326 @@ export const makeLander = (state, setting, endAnimation) => {
                 }
             }
         } catch (e) {
-            // console.log(e);
+            console.log(e);
             return;
         };
-
+    
         let landingState = {
             land: isEnd.land,
             ground: isEnd.ground
         }
-
+    
         return landingState;
     };
+    
+    const loadPyodideInstance = async () => {
+        if (!window.pyodide) {
+            await new Promise((resolve, reject) => {
+                const pyodideScript = document.createElement("script");
+                pyodideScript.src = "https://cdn.jsdelivr.net/pyodide/v0.23.0/full/pyodide.js";
+                pyodideScript.onload = resolve;
+                pyodideScript.onerror = reject;
+                document.head.appendChild(pyodideScript);
+            });
+            window.pyodide = await loadPyodide();  // Pyodide 로드
+            console.log("Pyodide loaded");
+        }
+    };
+    const pyUpdateIterator = async (code, logs) => {
+        const pythonHeader = `from js import (
+            getVelocityX,
+            getAngle,
+            getRotationVelocity,
+            stopRightRotation,
+            rotateLeft,
+            stopLeftRotation,
+            rotateRight,
+            getVelocityY,
+            getHeight,
+            engineOn,
+            engineOff,
+        )
+    \n`;
+        console.log(logs[0]);
+        const rocket = deepCopy(logs[0]);
+        console.log("rocket:", rocket);
+    
+        // Pyodide 로드
+        await loadPyodideInstance();
+    
+        // JavaScript 함수들을 Pyodide로 등록
+        window.engineOn = () => {
+            if (allowed.engineOn)
+                rocket.engineOn = true;
+            else {
+                throw new TypeError("engineOn is not a function");
+            }
+        };
+    
+        window.engineOff = () => {
+            if (allowed.engineOff)
+                rocket.engineOn = false;
+            else {
+                throw new TypeError("engineOff is not a function");
+            }
+        };
+    
+        window.getVelocityX = () => {
+            if (allowed.getVelocityX) {
+                return velocityInMPS_s(rocket.velocity.x);
+            } else {
+                throw new TypeError("getVelocityX is not a function");
+            }
+        };
+    
+        window.getVelocityY = () => {
+            if (allowed.getVelocityY)
+                return velocityInMPS_s(rocket.velocity.y);
+            else {
+                throw new TypeError("getVelocityY is not a function");
+            }
+        };
+    
+        window.getAngle = () => {
+            if (allowed.getAngle)
+                return rocket.angle;
+            else {
+                throw new TypeError("getAngle is not a function");
+            }
+        };
+    
+        window.getHeight = () => {
+            if (allowed.getHeight)
+                return heightInMeter(rocket.position.y, _groundedHeight);
+            else {
+                throw new TypeError("getHeight is not a function");
+            }
+        };
+    
+        window.getRotationVelocity = () => {
+            if (allowed.getRotationVelocity)
+                return velocityInMPS_s(rocket.rotationVelocity);
+            else {
+                throw new TypeError("getRotationVelocity is not a function");
+            }
+        };
+    
+        window.rotateLeft = () => {
+            if (allowed.rotateLeft)
+                rocket.rotatingLeft = true;
+            else {
+                throw new TypeError("rotateLeft is not a function");
+            }
+        };
+    
+        window.rotateRight = () => {
+            if (allowed.rotateRight)
+                rocket.rotatingRight = true;
+            else {
+                throw new TypeError("rotateRight is not a function");
+            }
+        };
+    
+        window.stopLeftRotation = () => {
+            if (allowed.stopLeftRotation)
+                rocket.rotatingLeft = false;
+            else {
+                throw new TypeError("stopLeftRotation is not a function");
+            }
+        };
+    
+        window.stopRightRotation = () => {
+            if (allowed.stopRightRotation)
+                rocket.rotatingRight = false;
+            else {
+                throw new TypeError("stopRightRotation is not a function");
+            }
+        };
+    
+        window.logging = () => {
+            console.log(
+                `getVelocityX()        : ${window.getVelocityX()}\n` +
+                `getVelocityY()        : ${window.getVelocityY()}\n` +
+                `getAngle()            : ${window.getAngle()}\n` +
+                `getHeight()           : ${window.getHeight()}\n` +
+                `getRotationVelocity() : ${window.getRotationVelocity()}`
+            );
+        };
+    
+        // JavaScript에서 Python 코드 실행
+        let isEnd = { end: false };
+        let _mainloop = () => {};
+    
+        try {
+            const pyodideResult = await pyodide.runPythonAsync(pythonHeader + code); // Python 코드를 Pyodide로 실행
+            console.log("Python Code Execution Result:", pyodideResult);
+    
+            // Python 코드 내에서 mainloop 함수를 가져와서 JavaScript로 할당
+            if (pyodide.globals.get("_mainloop")) {
+                _mainloop = pyodide.globals.get("_mainloop");
+            }
+    
+            while (!isEnd.end) {
+                _mainloop();  // Python의 mainloop 호출
+                isEnd = checkEnd(rocket);  // 착륙 성공 여부 확인
+                if (!isEnd.end) {
+                    updateRocket(rocket);  // 로켓 상태 업데이트
+                    logs.push(deepCopy(rocket));  // 로그 기록
+                } else {
+                    rocket.engineOn = false;
+                    rocket.rotatingLeft = false;
+                    rocket.rotatingRight = false;
+                    logs.push(deepCopy(rocket));
+                }
+            }
+        } catch (e) {
+            console.error('Error running Python code with Pyodide:', e);
+            return;
+        }
+    
+        let landingState = {
+            land: isEnd.land,
+            ground: isEnd.ground
+        };
+    
+        return landingState;
+    };
+    
+    
+    const compileCodeAndGetWasm = async (code) => {
+        const formData = new FormData();
+        formData.append('code', code);
+    
+        try {
+            const response = await fetch(process.env.REACT_APP_WASM_SERVER_ADDRESS, {
+                method: 'POST',
+                body: formData
+            });
+    
+            if (!response.ok) throw new Error('Failed to compile C code');
+            
+            const wasmArrayBuffer = await response.arrayBuffer();  
+            console.log("WASM ArrayBuffer length:", wasmArrayBuffer.byteLength)
+            console.log(wasmArrayBuffer);
+            return wasmArrayBuffer;
+        } catch (error) {
+            console.error('Error compiling C code to WASM:', error);
+            throw error;
+        }
+    };
+    const cUpdateIterator = async (code, logs) => {
+        const cHeader = `
+            extern double getVelocityX();
+            extern double getVelocityY();
+            extern double getHeight();
+            extern double getAngle();
+            extern double getRotationVelocity();
+            extern void stopRightRotation();
+            extern void stopLeftRotation();
+            extern void rotateLeft();
+            extern void rotateRight();
+            extern void engineOn();
+            extern void engineOff();\n`;
+        const wasmArrayBuffer = await compileCodeAndGetWasm(cHeader + code);
+        const rocket = deepCopy(logs[0]);
+        console.log("rocket:", rocket);
+        const env = {
+            engineOn: () => {
+                if (allowed.engineOn) rocket.engineOn = true;
+                else throw new TypeError("engineOn is not a function");
+            },
+            engineOff: () => {
+                if (allowed.engineOff) rocket.engineOn = false;
+                else throw new TypeError("engineOff is not a function");
+            },
+            getVelocityX: () => {
+                if (allowed.getVelocityX) return velocityInMPS_s(rocket.velocity.x);
+                else throw new TypeError("getVelocityX is not a function");
+            },
+            getVelocityY: () => {
+                if (allowed.getVelocityY) return velocityInMPS_s(rocket.velocity.y);
+                else throw new TypeError("getVelocityY is not a function");
+            },
+            getAngle: () => {
+                if (allowed.getAngle) return rocket.angle;
+                else throw new TypeError("getAngle is not a function");
+            },
+            getHeight: () => {
+                if (allowed.getHeight) return heightInMeter(rocket.position.y, _groundedHeight);
+                else throw new TypeError("getHeight is not a function");
+            },
+            getRotationVelocity: () => {
+                if (allowed.getRotationVelocity) return velocityInMPS_s(rocket.rotationVelocity);
+                else throw new TypeError("getRotationVelocity is not a function");
+            },
+            rotateLeft: () => {
+                if (allowed.rotateLeft) rocket.rotatingLeft = true;
+                else throw new TypeError("rotateLeft is not a function");
+            },
+            rotateRight: () => {
+                if (allowed.rotateRight) rocket.rotatingRight = true;
+                else throw new TypeError("rotateRight is not a function");
+            },
+            stopLeftRotation: () => {
+                if (allowed.stopLeftRotation) rocket.rotatingLeft = false;
+                else throw new TypeError("stopLeftRotation is not a function");
+            },
+            stopRightRotation: () => {
+                if (allowed.stopRightRotation) rocket.rotatingRight = false;
+                else throw new TypeError("stopRightRotation is not a function");
+            },
+        };
+    
+        let wasmReady = false;
+        let wasmModule;
+        let isEnd = { end: false };
+        let landingState = { land: false, ground: false };
+        try {
+            console.log("wasmArrayBuffer:", wasmArrayBuffer);
+            console.log(wasmArrayBuffer instanceof ArrayBuffer);  
+            wasmModule = await WebAssembly.instantiate(wasmArrayBuffer, { env });
+            wasmReady = true; // WASM 준비 완료
+            const _mainloop = wasmModule.instance.exports.main;
+            //console.log("mainloop function:", _mainloop.toString());
+            while(!isEnd.end){
+                _mainloop();  // wasm mainloop 실행
+                isEnd = checkEnd(rocket);
+                if (!isEnd.end) {
+                    updateRocket(rocket);
+                    logs.push(deepCopy(rocket));
+                } else {
+                    rocket.engineOn = false;
+                    rocket.rotatingLeft = false;
+                    rocket.rotatingRight = false;
+                    logs.push(deepCopy(rocket));
+                    landingState = {
+                        land: isEnd.land,
+                        ground: isEnd.ground
+                    };
+                }
+            }
+        } catch (e) {
+            console.error("Error running WebAssembly code:", e);
+        }
+    
+        return landingState;
+    };
+
+    const runSimulation = (language, code, logs) => {
+        try {
+            if (language == 'js') {
+                return jsUpdateIterator(code, logs);
+            } else if (language == 'py') {
+                return pyUpdateIterator(code, logs);
+            } else if (language == 'c') {
+                return cUpdateIterator(code, logs);
+            } else if (language == 'block') {
+                return jsUpdateIterator(code, logs);
+            }
+        } catch (err) {
+            console.error('Error running simulation:', err);
+        }
+    }
 
     function deepCopy(obj) {
         if (typeof obj !== 'object' || obj === null) {
@@ -689,6 +998,6 @@ export const makeLander = (state, setting, endAnimation) => {
 
     return {
         draw,
-        updateIterator
+        runSimulation
     };
 };

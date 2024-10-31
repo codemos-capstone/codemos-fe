@@ -1,43 +1,40 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { CodeSpaceContext } from 'common/CodeSpaceContext';
-import AceEditor from "react-ace-builds";
+import AceEditor from "aceEditor/AceEditor";
 import BlockEditor from "blockCoding/BlockEditor";
-import FileBtn from "../../Buttons/FileBtn";
-import Docs from "views/Docs";
-import ReactMarkdown from "react-markdown";
 import GameCanvas from "./GameCanvas";
 import axios from "axios";
-import { javascriptGenerator } from 'blockly/javascript';
+import { getEncodedCode } from "blockCoding/Blockly/BlocklyComponent";
 
 import "./Code.css";
-import "react-ace-builds/webpack-resolver-min";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-ambiance";
 
+const modeName = {
+    js: 'javascript',
+    py: 'python',
+    c: 'c_cpp',
+    block: 'block'
+}
+
+const defaultCodes = {
+    js: '_mainloop = function(){\n\n}',
+    block: '',
+    c: `void main() { }`,
+    py: 'def _mainloop(): pass'
+}
+
 export default function Code() {
-    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun, judgeMessage,setJudgeMessage,currentLang } = useContext(CodeSpaceContext);
+    const { selectedProblem, selectedCode, setSelectedCode, selectedCodeId, selectedFileName, run, setRun, judgeMessage,setJudgeMessage, currentLang } = useContext(CodeSpaceContext);
 
     const CodeEditorStyle = {
-        width: "95%",
+        width: "90%",
         height: "70vh",
         border: "5px solid #3D3D3D",
         borderTop: "20px solid #3D3D3D",
+        marginBottom: '2rem'
     };
 
-
-    const toggleDocs = () => {
-        setIsDocsVisible(!isDocsVisible);
-    };
-
-    const handleBlockCode = (code) => {
-        // console.log(code)
-        javascriptGenerator.workspaceToCode(code);
-    }
-
-    const startResize = (e) => {
-        window.addEventListener('mousemove', resize);
-        window.addEventListener('mouseup', stopResize);
-    };
     const resize = (e) => {
         const newWidth = (window.innerWidth - e.clientX) / window.innerWidth * 100;
         setDocsWidth(Math.max(20, Math.min(80, newWidth))); // Limit width between 20% and 80%
@@ -52,8 +49,6 @@ export default function Code() {
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
 
-    const [docsWidth, setDocsWidth] = useState(50);
-    const resizeRef = useRef(null);
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     const [animationRunning, setAnimationRunning] = useState(false); // 애니메이션 상태 관리
 
@@ -64,8 +59,6 @@ export default function Code() {
     
     useEffect(() => {
         if (run) {
-           
-            
             setAnimationRunning(false);  // 먼저 애니메이션을 false로 설정하고
     
             setTimeout(() => {
@@ -111,6 +104,9 @@ export default function Code() {
         }
     }, [run, selectedProblem, selectedCode, setJudgeMessage]);
 
+    useEffect(() => {
+        setRun(false);
+    }, [selectedCode])
 
     return (
         <div className="code">
@@ -129,7 +125,7 @@ export default function Code() {
                                         <th>Initial Position(x, y)<br /><span>getX(), getY()</span></th>
                                         <th>Initial Velocity(x, y)<br /><span>getVelocityX(), getVelocityY()</span></th>
                                         <th>Initial Rotation Velocity<br /><span>getRotationVelocity()</span></th>
-                                        <th>Initial Angle(deg)</th>
+                                        <th>Initial Angle(deg)<br /><span>getAngle()</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -178,13 +174,14 @@ export default function Code() {
                     <div className="no-file">파일을 생성해주세요.<br /> (파일을 생성하지 않으면 코드가 저장되지 않습니다.)</div>}
                 {currentLang == 'block' ? <BlockEditor />
                 : <AceEditor
+                selectedCodeId={selectedCodeId}
                 style={CodeEditorStyle}
                 id="editor"
-                mode="javascript"
+                mode={currentLang && modeName[currentLang]}
                 theme="ambiance"
                 name="code-editor"
                 fontSize="14px"
-                value={selectedCode || "_mainloop = function(){\n\n}"}
+                value={selectedCode || defaultCodes[currentLang]}
                 onChange={(value) => setSelectedCode(value)}
                 showPrintMargin={false}
                 editorProps={{ $blockScrolling: false }}
@@ -248,7 +245,8 @@ export default function Code() {
                 {animationRunning && <GameCanvas 
                                         className="GameCanvas" 
                                         size={[600, 800]} 
-                                        code={selectedCode} 
+                                        language={currentLang} 
+                                        code={currentLang == 'block' ? getEncodedCode(selectedCode) : selectedCode} 
                                         problem={selectedProblem} 
                                         endAnimation={endGame} 
                                         setScore={setScore}

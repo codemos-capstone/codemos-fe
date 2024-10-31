@@ -54,10 +54,12 @@ function CodeSpaceInner() {
   
 
   useEffect(() => {
-    const problem = JSON.parse(sessionStorage.getItem("selectedProblem"));
-    sessionStorage.removeItem("selectedProblem")
-    if (problem) {
-      setSelectedProblem(problem);
+    if (sessionStorage.getItem("selectedProblem")){
+      const problem = JSON.parse(sessionStorage.getItem("selectedProblem"));
+      sessionStorage.removeItem("selectedProblem")
+      if (problem) {
+        setSelectedProblem(problem);
+      }
     }
   }, []);
 
