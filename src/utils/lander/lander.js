@@ -504,7 +504,19 @@ export const makeLander = (state, setting, endAnimation) => {
         }
     };
     const cUpdateIterator = async (code, logs) => {
-        const wasmArrayBuffer = await compileCodeAndGetWasm(code);
+        const cHeader = `
+            extern double getVelocityX();
+            extern double getVelocityY();
+            extern double getHeight();
+            extern double getAngle();
+            extern double getRotationVelocity();
+            extern void stopRightRotation();
+            extern void stopLeftRotation();
+            extern void rotateLeft();
+            extern void rotateRight();
+            extern void engineOn();
+            extern void engineOff();\n`;
+        const wasmArrayBuffer = await compileCodeAndGetWasm(cHeader + code);
         const rocket = deepCopy(logs[0]);
         console.log("rocket:", rocket);
         const env = {
