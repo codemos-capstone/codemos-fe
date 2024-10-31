@@ -6,13 +6,13 @@ import axios from 'axios';
 import probImage from 'assets/images/FILE.png';
 import jsImage from 'assets/images/JS.png';
 import pythonImage from 'assets/images/python.png';
-import cppImage from 'assets/images/cpp.png';
+import cImage from 'assets/images/c.png';
 import blockImage from 'assets/images/block.svg';
 
 const logos = {
   'js': jsImage,
   'py': pythonImage,
-  'cpp': cppImage,
+  'c': cImage,
   'block': blockImage
 }
 

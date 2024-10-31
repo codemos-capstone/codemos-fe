@@ -335,7 +335,7 @@ export const makeLander = (state, setting, endAnimation) => {
             engineOn,
             engineOff,
         )
-    `;
+    \n`;
         console.log(logs[0]);
         const rocket = deepCopy(logs[0]);
         console.log("rocket:", rocket);
@@ -595,7 +595,7 @@ export const makeLander = (state, setting, endAnimation) => {
                 return jsUpdateIterator(code, logs);
             } else if (language == 'py') {
                 return pyUpdateIterator(code, logs);
-            } else if (language == 'cpp') {
+            } else if (language == 'c') {
                 return cUpdateIterator(code, logs);
             } else if (language == 'block') {
                 return jsUpdateIterator(code, logs);
