@@ -64,6 +64,11 @@ export default function GameCanvas({ language, code, problem, endAnimation, setS
         challengeManager.populateCornerInfo();
         //terrain.setShowLandingSurfaces();
 
+        canvasRef.current.scrollIntoView({  
+            behavior: 'smooth',
+            block: 'start'
+        });
+
         const logs = [initState[0]]
         const runGame = async () => {
             const landingEffect = await lander.runSimulation(language, code, logs);
