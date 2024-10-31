@@ -27,7 +27,9 @@ export default function AceEditor({mode, theme,  ...props}){
         }
 
         aceEditorRef.current.on('change', () => {
-            props.onChange(aceEditorRef.current.getValue());
+            if(props.onChange){
+                props.onChange(aceEditorRef.current.getValue());
+            }
         })
 
     }, []);
