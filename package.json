@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "ace-builds": "^1.36.3",
+    "@reactour/tour": "^3.7.0",
     "axios": "^1.7.2",
     "blockly": "^10.0.0",
     "highlight.js": "^11.9.0",

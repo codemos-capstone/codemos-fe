@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import { useTour } from "@reactour/tour";
 import { CodeSpaceContext } from "common/CodeSpaceContext";
 import File from './File/File';
 import Code from './Code/Code';
@@ -50,7 +51,9 @@ function CodeSpaceInner() {
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
   const [fileWidth, setFileWidth] = useState(200); // Initial file width
-  const [saveStatus, setSaveStatus] = useState(""); //저장 상태메시징
+  const [saveStatus, setSaveStatus] = useState(""); //저장 상태 메시지
+
+  const { setIsOpen } = useTour();
   
 
   useEffect(() => {
@@ -62,6 +65,9 @@ function CodeSpaceInner() {
       }
     }
   }, []);
+  useEffect(() => {
+    setIsOpen(true);
+  }, [])
 
   const toggleDocsVisibility = () => {
     setIsDocsVisible(!isDocsVisible);
