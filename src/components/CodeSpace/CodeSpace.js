@@ -10,6 +10,7 @@ import Docs from "views/Docs";
 import './CodeSpace.css';
 
 function ContextProvider ({ children }){
+
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedCodeId, setSelectedCodeId] = useState('');  // 관리할 상태 추가
@@ -51,10 +52,7 @@ function CodeSpaceInner() {
   const docsRef = useRef(null);
   const resizerRef = useRef(null);
   const [fileWidth, setFileWidth] = useState(200); // Initial file width
-  const [saveStatus, setSaveStatus] = useState(""); //저장 상태 메시지
-
-  const { setIsOpen } = useTour();
-  
+  const [saveStatus, setSaveStatus] = useState(""); //저장 상태 메시지  
 
   useEffect(() => {
     if (sessionStorage.getItem("selectedProblem")){
@@ -65,9 +63,6 @@ function CodeSpaceInner() {
       }
     }
   }, []);
-  useEffect(() => {
-    setIsOpen(true);
-  }, [])
 
   const toggleDocsVisibility = () => {
     setIsDocsVisible(!isDocsVisible);

@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CodeSpace from 'components/CodeSpace/CodeSpace';
-import { TourProvider } from "@reactour/tour";
+import { TourProvider, useTour } from "@reactour/tour";
 import './CodeSpaces.css'
 
 export default function CodeSpaces() {
-
     return (
         <TourProvider steps={steps}>
             <div className='container'>
