@@ -2,9 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { CodeSpaceContext } from 'common/CodeSpaceContext';
 import AceEditor from "react-ace-builds";
 import BlockEditor from "blockCoding/BlockEditor";
-import FileBtn from "../../Buttons/FileBtn";
-import Docs from "views/Docs";
-import ReactMarkdown from "react-markdown";
 import GameCanvas from "./GameCanvas";
 import axios from "axios";
 import { getEncodedCode } from "blockCoding/Blockly/BlocklyComponent";
@@ -31,14 +28,6 @@ export default function Code() {
         borderTop: "20px solid #3D3D3D",
     };
 
-    const toggleDocs = () => {
-        setIsDocsVisible(!isDocsVisible);
-    };
-
-    const startResize = (e) => {
-        window.addEventListener('mousemove', resize);
-        window.addEventListener('mouseup', stopResize);
-    };
     const resize = (e) => {
         const newWidth = (window.innerWidth - e.clientX) / window.innerWidth * 100;
         setDocsWidth(Math.max(20, Math.min(80, newWidth))); // Limit width between 20% and 80%
@@ -53,8 +42,6 @@ export default function Code() {
     const [judgeResult, setJudgeResult] = useState(null);
     const [judgeProgress, setJudgeProgress] = useState(0);
 
-    const [docsWidth, setDocsWidth] = useState(50);
-    const resizeRef = useRef(null);
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
     const [animationRunning, setAnimationRunning] = useState(false); // 애니메이션 상태 관리
 
