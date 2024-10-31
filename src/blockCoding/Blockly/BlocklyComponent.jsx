@@ -48,6 +48,7 @@ function BlocklyComponent(props) {
   const handleCode = () => {
     const code = Blockly.serialization.workspaces.save(primaryWorkspace.current);
     const processed = JSON.stringify(code);
+    console.log(code);
     props.setSavedCode(processed);
     Blockly.serialization.workspaces.load(code, primaryWorkspace.current);
   };
@@ -82,6 +83,15 @@ function BlocklyComponent(props) {
       );
     }
   }, [primaryWorkspace, toolbox]);
+  useEffect(() => {
+    primaryWorkspace.current.clear();
+    if (!props.savedCode) {
+      Blockly.Xml.domToWorkspace(
+        Blockly.utils.xml.textToDom(props.initialXml),
+        primaryWorkspace.current,
+      );
+    }
+  }, [props.selectedCodeId])
   useEffect(() => {
     const savedCode = props.savedCode;
     if(primaryWorkspace.current) {

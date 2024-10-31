@@ -7,7 +7,7 @@ import './blocks/customblocks';
 import './generator/generator';
 
 export default function BlockEditor() {
-  const { selectedCode, setSelectedCode } = useContext(CodeSpaceContext);
+  const { selectedCode, setSelectedCode, selectedCodeId } = useContext(CodeSpaceContext);
   const toolbox = `
     <xml xmlns="http://www.w3.org/1999/xhtml">
       <category name="Logic" colour="#5C81A6">
@@ -105,6 +105,7 @@ export default function BlockEditor() {
           trashcan={true}
           media={'media/'}
           savedCode={selectedCode}
+          selectedCodeId={selectedCodeId}
           setSavedCode={setSelectedCode}
           move={{
             scrollbars: true,
