@@ -35,6 +35,7 @@ Blockly.setLocale(locale);
 let primaryWorkspace;
 
 export const getEncodedCode = (jsonCode) => {
+  if (!jsonCode) return;
   const converted = JSON.parse(jsonCode);
   Blockly.serialization.workspaces.load(converted, primaryWorkspace.current);
   return javascriptGenerator.workspaceToCode(primaryWorkspace.current);
