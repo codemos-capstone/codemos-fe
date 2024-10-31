@@ -25,7 +25,7 @@ const steps = [
         content: 'This is your file list which contains all of your created code files. You can choose one of your file or create new one.',
     },
     {
-        selector: '.colab-header .menu .file-buttons',
+        selector: '.colab-header .menu',
         content: 'This is menu. You can create new file here.'
     },
     {
@@ -38,6 +38,10 @@ const steps = [
     },
     {
         selector: '.colab-header .actions',
-        content: 'You can simulate your codes by clicking this run button. DOCS button will show the docs that contains all the information you will need.'
-    }
+        content: `You can simulate your codes by clicking this run button\n(But you have to press convert button before your block code simulating!).\n DOCS button will show the docs that contains all the information you will need.`
+    },
+    {
+        content: 'This is all for basic uses. Enjoy your coding!',
+        position: 'center'
+    },
 ]

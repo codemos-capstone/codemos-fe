@@ -2,6 +2,7 @@ import React, { useState, useContext, useRef } from 'react';
 import { CodeSpaceContext } from 'common/CodeSpaceContext';
 import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
+import { useTour } from '@reactour/tour';
 
 const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
   const { setRun, setShowNewFile, judgeMessage} = useContext(CodeSpaceContext);
@@ -10,7 +11,9 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);
   const fileInputRef = useRef(null); // 파일 input 참조
 
-  const runGame = () => { setRun(true) };
+  const { setIsOpen } = useTour();
+
+  const runGame = () => { setRun(true); };
 
   const handleNewJs = () => {
     setShowNewFile('js');
@@ -97,7 +100,7 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
           )}
         </div>
         <div className="menu-button">Tools</div>*/}
-        <div className="menu-button help">Help</div>
+        <div className="menu-button help" onClick={() => {setIsOpen(true)}}>Help</div>
       </div>
 
       <div className="actions">
