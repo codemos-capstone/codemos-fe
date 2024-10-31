@@ -51,7 +51,7 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
   return (
     <header className="colab-header">
       <div className="menu">
-        <button 
+        <div
           className="menu-button" 
           onMouseOver={() => setDropdownVisible(true)}
           onMouseLeave={() => setDropdownVisible(false)}
@@ -67,8 +67,8 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
               <button className="dropdown-item">Save</button>
             </div>
           )}
-        </button>
-        <button 
+        </div>
+        <div
           className="menu-button" 
           onMouseEnter={() => setEditDropdownVisible(true)}
           onMouseLeave={() => setEditDropdownVisible(false)}
@@ -83,8 +83,8 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
               <button className="dropdown-item">Paste</button>
             </div>
           )}
-        </button>
-        <button className="menu-button" 
+        </div>
+        <div className="menu-button" 
           onMouseEnter={() => setRunDropdownVisible(true)}
           onMouseLeave={() => setRunDropdownVisible(false)}
         >
@@ -95,9 +95,9 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
               <button className="dropdown-item">Debug</button>
             </div>
           )}
-        </button>
-        <button className="menu-button">Tools</button>
-        <button className="menu-button">Help</button>
+        </div>
+        <div className="menu-button">Tools</div>
+        <div className="menu-button">Help</div>
       </div>
 
       <div className="actions">
