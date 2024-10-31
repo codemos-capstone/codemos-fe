@@ -322,6 +322,20 @@ export const makeLander = (state, setting, endAnimation) => {
         }
     };
     const pyUpdateIterator = async (code, logs) => {
+        const pythonHeader = `from js import (
+            getVelocityX,
+            getAngle,
+            getRotationVelocity,
+            stopRightRotation,
+            rotateLeft,
+            stopLeftRotation,
+            rotateRight,
+            getVelocityY,
+            getHeight,
+            engineOn,
+            engineOff,
+        )
+    `;
         console.log(logs[0]);
         const rocket = deepCopy(logs[0]);
         console.log("rocket:", rocket);
@@ -433,7 +447,7 @@ export const makeLander = (state, setting, endAnimation) => {
         let _mainloop = () => {};
     
         try {
-            const pyodideResult = await pyodide.runPythonAsync(code); // Python 코드를 Pyodide로 실행
+            const pyodideResult = await pyodide.runPythonAsync(pythonHeader + code); // Python 코드를 Pyodide로 실행
             console.log("Python Code Execution Result:", pyodideResult);
     
             // Python 코드 내에서 mainloop 함수를 가져와서 JavaScript로 할당
