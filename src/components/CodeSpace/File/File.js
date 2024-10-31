@@ -121,7 +121,7 @@ export default function File({ reloadFiles }) {
   };
 
 
-  const handleContextMenu = (e, fileId) => {
+  const handleContextMenu = (e, fileId, fileName) => {
     e.preventDefault();
     const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
     const colabHeader = document.querySelector('.colab-header')?.offsetHeight || 0;
@@ -131,22 +131,24 @@ export default function File({ reloadFiles }) {
       visible: true,
       x: offsetX, 
       y: offsetY, 
-      fileId: fileId
+      fileId: fileId,
+      fileName
     });
   };
 
   const handleDeleteFile = async () => {
     if (contextMenu.fileId) {
-      try {
-        const token = sessionStorage.getItem('accessToken');
-        await axios.delete(`${serverAddress}/api/v1/code-file/${contextMenu.fileId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setContextMenu({ visible: false, x: 0, y: 0, fileId: null });
-        fetchData('code-file', setCodeFiles);
-      } catch (error) {
-        console.error('Error deleting file:', error);
-      }
+      if (confirm(`Delete file '${contextMenu.fileName}'?`))
+        try {
+          const token = sessionStorage.getItem('accessToken');
+          await axios.delete(`${serverAddress}/api/v1/code-file/${contextMenu.fileId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setContextMenu({ visible: false, x: 0, y: 0, fileId: null });
+          fetchData('code-file', setCodeFiles);
+        } catch (error) {
+          console.error('Error deleting file:', error);
+        }
     }
   };
 
@@ -184,7 +186,7 @@ export default function File({ reloadFiles }) {
                   <li
                     key={codeFile.id}
                     onClick={() => handleFileClick(codeFile)}
-                    onContextMenu={(e) => handleContextMenu(e, codeFile.id)}
+                    onContextMenu={(e) => handleContextMenu(e, codeFile.id, codeFile.name)}
                     className={codeFile.id === selectedCodeId ? 'selected' : ''}
                   >
                     <div className="fileNameDetail">
