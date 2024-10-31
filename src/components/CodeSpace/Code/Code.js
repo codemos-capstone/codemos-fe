@@ -7,7 +7,7 @@ import Docs from "views/Docs";
 import ReactMarkdown from "react-markdown";
 import GameCanvas from "./GameCanvas";
 import axios from "axios";
-import { javascriptGenerator } from 'blockly/javascript';
+import { getEncodedCode } from "blockCoding/Blockly/BlocklyComponent";
 
 import "./Code.css";
 import "react-ace-builds/webpack-resolver-min";
@@ -31,15 +31,9 @@ export default function Code() {
         borderTop: "20px solid #3D3D3D",
     };
 
-
     const toggleDocs = () => {
         setIsDocsVisible(!isDocsVisible);
     };
-
-    const handleBlockCode = (code) => {
-        // console.log(code)
-        javascriptGenerator.workspaceToCode(code);
-    }
 
     const startResize = (e) => {
         window.addEventListener('mousemove', resize);
@@ -116,6 +110,9 @@ export default function Code() {
         }
     }, [run, selectedProblem, selectedCode, setJudgeMessage]);
 
+    useEffect(() => {
+        setRun(false);
+    }, [selectedCode])
 
     return (
         <div className="code">
@@ -254,7 +251,7 @@ export default function Code() {
                                         className="GameCanvas" 
                                         size={[600, 800]} 
                                         language={currentLang} 
-                                        code={selectedCode} 
+                                        code={currentLang == 'block' ? getEncodedCode(selectedCode) : selectedCode} 
                                         problem={selectedProblem} 
                                         endAnimation={endGame} 
                                         setScore={setScore}

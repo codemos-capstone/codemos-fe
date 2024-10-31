@@ -503,7 +503,7 @@ export const makeLander = (state, setting, endAnimation) => {
             throw error;
         }
     };
-    const cUpdateIterator = async (code, logs) => {
+    const cUpdateIterator = async (code, logs) => {f
         const wasmArrayBuffer = await compileCodeAndGetWasm(code);
         const rocket = deepCopy(logs[0]);
         console.log("rocket:", rocket);
@@ -597,6 +597,8 @@ export const makeLander = (state, setting, endAnimation) => {
                 return pyUpdateIterator(code, logs);
             } else if (language == 'c') {
                 return cUpdateIterator(code, logs);
+            } else if (language == 'block') {
+                return jsUpdateIterator(code, logs);
             }
         } catch (err) {
             console.error('Error running simulation:', err);

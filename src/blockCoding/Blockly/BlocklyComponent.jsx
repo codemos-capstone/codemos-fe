@@ -28,19 +28,28 @@ import {useEffect, useRef} from 'react';
 import * as Blockly from 'blockly/core';
 import * as locale from 'blockly/msg/en';
 import 'blockly/blocks';
+import { javascriptGenerator } from 'blockly/javascript';
 
 Blockly.setLocale(locale);
+
+let primaryWorkspace;
+
+export const getEncodedCode = (jsonCode) => {
+  const converted = JSON.parse(jsonCode);
+  Blockly.serialization.workspaces.load(converted, primaryWorkspace.current);
+  return javascriptGenerator.workspaceToCode(primaryWorkspace.current);
+}
 
 function BlocklyComponent(props) {
   const blocklyDiv = useRef();
   const toolbox = useRef();
-  let primaryWorkspace = useRef();
+  primaryWorkspace = useRef();
 
   const handleCode = () => {
     const code = Blockly.serialization.workspaces.save(primaryWorkspace.current);
     const processed = JSON.stringify(code);
     props.setSavedCode(processed);
-    console.log('converted')
+    Blockly.serialization.workspaces.load(code, primaryWorkspace.current);
   };
 
   useEffect(() => {
