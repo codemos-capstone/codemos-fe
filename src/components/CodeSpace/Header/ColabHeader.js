@@ -103,7 +103,7 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
       <div className="actions">
       {saveStatus &&  <div className="action-button" style={{ color: 'green' ,fontSize:'80%' }}> {saveStatus}</div>}
       {judgeMessage && <div className="action-button" style={{ color: 'green' ,fontSize:'80%'}}>{judgeMessage}</div>}
-        <button className="action-button" onClick={runGame}><img src={runImg} alt="Run" /></button>
+        <button className="action-button run" onClick={runGame}><img src={runImg} alt="Run" /></button>
         <button className="action-button" onClick={toggleDocsVisibility}>DOCS</button>
         <button className="action-button"><span className="action-icon">&#9881;</span></button>
       </div>

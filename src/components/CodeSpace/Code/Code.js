@@ -125,7 +125,7 @@ export default function Code() {
                                         <th>Initial Position(x, y)<br /><span>getX(), getY()</span></th>
                                         <th>Initial Velocity(x, y)<br /><span>getVelocityX(), getVelocityY()</span></th>
                                         <th>Initial Rotation Velocity<br /><span>getRotationVelocity()</span></th>
-                                        <th>Initial Angle(deg)</th>
+                                        <th>Initial Angle(deg)<br /><span>getAngle()</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
