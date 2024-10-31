@@ -25,6 +25,7 @@ export default function Code() {
         height: "70vh",
         border: "5px solid #3D3D3D",
         borderTop: "20px solid #3D3D3D",
+        marginBottom: '2rem'
     };
 
     const resize = (e) => {
