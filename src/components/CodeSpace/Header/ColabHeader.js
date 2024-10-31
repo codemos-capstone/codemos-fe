@@ -4,7 +4,7 @@ import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
 
 const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
-  const { setRun, setShowNewFile, judgeMessage } = useContext(CodeSpaceContext);
+  const { setRun, setShowNewFile, judgeMessage} = useContext(CodeSpaceContext);
   const [dropdownVisible, setDropdownVisible] = useState(false); 
   const [editDropdownVisible, setEditDropdownVisible] = useState(false);
   const [runDropdownVisible, setRunDropdownVisible] = useState(false);
@@ -62,7 +62,7 @@ const ColabHeader = ({ toggleDocsVisibility, saveStatus }) => {
               <button className="dropdown-item" onClick={handleNewJs}>New JavaScript File</button>
               <button className="dropdown-item" onClick={handleNewC}>New C File</button>
               <button className="dropdown-item" onClick={handleNewPython}>New Python File</button>
-              <button className="dropdown-item" onClick={handleNewBlock}>New block coding space</button>
+              <button className="dropdown-item" onClick={handleNewBlock}>New block coding File</button>
               <button className="dropdown-item" onClick={handleOpenFile}>Open</button> {/* 파일 열기 버튼 */}
               <button className="dropdown-item">Save</button>
             </div>
