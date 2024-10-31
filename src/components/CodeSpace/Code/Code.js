@@ -28,7 +28,7 @@ export default function Code() {
     const { selectedProblem, selectedCode, setSelectedCode, selectedCodeId, selectedFileName, run, setRun, judgeMessage,setJudgeMessage, currentLang } = useContext(CodeSpaceContext);
 
     const CodeEditorStyle = {
-        width: "95%",
+        width: "90%",
         height: "70vh",
         border: "5px solid #3D3D3D",
         borderTop: "20px solid #3D3D3D",
