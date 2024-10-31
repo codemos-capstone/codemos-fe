@@ -17,8 +17,15 @@ const modeName = {
     block: 'block'
 }
 
+const defaultCodes = {
+    js: '_mainloop = function(){\n\n}',
+    block: '',
+    c: `void main() { }`,
+    py: 'def _mainloop(): pass'
+}
+
 export default function Code() {
-    const { selectedProblem, selectedCode, setSelectedCode, selectedFileName, run, setRun, judgeMessage,setJudgeMessage, currentLang } = useContext(CodeSpaceContext);
+    const { selectedProblem, selectedCode, setSelectedCode, selectedCodeId, selectedFileName, run, setRun, judgeMessage,setJudgeMessage, currentLang } = useContext(CodeSpaceContext);
 
     const CodeEditorStyle = {
         width: "95%",
@@ -167,14 +174,14 @@ export default function Code() {
                     <div className="no-file">파일을 생성해주세요.<br /> (파일을 생성하지 않으면 코드가 저장되지 않습니다.)</div>}
                 {currentLang == 'block' ? <BlockEditor />
                 : <AceEditor
-                selectedFileName={selectedFileName}
+                selectedCodeId={selectedCodeId}
                 style={CodeEditorStyle}
                 id="editor"
                 mode={currentLang && modeName[currentLang]}
                 theme="ambiance"
                 name="code-editor"
                 fontSize="14px"
-                value={selectedCode || "_mainloop = function(){\n\n}"}
+                value={selectedCode || defaultCodes[currentLang]}
                 onChange={(value) => setSelectedCode(value)}
                 showPrintMargin={false}
                 editorProps={{ $blockScrolling: false }}

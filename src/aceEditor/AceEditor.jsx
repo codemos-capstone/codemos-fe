@@ -35,7 +35,7 @@ export default function AceEditor({mode, theme,  ...props}){
     useEffect(() => {
         aceEditorRef.current.setValue(props.value);
         aceEditorRef.current.session.setMode(`ace/mode/${mode ? mode : 'javascript'}`);
-    }, [props.selectedFileName])
+    }, [props.selectedCodeId])
   
     return (
       <div
@@ -47,12 +47,3 @@ export default function AceEditor({mode, theme,  ...props}){
       </div>
     );
 }
-/**
- *                 style={CodeEditorStyle}
-                id="editor"
-                name="code-editor"
-                value={selectedCode || "_mainloop = function(){\n\n}"}
-                onChange={(value) => setSelectedCode(value)}
-                editorProps={{ $blockScrolling: false }}
-                marginBottom="4%"
- */
