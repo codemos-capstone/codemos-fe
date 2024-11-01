@@ -192,7 +192,7 @@ export const makeLander = (state, setting, endAnimation) => {
         };
         const getAngle = () => {
             if (allowed.getAngle)
-                return getAngleDeltaUpright(rocket.angle);
+                return getAngleDeltaUpright(rocket.angle) - 180;
             else {
                 throw new TypeError("getAngle is not a function")
             }
