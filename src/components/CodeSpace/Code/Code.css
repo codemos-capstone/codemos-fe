@@ -19,6 +19,7 @@
 .editor-container .no-file {
     text-align: center;
     color: #ffec60;
+    margin-bottom: 2rem;
 }
 .fileSubject{
     color: white;

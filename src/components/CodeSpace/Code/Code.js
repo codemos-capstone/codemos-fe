@@ -171,7 +171,7 @@ export default function Code() {
                     //선택 안하면 아무것도 없음
                 )}
                 {selectedFileName ? <div className="fileSubject">{selectedFileName + '.' + currentLang}</div> :
-                    <div className="no-file">파일을 생성해주세요.<br /> (파일을 생성하지 않으면 코드가 저장되지 않습니다.)</div>}
+                    <div className="no-file">Please create your file.<br /> (Or your codes will be missing)</div>}
                 {currentLang == 'block' ? <BlockEditor />
                 : <AceEditor
                 selectedCodeId={selectedCodeId}
