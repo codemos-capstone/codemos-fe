@@ -5,7 +5,7 @@ class Star {
     this.x = Math.random() * window.innerWidth;
     this.y = Math.random() * window.innerHeight;
     this.size = Math.random() * 1.8;
-    this.speed = (Math.random() * 0.22);
+    this.speed = ((Math.random() + 0.1) * 0.22);
     if (Math.random() <= 0.005) { this.color = "#faa"}
     else if (Math.random() >= 0.99) { this. color = "#ffa"}
     else if (Math.random() >= 0.499 && Math.random() <= 0.51) this.color = "#aaf"
