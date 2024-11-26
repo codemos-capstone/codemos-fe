@@ -1,23 +1,62 @@
-.content{
+.main-view {
     display: flex;
-    width:100%;
     flex-direction: column;
-    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 10%;
 }
-.logo{
+
+.main-view .content{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width:80%;
+    margin-bottom: 5rem;
+}
+.main-view .content .logo{
     margin-top: 6%;
     width: 200px;
-    background-color: none;
 }
-.main-title{
+.main-view .content .main-title{
     font-family: Georgia;
     font-size: xx-large;
     color:#BF1F1F;
 }
-.introduction{
+.main-view .content .texts {
+    margin-left: 5%;
+    width: 35%;
+}
+.main-view .content p {
+    width: fit-content;
+}
+.main-view .introduction{
     margin-top: 3%;
-    width: 60%;
-    text-align: center;
     font-size: small;
+}
+
+.main-view .btns .button-container:hover {
+    border-radius: 5px;
+    background-color: #ffffffe7;
+    transition: background-color 0.5s;
+}
+
+.main-view .btns button {
+    cursor: pointer;
+    min-width: 15rem;
+    background-color: #fff0;
+    padding: 1rem 1.5rem;
+    font-size: 1.5rem;
+    color: #fff;
+    border: 1px solid #dae3ffa9;
+    border-radius: 5px;
+    text-decoration: underline;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border 0.2s;
+}
+
+.main-view .btns button:hover {
+    background: linear-gradient(45deg, #751fff, #2e66ff);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
 }
