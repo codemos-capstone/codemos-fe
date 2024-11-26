@@ -54,13 +54,17 @@
     display: flex;
 }
 
-.subscribe-section input, .subscribe-section button {
+.subscribe-section input {
     padding: 10px;
     margin: 5px;
+    background-color: #e1e4e9;
 }
 
 .subscribe-section button {
-    background-color: #555;
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px;
+    background-color: #4c5055;
     border: none;
     color: white;
 }
