@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useTour } from "@reactour/tour";
-import { CodeSpaceContext } from "common/CodeSpaceContext";
+import { CodeSpaceContext } from "contexts/CodeSpaceContext";
 import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";

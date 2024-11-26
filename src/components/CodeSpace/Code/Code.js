@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { CodeSpaceContext } from 'common/CodeSpaceContext';
+import { CodeSpaceContext } from 'contexts/CodeSpaceContext';
 import AceEditor from "aceEditor/AceEditor";
 import BlockEditor from "blockCoding/BlockEditor";
 import GameCanvas from "./GameCanvas";

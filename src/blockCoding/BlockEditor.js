@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { CodeSpaceContext } from 'common/CodeSpaceContext';
+import { CodeSpaceContext } from 'contexts/CodeSpaceContext';
 import BlocklyComponent, { Block, Category } from './Blockly';
 
 import './blocks/customblocks';

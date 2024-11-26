@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { CodeSpaceContext } from 'common/CodeSpaceContext';
+import { CodeSpaceContext } from 'contexts/CodeSpaceContext';
 import './File.css';
 import axios from 'axios';
 
