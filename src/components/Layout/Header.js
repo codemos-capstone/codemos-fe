@@ -56,15 +56,17 @@ export default function Header(){
                 </div>
                 <div className="nav-menu">
                     <Link to ="/landing">
-                        <div className="pro">Problems</div>
+                        <div className="btn">Problems</div>
+                    </Link>
+                    <Link to={"/leader/1000"}>
+                        <div className="btn">Leader Board</div>
                     </Link>
                     <Link>
-                        <div className="pro">Report</div>
+                        <div className="btn">Report</div>
                     </Link>
                 </div>
             </div>
             <div className="right">
-                <LBBtn />
                 {user ? (
                     <>
                         <button className="logout-btn" onClick={handleLogout}>Logout</button>
@@ -79,7 +81,10 @@ export default function Header(){
                         </button>
                     </>
                 ) : (
-                    <button btntype="login" className="login-btn" onClick={() => navigate("/sign/login")}>Login</button>
+                    <>
+                        <button className="reg-btn" onClick={() => navigate("/sign/register")}>Register</button>
+                        <button className="login-btn" onClick={() => navigate("/sign/login")}>Login</button>
+                    </>
                 )}
             </div>
         </div>
