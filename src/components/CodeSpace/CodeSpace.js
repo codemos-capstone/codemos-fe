@@ -154,7 +154,7 @@ function CodeSpaceInner() {
           style={{ width: isDocsVisible ? `${docsWidth}px` : '0' }}
         >
           <div className="resizer" ref={resizerRef} onMouseDown={handleMouseDown}></div>
-          <Docs />
+          <Docs closeDocs={() => {setIsDocsVisible(false);}} />
         </div>
         <div className="toggle-docs" onClick={toggleDocsVisibility}>
           {isDocsVisible ? '▶' : '◀'}

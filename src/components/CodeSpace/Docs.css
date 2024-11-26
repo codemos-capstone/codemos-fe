@@ -9,6 +9,14 @@
     z-index: 1000;
 }
 
+.docs-container .close-btn {
+    cursor: pointer;
+    background-color: #fff0;
+    color: #fff;
+    border: none;
+    font-size: 1.2rem;
+}
+
 .docs-container.visible {
     transform: translateX(0); /* 화면으로 들어오도록 설정 */
 }

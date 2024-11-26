@@ -54,7 +54,7 @@ getAngle()            : -60.2
 getHeight()           : 239
 getRotationVelocity() : 0.37505750000014804
 */`;
-const Docs = () => {
+const Docs = ({ closeDocs }) => {
     const docsRef = useRef(null);
     useEffect(() => {
         if (docsRef.current) {
@@ -70,7 +70,7 @@ const Docs = () => {
 
     return (
         <div className={`docs-container `} ref={docsRef}>
-            <div>X</div>
+            <button className="close-btn" onClick={closeDocs}>X</button>
             <div className="desc">
                 <h1>CodeMos API Documentation</h1>  
             <div>
