@@ -21,23 +21,23 @@ export default function ResetPassword() {
                     params: { token },
                 }
             );
-            alert("비밀번호가 성공적으로 재설정되었습니다.");
+            alert("Successfully reset your password.");
             navigate("/login");
         } catch (error) {
-            console.error("비밀번호 재설정 실패:", error);
-            alert("비밀번호 재설정에 실패했습니다. 다시 시도해주세요.");
+            console.error("Failed to reset password:", error);
+            alert("Failed to reset password. Please try again.");
         }
     };
 
     return (
         <div>
-            <h2>비밀번호 재설정</h2>
+            <h2>Reset Password</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="newPassword">새 비밀번호</label>
-                    <input type="password" id="newPassword" name="newPassword" placeholder="새 비밀번호를 입력하세요" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
+                    <label htmlFor="newPassword">New Password</label>
+                    <input type="password" id="newPassword" name="newPassword" placeholder="Enter your new password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
                 </div>
-                <button type="submit">비밀번호 재설정</button>
+                <button type="submit">Reset Password</button>
             </form>
         </div>
     );

@@ -1,0 +1,26 @@
+{
+    "leader": {
+        "btns": ["Leader board", "Reload"],
+        "cols": ["Rank", "Name", "Score", "Time taken"]
+    },
+    "login": [
+        "Register Success!",
+        "Login",
+        "Register",
+        "Login Page",
+        "Register Page",
+        "Main Page"
+],
+    "user": [
+        "Main Page",
+        "Username",
+        "Register Code",
+        "Register this code?",
+        "Register Success!",
+        "Delete this code?"
+    ],
+    "btns": {
+        "login": ["Login", "Logout"],
+        "leader": "Leader board"
+    }
+}

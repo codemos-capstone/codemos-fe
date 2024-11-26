@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useTour } from "@reactour/tour";
-import { CodeSpaceContext } from "common/CodeSpaceContext";
+import { CodeSpaceContext } from "contexts/CodeSpaceContext";
 import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";
 import axios from 'axios';
-import Docs from "views/Docs";
+import Docs from "./Docs";
 
 import './CodeSpace.css';
 
@@ -154,7 +154,7 @@ function CodeSpaceInner() {
           style={{ width: isDocsVisible ? `${docsWidth}px` : '0' }}
         >
           <div className="resizer" ref={resizerRef} onMouseDown={handleMouseDown}></div>
-          <Docs />
+          <Docs closeDocs={() => {setIsDocsVisible(false);}} />
         </div>
         <div className="toggle-docs" onClick={toggleDocsVisibility}>
           {isDocsVisible ? '▶' : '◀'}

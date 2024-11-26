@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import profile from 'assets/images/profile.jpeg'
 import './btns.css';
-const btnTexts = require('lang/kor.json').btns.login;
+const btnTexts = require('lang/eng.json').btns.login;
 
 function ProfileBtn(){
     const navigate = useNavigate();

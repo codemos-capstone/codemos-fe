@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef } from 'react';
-import { CodeSpaceContext } from 'common/CodeSpaceContext';
+import { CodeSpaceContext } from 'contexts/CodeSpaceContext';
 import './ColabHeader.css';
 import runImg from 'assets/images/run.png';
 import { useTour } from '@reactour/tour';

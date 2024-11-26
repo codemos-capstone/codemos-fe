@@ -1,12 +1,20 @@
 /* Docs.css */
 .docs-container {
-    background-color: #02071e;
+    background-color: #0d101bee;
     color: #ffffff;
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
     padding: 20px;
     text-align: left;
     z-index: 1000;
+}
+
+.docs-container .close-btn {
+    cursor: pointer;
+    background-color: #fff0;
+    color: #fff;
+    border: none;
+    font-size: 1.2rem;
 }
 
 .docs-container.visible {

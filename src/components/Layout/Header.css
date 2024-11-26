@@ -20,7 +20,8 @@
     margin: 0;
 }
 .header .left a {
-    margin-left: 15px;
+    margin-left: 1rem;
+    margin-right: 1.2rem;
     text-decoration: none;
 }
 .header .left a:hover {
@@ -34,10 +35,25 @@
     justify-content: space-between; /* 수직으로 중앙 정렬합니다. */
     align-items: center; /* 수평으로 중앙 정렬합니다. */
 }
-.header .pro{
+.header .right .login-btn, .header .right .logout-btn, .header .right .reg-btn{
+    padding: 8px 16px;
+    font-size: 12px;
+    border: 1px solid rgb(179, 179, 179);
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #0a0f1c;
+    color:white;
+    margin-left: 10px;
+    transition: border 0.2s, color 0.2s;
+}
+.header .right .login-btn:hover, .header .right .logout-btn:hover, .header .right .reg-btn:hover {
+    border: 1px solid rgba(63, 76, 253, 0.726);
+    color: rgb(228, 230, 255);
+}
+
+.header .btn{
     padding: 0;
     margin: 0;
-    margin-left: 7%;
     color: white;
     font-size: small;
 }

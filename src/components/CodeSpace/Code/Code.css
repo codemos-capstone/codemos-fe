@@ -1,5 +1,5 @@
 .code {
-    background-color: #3D3D3D;
+    background-color: #3d3d3d;
     display: flex;
     position: relative;
     max-width: 100%;
@@ -19,6 +19,7 @@
 .editor-container .no-file {
     text-align: center;
     color: #ffec60;
+    margin-bottom: 2rem;
 }
 .fileSubject{
     color: white;
@@ -31,10 +32,10 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .problems{
-    color: white;
+    color: rgb(255, 255, 255);
     display: flex;
     align-items: center;
-    background-color:rgb(26, 26, 26);
+    background-color: #fff0;
     height: fit-content;
     flex-direction: column;
     width: 86.5%;

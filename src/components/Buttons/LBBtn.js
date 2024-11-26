@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './btns.css';
-const btnTexts = require('lang/kor.json').btns;
+const btnTexts = require('lang/eng.json').btns;
 
 export default function LBBtn({}){
     const navigate = useNavigate();

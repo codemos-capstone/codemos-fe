@@ -1,6 +1,5 @@
 import React from "react"
 import { Routes, Route, useLocation } from 'react-router-dom';
-import Docs from "views/Docs"
 import SignPage from "views/SignPage"
 import Leader from "views/Leader"
 import OAuthMiddle from "hooks/auth";
@@ -29,7 +28,6 @@ export default function App(){
                     <Route index element={<MainView />} />
                     <Route path="/landing" element={<Landing/>}/>
                     <Route path="/codespaces" element={<CodeSpaces/>}/>
-                    <Route path="/docs" element={<Docs isVisible={false} />} />
                     <Route path="/sign/:formType" element={<SignPage/>} />
                     <Route path="/leader/:problemId" element={<Leader />} />
                     <Route path="/oauthMiddle" element={<OAuthMiddle />} />
