@@ -21,8 +21,6 @@
     ],
     "btns": {
         "login": ["Login", "Logout"],
-        "game": "Game Start",
-        "docs": "Game Docs",
         "leader": "Leader board"
     }
 }

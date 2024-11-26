@@ -5,7 +5,7 @@ import File from './File/File';
 import Code from './Code/Code';
 import ColabHeader from "./Header/ColabHeader";
 import axios from 'axios';
-import Docs from "views/Docs";
+import Docs from "./Docs";
 
 import './CodeSpace.css';
 
