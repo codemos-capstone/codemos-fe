@@ -6,7 +6,7 @@ import ForgotPassword from "components/Sign/ForgotPassword";
 
 import "./SignPage.css"
 
-const btnTexts = require('lang/kor.json').login;
+const btnTexts = require('lang/eng.json').login;
 
 export default function SignPage(){
     const navigate = useNavigate();

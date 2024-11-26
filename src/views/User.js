@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import "./User.css"
 
-const btnTexts = require('lang/kor.json').user;
+const btnTexts = require('lang/eng.json').user;
 const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
 
 import symbol from 'assets/images/main-symbol.png'

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import useRegister from './useRegister'; // 사용자 정의 훅 import
-const btnTexts = require('lang/kor.json').login;
+const btnTexts = require('lang/eng.json').login;
 
 export default function Register({ initialEmail }) {
     const navigate = useNavigate();

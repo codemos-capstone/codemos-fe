@@ -28,7 +28,7 @@ export default function useLogin() {
         })
         .catch(err => {
             console.error("Login failed:", err.message);
-            alert("아이디 혹은 비밀번호를 확인하세요.");
+            alert("Check ID or password.");
         });
     };
 

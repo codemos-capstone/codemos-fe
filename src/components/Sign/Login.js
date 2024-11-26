@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useLogin from './useLogin'; // Import the custom hook
 import googleLoginImage from 'assets/images/continueGoogle.png';
-const btnTexts = require('lang/kor.json').login;
+const btnTexts = require('lang/eng.json').login;
 
 export default function Login() {
     const { email, setEmail, password, setPassword, handleLogin } = useLogin();
@@ -38,7 +38,7 @@ export default function Login() {
                         style={{ float: 'left', fontSize: '60%', textDecoration: 'underline', cursor: 'pointer' }}
                         onClick={() => navigate("/sign/forgotpassword")}
                     >
-                        비밀번호를 잊으셨나요?
+                        Forgot Password?
                     </div>
                 </div>
               
