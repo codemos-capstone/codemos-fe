@@ -52,7 +52,7 @@
     align-items: center;
 }
 .sign-container form button, .sign-container .home-btn {
-    background-color: #4caf50;
+    background-color: #2d3d83;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -77,7 +77,7 @@
     color: #1347a7;
 }
 .sign-container form button:hover, .sign-container .home-btn:hover {
-    background-color: #419544; /* Darker shade for hover effect */
+    background-color: #495ca8; /* Darker shade for hover effect */
 }
 .sign-container .home {
     padding: 2%;
