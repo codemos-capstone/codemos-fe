@@ -3,12 +3,6 @@ import './Docs.css';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/monokai.css'; // 하이라이트 스타일 선택
 
-import landing_sample from "assets/images/landing_sample.gif";
-import docs_angle from "assets/images/docs_angle.png";
-import docs_u from "assets/images/docs_u.png";
-import docs_r from "assets/images/docs_r.png";
-import docs_l from "assets/images/docs_l.png";
-
 const basicForm = `// 변수, 함수 선언
 _mainloop = function() {
     // 반복 실행할 코드
@@ -151,7 +145,6 @@ const Docs = ({ closeDocs }) => {
     // 비밀
                 </code></pre>
             </div>
-            <img src={landing_sample} width="100%" /><br />
             <p className="function-description">
                 <br />
             </p>
@@ -232,7 +225,6 @@ const Docs = ({ closeDocs }) => {
             <p className="function-description">
     이 함수는 우주선의 현재 각도를 실수형으로 반환합니다.(-180.0 ~ +180.0)<br />
     <br />
-            <img src={docs_angle} width="100%" />
             </p>
             <div className="function-example">
                 <pre><code className="language-javascript">
@@ -270,7 +262,6 @@ const Docs = ({ closeDocs }) => {
             <h2 className="function-title">engineOn</h2>
             <p className="function-description">
     이 함수를 호출하면 우주선의 주 엔진을 작동시킵니다.<br />
-            <img src={docs_u} width="25%" />
             </p>
             <div className="function-example">
                 <pre><code className="language-javascript">
@@ -297,7 +288,6 @@ const Docs = ({ closeDocs }) => {
     이 함수를 호출하면 우주선의 좌측 추진체을 작동합니다.<br />
     (우주선의 각속도가 증가합니다.)<br />
 
-            <img src={docs_r} width="40%" />
             </p>
             <div className="function-example">
                 <pre><code className="language-javascript">
@@ -323,7 +313,6 @@ const Docs = ({ closeDocs }) => {
             <p className="function-description">
     이 함수를 호출하면 우주선의 우측 추진체을 작동합니다.<br />
     (우주선의 각속도가 감소합니다.)<br />
-            <img src={docs_l} width="40%" />
             </p>
             <div className="function-example">
                 <pre><code className="language-javascript">

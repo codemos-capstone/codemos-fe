@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import symbol from 'assets/images/main-symbol.png'
 import logo from 'assets/images/main-logo.png'
 import LoginBtn from 'components/Buttons/LoginBtn'
-import defaultProfilePic from 'assets/images/dol.jpg' 
+import defaultProfilePic from 'assets/images/profile.jpeg'
 import './Header.css';
 import LBBtn from "../Buttons/LBBtn";
 import axios from 'axios';

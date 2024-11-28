@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './UserProfile.css';
-import defaultProfilePic from 'assets/images/dol.jpg' 
+import defaultProfilePic from 'assets/images/profile.jpeg' 
 
 const UserProfile = () => {
     const [profile, setProfile] = useState(null);
