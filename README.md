@@ -11,11 +11,9 @@
 
 1. [Getting Started](#getting-started)
 2. [How to Play](#how-to-play)
-    1. [게임 입장 화면](#게임-입장-화면)
-    2. [게임 시작 화면](#게임-시작-화면)
-    3. [API Docs와 Code Editor](#API-Docs와-Code-Editor)
-    4. [Code Apply](#code-apply)
-    5. [게임 결과 화면](#게임-결과-화면)
+    1. [코드 스페이스](#코드-스페이스)
+    2. [API Docs와 Code Editor](#API-Docs와-Code-Editor)
+    3. [Code Apply](#code-apply)
 4. [API Function Docs](#API-Function-Docs)
 5. [기술 스택](#기술-스택)
 6. [Reference](#reference)
@@ -34,77 +32,28 @@
 $> npx http-server
 ```
 
-## 실행 영상
-[![Video Label](http://img.youtube.com/vi/AM9rDd-U9FY/0.jpg)](https://youtu.be/AM9rDd-U9FY)
-
 ## How to play
 
-### **게임 입장 화면**
+### **메인 페이지**
 
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/7f23af5d-5bf4-44af-89c9-4b1267c7768b)
-
-
-### **게임 시작 화면**
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/e93567b1-a1b0-4375-b0e3-434a60b922fb)
-
-### API Docs와 Code Editor
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/2a0eb70c-87cc-48b1-ac66-5ed7408c6209)
-
-- 좌측 하단의 Docs 버튼을 누르면 우주선의 상태를 받아오고 엔진을 조작하는 API 함수에 대한 설명을 제공합니다.
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/ce55fea1-7742-4661-b6f1-a4123faf191f)
+![image](https://github.com/user-attachments/assets/8719e3f0-0e07-445d-b523-069a299b96b9)
 
 
-- 우측 하단의 Code 버튼을 누르면 코드 에디터가 열립니다. 코드 에디터에 우주선 착륙 알고리즘을 작성할 수 있습니다.
+### **코드 스페이스**
 
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/de1335da-07b0-4d08-b42b-905630fc6bd5)
+![image](https://github.com/user-attachments/assets/6c18bdf3-602a-43d7-9e4f-5172601adde3)
+![image](https://github.com/user-attachments/assets/9deed0f7-6956-4b01-9a6f-216e79a7bf22)
 
+### API Docs
+
+![image](https://github.com/user-attachments/assets/9e0c3c7d-ba74-44df-9f12-efb556ef6d66)
+
+- 우측 상단의 Docs 버튼을 누르면 우주선의 상태를 받아오고 엔진을 조작하는 API 함수에 대한 설명을 제공합니다.
 - 경계선을 드래그하여 크기를 조절할 수 있습니다.
 
 ### Code Apply
 
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/f237d303-8597-46c1-b7d1-de42fb01fe87)
-
-- Apply 버튼을 클릭해 코드 에디터에 작성한 코드를 우주선에 적용할 수 있습니다. 이후부터 우주선은 적용된 알고리즘에 따라 제어됩니다.
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/f89bf930-7275-4884-bfa1-f50fb17924c2)
-
-
-### 게임 결과 화면
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/d0ea4bb1-24f7-40d7-b151-4c36db827e61)
-
-- 착륙 속도 12.0 MPH, 착륙 각도 11.0° 미만일 때 착륙으로 간주합니다.
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/f9507fec-5df0-488a-a243-7ddc27303c43)
-
-- 초과한 상태로 지면에 닿는다면 추락으로 간주합니다. 추락일 경우에는 점수가 음수로 환산되어 리더보드에 등록됩니다. 
-
-
-### 리더보드
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/ecf24444-8640-425f-b262-739071e9386f)
-
-- 게임이 끝나면 이번 게임에 적용된 알고리즘과 결과를 서버에 저장할지 선택할 수 있습니다.(알고리즘을 통해 조작된 결과만 가능, 키보드 조작시 저장 불가)
-- 저장하면 해당 코드와 결과는 서버에 저장되고, 내 프로필에서 코드들을 볼 수 있습니다.
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/a5786f3d-9991-48cd-bda6-6af88f14ff41)
-
-- 프로필에 들어가면 저장한 알고리즘들을 확인할 수 있습니다.
-- 이 중 마음에 드는 결과를 리더보드에 계정당 한 개 등록할 수 있습니다.
-
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/f88bc75b-46fd-4cbf-a118-cde53a2d633e)
-
-- 리더보드에는 플레이어가 등록한 알고리즘과 점수 순위를 표시합니다.
-- 1등부터 10등까지는 알고리즘이 비공개됩니다.
-
-
-![image](https://github.com/yhcho0405/CodeMos/assets/49319275/a700b735-8fba-49d8-8bf1-c4ebd2dde338)
-
-- 11등 이후 기록은 어떤 알고리즘인지 직접 확인할 수 있습니다.
+- 우측 상단 실행 버튼을 클릭해 코드 에디터에 작성한 코드로 시뮬레이션을 시작할 수 있습니다.
 
 
 ## API Function Docs
@@ -167,9 +116,6 @@ newInterval = setInterval(() => { // main loop
 ```
 
 #### Well-Written Landing Algorithm Example
-
-![landing_sample (1)](https://github.com/yhcho0405/CodeMos/assets/52823519/810e5e11-3fce-47ae-a23d-5cb1460d4d6a)
-
 ```javascript
 // 비밀 ~
 ```
@@ -229,8 +175,6 @@ getRotationVelocity()
 
 이 함수를 호출하면 우주선의 주 엔진을 작동시킵니다.
 
-<img width="146" alt="image" src="https://github.com/yhcho0405/CodeMos/assets/52823519/11c23e42-aeef-4f39-a701-50d467291200">
-
 ```javascript
 engineOn()
 ```
@@ -248,8 +192,6 @@ engineOff()
 이 함수를 호출하면 우주선의 좌측 추진체을 작동합니다.
 (우주선의 각속도가 증가합니다.)
 
-<img width="166" alt="image" src="https://github.com/yhcho0405/CodeMos/assets/52823519/67b018c5-8f0f-4e06-b624-9df2a7a6e254">
-
 ```javascript
 rotateLeft()
 ```
@@ -266,8 +208,6 @@ stopLeftRotation()
 
 이 함수를 호출하면 우주선의 우측 추진체을 작동합니다.
 (우주선의 각속도가 감소합니다.)
-
-<img width="155" alt="image" src="https://github.com/yhcho0405/CodeMos/assets/52823519/c0205ad5-8a7d-4986-a6d3-cc828732b079">
 
 ```javascript
 rotateRight()
@@ -310,8 +250,6 @@ getRotationVelocity() : 0.37505750000014804
 
 
 ## 기술 스택
-
-<img width="481" alt="image" src="https://github.com/yhcho0405/CodeMos/assets/52823519/f8c8e058-3236-4a8b-9e89-30084cbcf021">
 
 
 ## Reference
