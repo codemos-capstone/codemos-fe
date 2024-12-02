@@ -29,7 +29,7 @@
 ### Running on LocalHost
 
 ```bash
-$> npx http-server
+$> npm start
 ```
 
 ## How to play
